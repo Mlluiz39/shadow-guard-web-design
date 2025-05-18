@@ -44,7 +44,7 @@ const Layout = ({ children }: LayoutProps) => {
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <div className="font-semibold text-lg">SecureGuard</div>
+            <div className="font-semibold text-lg">ProteQrv</div>
           </div>
         )}
 
