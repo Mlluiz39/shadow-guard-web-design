@@ -106,11 +106,9 @@ export const Sidebar = ({ className }: SidebarProps) => {
       <div className="flex-1 flex flex-col gap-1 p-2 overflow-y-auto">
         <NavItem icon={BarChart4} label="Comercial" to="/dashboard" collapsed={collapsed} />
         <NavItem icon={Settings} label="Configurações" to="/configuracoes" collapsed={collapsed} />
-        <NavItem icon={MapPin} label="Escolta" to="/escolta" collapsed={collapsed} />
+        <NavItem icon={FileText} label="Operações" to="/operacoes" collapsed={collapsed} />
         <NavItem icon={DollarSign} label="Financeiro" to="/financeiro" collapsed={collapsed} />
-        <NavItem icon={Car} label="Frotas" to="/frotas" collapsed={collapsed} />
-        <NavItem icon={FileText} label="Operacional" to="/operacional" collapsed={collapsed} />
-        <NavItem icon={Archive} label="Suprimentos" to="/suprimentos" collapsed={collapsed} />
+        <NavItem icon={Car} label="Logística" to="/logistica" collapsed={collapsed} />
       </div>
 
       {/* Footer */}
