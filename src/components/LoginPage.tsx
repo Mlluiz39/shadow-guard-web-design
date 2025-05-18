@@ -102,7 +102,7 @@ const LoginPage = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full py-6 bg-security-accent hover:bg-security-accent/90 text-white font-medium rounded"
+              className="w-full py-6 bg-security-blueMotion hover:bg-security-accent/90 text-white font-medium rounded"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-2">
