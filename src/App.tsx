@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -20,25 +19,22 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-// Componente para proteção de rotas
+// Componente para proteção de rotas - corrigido para evitar loops de renderização
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAuth = () => {
-      const isLoggedIn = localStorage.getItem('secureGuardLoggedIn') === 'true';
-      setIsAuthenticated(isLoggedIn);
-    };
-    
-    checkAuth();
-  }, []);
+    // Verificando apenas uma vez na montagem do componente
+    const isLoggedIn = localStorage.getItem('proteqrvLoggedIn') === 'true';
+    setIsAuthenticated(isLoggedIn);
+  }, []); // Array de dependências vazio para executar apenas uma vez
 
   if (isAuthenticated === null) {
     // Estado de carregamento, poderia mostrar um spinner aqui
     return <div className="flex h-screen items-center justify-center">Carregando...</div>;
   }
   
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
 };
 
 const queryClient = new QueryClient();

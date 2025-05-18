@@ -52,17 +52,17 @@ const SignUpPage = () => {
       
       // Armazenamos os dados do usuário no localStorage como simulação
       // Em um ambiente real, estes dados seriam armazenados no backend
-      localStorage.setItem('secureGuardUser', JSON.stringify({ 
+      localStorage.setItem('proteqrvUser', JSON.stringify({ 
         username, 
         email,
         role: 'usuario'
       }));
       
-      // Definir o usuário como logado
-      localStorage.setItem('secureGuardLoggedIn', 'true');
+      // Definir o usuário como logado - usando o mesmo nome de chave que o LoginPage
+      localStorage.setItem('proteqrvLoggedIn', 'true');
       
       toast.success('Cadastro realizado com sucesso!');
-      navigate('/dashboard');
+      navigate('/dashboard', { replace: true });
     }, 1500);
   };
 

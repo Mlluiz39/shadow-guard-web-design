@@ -14,13 +14,14 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Verificar se o usuário já está logado
+  // Verificar se o usuário já está logado - corrigido para evitar loops
   useEffect(() => {
     const user = localStorage.getItem('proteqrvLoggedIn');
-    if (user) {
-      navigate('/dashboard');
+    if (user === 'true') {
+      // Usamos replace para evitar que o usuário volte para a tela de login após fazer logout
+      navigate('/dashboard', { replace: true });
     }
-  }, [navigate]);
+  }, []); // Mantemos o array de dependências vazio para executar apenas uma vez
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
