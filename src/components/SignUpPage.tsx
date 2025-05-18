@@ -58,8 +58,11 @@ const SignUpPage = () => {
         role: 'usuario'
       }));
       
+      // Definir o usuário como logado
+      localStorage.setItem('secureGuardLoggedIn', 'true');
+      
       toast.success('Cadastro realizado com sucesso!');
-      navigate('/');
+      navigate('/dashboard');
     }, 1500);
   };
 
