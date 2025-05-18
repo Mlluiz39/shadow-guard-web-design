@@ -1,8 +1,20 @@
 {
-  "name": "vite_react_shadcn_ts",
-  "private": true,
+  "name": "proteqta",
   "version": "0.0.0",
+  "private": true,
+  "description": "Sistema de Gestão para Segurança Privada",
+  "homepage": "https://github.com/Mlluiz39/proteqta#readme",
+  "bugs": {
+    "url": "https://github.com/Mlluiz39/proteqta/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mlluiz39/proteqta.git"
+  },
+  "license": "ISC",
+  "author": "Marcelo Luiz",
   "type": "module",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

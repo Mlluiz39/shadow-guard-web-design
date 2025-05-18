@@ -20,8 +20,8 @@ export const Logo = ({ size = "md", variant = "full" }: LogoProps) => {
       </div>
       {variant === "full" && (
         <div className={`font-bold ${sizeClasses[size]} text-security-foreground`}>
-          <span>Secure</span>
-          <span className="text-security-accent">Guard</span>
+          <span className="text-security-border-dark">Prote</span>
+          <span className="text-security-accent">Qrv</span>
         </div>
       )}
     </div>

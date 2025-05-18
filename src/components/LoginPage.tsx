@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   // Verificar se o usuário já está logado
   useEffect(() => {
-    const user = localStorage.getItem('secureGuardLoggedIn');
+    const user = localStorage.getItem('proteqrvLoggedIn');
     if (user) {
       navigate('/dashboard');
     }
@@ -33,7 +33,7 @@ const LoginPage = () => {
     setIsLoading(true);
     
     // Verificar se o usuário existe no localStorage (simulação)
-    const storedUser = localStorage.getItem('secureGuardUser');
+    const storedUser = localStorage.getItem('proteqrvUser');
     
     setTimeout(() => {
       setIsLoading(false);
@@ -43,7 +43,7 @@ const LoginPage = () => {
         
         // Verificação simplificada - em produção usaria hash de senha e autenticação real
         if (user.username === username && password.length >= 6) {
-          localStorage.setItem('secureGuardLoggedIn', 'true');
+          localStorage.setItem('proteqrvLoggedIn', 'true');
           toast.success('Login realizado com sucesso.');
           navigate('/dashboard');
         } else {
@@ -51,10 +51,10 @@ const LoginPage = () => {
         }
       } else if (username === 'admin' && password === 'admin123') {
         // Usuário padrão para demonstração
-        localStorage.setItem('secureGuardLoggedIn', 'true');
-        localStorage.setItem('secureGuardUser', JSON.stringify({
+        localStorage.setItem('proteqrvLoggedIn', 'true');
+        localStorage.setItem('proteqrvUser', JSON.stringify({
           username: 'admin',
-          email: 'admin@secureguard.com',
+          email: 'admin@proteqrv.com',
           role: 'administrador'
         }));
         toast.success('Login realizado com sucesso.');
@@ -134,7 +134,7 @@ const LoginPage = () => {
           </Card>
 
           <div className="text-center text-sm text-security-muted">
-            <p>© {new Date().getFullYear()} SecureGuard Security Systems</p>
+            <p>© {new Date().getFullYear()} proteqrv Security Systems</p>
             <p>Todos os direitos reservados</p>
           </div>
         </div>
