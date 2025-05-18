@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Layout from "./components/Layout";
 import LoginPage from "./components/LoginPage";
+import SignUpPage from "./components/SignUpPage";
 import Dashboard from "./pages/Dashboard";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
@@ -17,6 +18,28 @@ import {
   Archive,
   BarChart4
 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+// Componente para proteção de rotas
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const isLoggedIn = localStorage.getItem('secureGuardLoggedIn') === 'true';
+      setIsAuthenticated(isLoggedIn);
+    };
+    
+    checkAuth();
+  }, []);
+
+  if (isAuthenticated === null) {
+    // Estado de carregamento, poderia mostrar um spinner aqui
+    return <div className="flex h-screen items-center justify-center">Carregando...</div>;
+  }
+  
+  return isAuthenticated ? <>{children}</> : <Navigate to="/" />;
+};
 
 const queryClient = new QueryClient();
 
@@ -27,40 +50,55 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/cadastro" element={<SignUpPage />} />
           <Route path="/dashboard" element={
-            <Layout>
-              <Dashboard />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/configuracoes" element={
-            <Layout>
-              <PlaceholderPage title="Configurações" icon={<Settings className="h-6 w-6" />} />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <PlaceholderPage title="Configurações" icon={<Settings className="h-6 w-6" />} />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/escolta" element={
-            <Layout>
-              <PlaceholderPage title="Escolta" icon={<MapPin className="h-6 w-6" />} />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <PlaceholderPage title="Escolta" icon={<MapPin className="h-6 w-6" />} />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/financeiro" element={
-            <Layout>
-              <PlaceholderPage title="Financeiro" icon={<DollarSign className="h-6 w-6" />} />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <PlaceholderPage title="Financeiro" icon={<DollarSign className="h-6 w-6" />} />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/frotas" element={
-            <Layout>
-              <PlaceholderPage title="Frotas" icon={<Car className="h-6 w-6" />} />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <PlaceholderPage title="Frotas" icon={<Car className="h-6 w-6" />} />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/operacional" element={
-            <Layout>
-              <PlaceholderPage title="Operacional" icon={<FileText className="h-6 w-6" />} />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <PlaceholderPage title="Operacional" icon={<FileText className="h-6 w-6" />} />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/suprimentos" element={
-            <Layout>
-              <PlaceholderPage title="Suprimentos" icon={<Archive className="h-6 w-6" />} />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <PlaceholderPage title="Suprimentos" icon={<Archive className="h-6 w-6" />} />
+              </Layout>
+            </ProtectedRoute>
           } />
           <Route path="/comercial" element={<Navigate replace to="/dashboard" />} />
           <Route path="*" element={<NotFound />} />

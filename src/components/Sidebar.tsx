@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Logo } from "./Logo";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { 
   Settings, 
   DollarSign, 
@@ -17,8 +17,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -54,9 +54,23 @@ interface SidebarProps {
 
 export const Sidebar = ({ className }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [username, setUsername] = useState("Usuário");
+  const [role, setRole] = useState("...");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Carregar informações do usuário do localStorage
+    const storedUser = localStorage.getItem('secureGuardUser');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUsername(user.username || "Usuário");
+      setRole(user.role || "usuário");
+    }
+  }, []);
+
   const handleLogout = () => {
+    // Remover dados de autenticação
+    localStorage.removeItem('secureGuardLoggedIn');
     toast.success("Logout realizado com sucesso.");
     navigate("/");
   };
@@ -104,8 +118,8 @@ export const Sidebar = ({ className }: SidebarProps) => {
             <div className="flex items-center gap-3 px-3 py-2 mb-2">
               <UserCircle className="h-5 w-5 text-sidebar-foreground" />
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-sidebar-foreground">Admin</span>
-                <span className="text-xs text-sidebar-foreground/70">administrador</span>
+                <span className="text-sm font-medium text-sidebar-foreground">{username}</span>
+                <span className="text-xs text-sidebar-foreground/70">{role}</span>
               </div>
             </div>
           )}

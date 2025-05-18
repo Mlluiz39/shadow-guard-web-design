@@ -1,83 +1,81 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Logo } from './Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { User, Lock, LogIn, UserPlus } from 'lucide-react';
+import { User, Lock, Mail, UserPlus, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Verificar se o usuário já está logado
-  useEffect(() => {
-    const user = localStorage.getItem('secureGuardLoggedIn');
-    if (user) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
-
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!username || !password) {
+    // Validações básicas
+    if (!username || !email || !password || !confirmPassword) {
       toast.error('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error('As senhas não conferem.');
+      return;
+    }
+
+    // Validação de email simples
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Por favor, insira um email válido.');
+      return;
+    }
+
+    // Validação de senha (mínimo 6 caracteres)
+    if (password.length < 6) {
+      toast.error('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
     
     setIsLoading(true);
     
-    // Verificar se o usuário existe no localStorage (simulação)
-    const storedUser = localStorage.getItem('secureGuardUser');
-    
+    // Simulando o cadastro - em um ambiente real, isto seria uma chamada de API
     setTimeout(() => {
       setIsLoading(false);
       
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        
-        // Verificação simplificada - em produção usaria hash de senha e autenticação real
-        if (user.username === username && password.length >= 6) {
-          localStorage.setItem('secureGuardLoggedIn', 'true');
-          toast.success('Login realizado com sucesso.');
-          navigate('/dashboard');
-        } else {
-          toast.error('Credenciais inválidas.');
-        }
-      } else if (username === 'admin' && password === 'admin123') {
-        // Usuário padrão para demonstração
-        localStorage.setItem('secureGuardLoggedIn', 'true');
-        localStorage.setItem('secureGuardUser', JSON.stringify({
-          username: 'admin',
-          email: 'admin@secureguard.com',
-          role: 'administrador'
-        }));
-        toast.success('Login realizado com sucesso.');
-        navigate('/dashboard');
-      } else {
-        toast.error('Credenciais inválidas ou usuário não cadastrado.');
-      }
-    }, 1000);
+      // Armazenamos os dados do usuário no localStorage como simulação
+      // Em um ambiente real, estes dados seriam armazenados no backend
+      localStorage.setItem('secureGuardUser', JSON.stringify({ 
+        username, 
+        email,
+        role: 'usuario'
+      }));
+      
+      toast.success('Cadastro realizado com sucesso!');
+      navigate('/');
+    }, 1500);
   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Left side - Login Form */}
+      {/* Left side - SignUp Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 bg-white">
         <div className="w-full max-w-md space-y-8">
           <div className="flex flex-col items-center gap-6">
             <Logo size="lg" />
             <h1 className="text-2xl md:text-3xl font-bold text-security">Sistema de Gestão</h1>
-            <h2 className="text-lg text-security-secondary">Acesso Seguro</h2>
+            <h2 className="text-lg text-security-secondary">Criar Nova Conta</h2>
           </div>
 
           <Card className="p-6 shadow-md border border-security-border-light">
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={handleSignUp} className="space-y-6">
               <div className="space-y-4">
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 text-security-muted h-5 w-5" />
@@ -86,6 +84,17 @@ const LoginPage = () => {
                     placeholder="Nome de usuário"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-security-muted h-5 w-5" />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
                   />
                 </div>
@@ -100,6 +109,17 @@ const LoginPage = () => {
                     className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
                   />
                 </div>
+
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-security-muted h-5 w-5" />
+                  <Input
+                    type="password"
+                    placeholder="Confirmar senha"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
+                  />
+                </div>
               </div>
 
               <Button
@@ -110,28 +130,24 @@ const LoginPage = () => {
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="h-5 w-5 border-2 border-white border-opacity-50 border-t-white rounded-full animate-spin"></span>
-                    Autenticando...
+                    Processando...
                   </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
-                    <LogIn className="h-5 w-5" />
-                    Entrar
+                    <UserPlus className="h-5 w-5" />
+                    Criar Conta
                   </span>
                 )}
               </Button>
-              
-              <div className="text-center pt-4">
-                <p className="text-sm text-security-muted">Não possui uma conta?</p>
-                <Link 
-                  to="/cadastro" 
-                  className="flex items-center justify-center gap-2 text-security-accent hover:text-security-accent/80 transition-colors mt-2"
-                >
-                  <UserPlus className="h-4 w-4" />
-                  Cadastre-se agora
-                </Link>
-              </div>
             </form>
           </Card>
+
+          <div className="text-center">
+            <Link to="/" className="flex items-center justify-center gap-2 text-security hover:text-security-accent transition-colors">
+              <ArrowLeft className="h-4 w-4" />
+              Voltar ao login
+            </Link>
+          </div>
 
           <div className="text-center text-sm text-security-muted">
             <p>© {new Date().getFullYear()} SecureGuard Security Systems</p>
@@ -148,22 +164,22 @@ const LoginPage = () => {
           <div className="w-full max-w-lg text-white space-y-6">
             <h2 className="text-3xl font-bold">Sistema Integrado de Segurança</h2>
             <p className="text-lg opacity-90">
-              Plataforma completa para gestão de operações de segurança privada. Acesse todos os módulos do sistema
-              com total segurança e controle.
+              Crie sua conta para acessar o sistema de gestão completo para operações de segurança privada.
+              Tenha acesso a todos os recursos e ferramentas em uma única plataforma.
             </p>
             
             <div className="flex flex-wrap gap-4 pt-4">
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">+1000</div>
-                <div className="text-sm opacity-75">Clientes</div>
+                <div className="text-2xl font-bold">Gestão</div>
+                <div className="text-sm opacity-75">Completa</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">+5000</div>
-                <div className="text-sm opacity-75">Operações</div>
+                <div className="text-2xl font-bold">Segurança</div>
+                <div className="text-sm opacity-75">Avançada</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">+200</div>
-                <div className="text-sm opacity-75">Veículos</div>
+                <div className="text-2xl font-bold">Suporte</div>
+                <div className="text-sm opacity-75">24/7</div>
               </div>
             </div>
           </div>
@@ -176,4 +192,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
