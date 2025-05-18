@@ -60,7 +60,7 @@ export const Sidebar = ({ className }: SidebarProps) => {
 
   useEffect(() => {
     // Carregar informações do usuário do localStorage
-    const storedUser = localStorage.getItem('secureGuardUser');
+    const storedUser = localStorage.getItem('proteqrvUser');
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setUsername(user.username || "Usuário");
@@ -69,10 +69,10 @@ export const Sidebar = ({ className }: SidebarProps) => {
   }, []);
 
   const handleLogout = () => {
-    // Remover dados de autenticação
-    localStorage.removeItem('secureGuardLoggedIn');
+    // Remover dados de autenticação - corrigindo o nome da chave para proteqrvLoggedIn
+    localStorage.removeItem('proteqrvLoggedIn');
     toast.success("Logout realizado com sucesso.");
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   return (
