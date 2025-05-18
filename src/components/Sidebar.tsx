@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { set } from "date-fns";
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -65,6 +66,7 @@ export const Sidebar = ({ className }: SidebarProps) => {
       const user = JSON.parse(storedUser);
       setUsername(user.username || "Usuário");
       setRole(user.role || "usuário");
+      
     }
   }, []);
 
