@@ -22,7 +22,7 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    const userNameDefault = 'admin@maximus.com.br'
+    const userNameDefault = 'admin'
     const passwordDefault = 'admin123'
 
     // Simulating authentication
@@ -60,7 +60,7 @@ const LoginPage = () => {
               <User className="absolute left-3 top-1/2 translate-y-1/2 text-maximus-muted h-5 w-5" />
               </div>
               <Input
-                type="email"
+                type="text"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 className="w-full pl-10 px-10 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
