@@ -22,6 +22,9 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
+    const userNameDefault = 'admin'
+    const passwordDefault = 'admin123'
+
     // Simulating authentication
     setTimeout(() => {
       if (username === userNameDefault && password === passwordDefault) {
