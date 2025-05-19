@@ -8,6 +8,7 @@ import SignUpPage from './components/SignUpPage'
 import Dashboard from './pages/Dashboard'
 import PlaceholderPage from './pages/PlaceholderPage'
 import NotFound from './pages/NotFound'
+import Operations from './pages/Operations'
 import {
   Settings,
   DollarSign,
@@ -86,14 +87,11 @@ const App = () => (
             }
           />
           <Route
-            path="/operacoes"
+            path="/operacoes/*"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage
-                    title="Operações"
-                    icon={<FileText className="h-6 w-6" />}
-                  />
+                  <Operations />
                 </Layout>
               </ProtectedRoute>
             }
