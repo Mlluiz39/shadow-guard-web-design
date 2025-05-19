@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { Logo } from './Logo'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { User, Lock, LogIn } from 'lucide-react'
@@ -13,13 +12,6 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('proteqrvLoggedIn')
-    if (isLoggedIn === 'true') {
-      navigate('/dashboard', { replace: true })
-    }
-  }, [navigate])
-
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -30,99 +22,116 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    const storedUser = localStorage.getItem('proteqrvUser')
-
+    // Simulating authentication
     setTimeout(() => {
       setIsLoading(false)
-
-      if (storedUser) {
-        const user = JSON.parse(storedUser)
-
-        if (user.username === username && user.password === password) {
-          localStorage.setItem('proteqrvLoggedIn', 'true')
-          toast.success('Login realizado com sucesso.')
-          navigate('/dashboard')
-        } else {
-          toast.error('Credenciais inválidas.')
-        }
-      } else if (username === 'admin' && password === 'admin123') {
-        const adminUser = {
-          username: 'admin',
-          email: 'admin@proteqrv.com',
-          role: 'administrador',
-          password: 'admin123',
-        }
-        localStorage.setItem('proteqrvUser', JSON.stringify(adminUser))
-        localStorage.setItem('proteqrvLoggedIn', 'true')
-        toast.success('Login realizado com sucesso.')
-        navigate('/dashboard')
-      } else {
-        toast.error('Credenciais inválidas ou usuário não cadastrado.')
-      }
+      toast.success('Login realizado com sucesso.')
+      navigate('/dashboard')
     }, 1000)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-white">
-      <div className="w-full max-w-md space-y-8">
-        <div className="flex flex-col items-center gap-6">
-          <Logo size="lg" />
-          <h1 className="text-2xl md:text-3xl font-bold text-security">
-            Sistema de Gestão
-          </h1>
-          <h2 className="text-lg text-security-secondary">Acesso Seguro</h2>
-        </div>
+    <div className="min-h-screen flex flex-col md:flex-row font-sans">
+      {/* Left side - Login Form */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 bg-slate-200">
+        <div className="w-full max-w-md space-y-8 mx-auto">
+          <div className="flex flex-col items-center gap-6">
+            <img
+              src="/logo-maximus.png"
+              alt="Maximus Tecnologia"
+              className="h-12"
+            />
+            <h1 className="text-3xl font-bold text-maximus">
+              Sistema de Gestão
+            </h1>
+            <h2 className="text-lg text-maximus-muted">Acesso Seguro</h2>
+          </div>
 
-        <Card className="p-6 shadow-md border border-security-border-light">
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-4">
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 text-security-muted h-5 w-5" />
-                <Input
-                  type="text"
-                  placeholder="Nome de usuário"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
-                />
+          <Card className="p-6 shadow-md border border-maximus-border">
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-4">
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
+                  <Input
+                    type="text"
+                    placeholder="Nome de usuário"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    className="pl-10 py-6 bg-maximus-light border-maximus-border focus:border-maximus-secondary"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
+                  <Input
+                    type="password"
+                    placeholder="Senha"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    className="pl-10 py-6 bg-maximus-light border-maximus-border focus:border-maximus-secondary"
+                  />
+                </div>
               </div>
 
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-security-muted h-5 w-5" />
-                <Input
-                  type="password"
-                  placeholder="Senha"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
-                />
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-6 hover:bg-[#c99c00] text-white font-medium rounded"
+              >
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="h-5 w-5 border-2 border-white border-opacity-50 border-t-white rounded-full animate-spin"></span>
+                    Autenticando...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <LogIn className="h-5 w-5" />
+                    Entrar
+                  </span>
+                )}
+              </Button>
+            </form>
+          </Card>
+
+          <div className="text-center text-sm text-maximus-muted">
+            <p>© {new Date().getFullYear()} Maximus Tecnologia</p>
+            <p>Todos os direitos reservados</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Right side - Informative Panel */}
+      <div className="hidden md:block md:w-1/2 bg-[#13132a] text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/bg-security-pattern.png')] opacity-10"></div>
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
+          <div className="w-full max-w-lg text-white space-y-6">
+            <h2 className="text-3xl font-bold">
+              Sistema Integrado de Informações
+            </h2>
+            <p className="text-lg opacity-90">
+              Plataforma completa para gestão de operações de segurança privada.
+              Acesse todos os módulos do sistema com total segurança e controle.
+            </p>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
+                <div className="text-2xl font-bold">+500</div>
+                <div className="text-sm opacity-75">Clientes</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
+                <div className="text-2xl font-bold">+1000</div>
+                <div className="text-sm opacity-75">Operações</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
+                <div className="text-2xl font-bold">+200</div>
+                <div className="text-sm opacity-75">Veículos</div>
               </div>
             </div>
-
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-6 bg-security-blueMotion hover:bg-security-accent/90 text-white font-medium rounded"
-            >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="h-5 w-5 border-2 border-white border-opacity-50 border-t-white rounded-full animate-spin"></span>
-                  Autenticando...
-                </span>
-              ) : (
-                <span className="flex items-center justify-center gap-2">
-                  <LogIn className="h-5 w-5" />
-                  Entrar
-                </span>
-              )}
-            </Button>
-          </form>
-        </Card>
-
-        <div className="text-center text-sm text-security-muted">
-          <p>© {new Date().getFullYear()} proteqrv Security Systems</p>
-          <p>Todos os direitos reservados</p>
+          </div>
         </div>
+
+        <div className="absolute bottom-0 right-0 w-full h-32 bg-gradient-to-t from-maximus/90 to-transparent"></div>
       </div>
     </div>
   )
