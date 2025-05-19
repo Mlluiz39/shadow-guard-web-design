@@ -19,9 +19,9 @@ export const Logo = ({ size = "md", variant = "full" }: LogoProps) => {
         <ShieldCheck className={`${size === "sm" ? "h-5 w-5" : size === "md" ? "h-6 w-6" : "h-7 w-7"}`} />
       </div>
       {variant === "full" && (
-        <div className={`font-bold ${sizeClasses[size]} text-security-foreground`}>
-          <span className="text-security-border-dark">Prote</span>
-          <span className="text-security-accent">Qrv</span>
+        <div className={`font-bold ${sizeClasses[size]} text-security-accent`}>
+          <span>Maximus </span>
+          <span className="text-security-accent">Tecnologia</span>
         </div>
       )}
     </div>

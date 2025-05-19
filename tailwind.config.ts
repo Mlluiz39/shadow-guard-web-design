@@ -67,9 +67,11 @@ export default {
 					DEFAULT: '#172B4D',
 					foreground: '#FFFFFF',
 					secondary: '#2C3E50',
-					accent: '#3498DB',
+					accent: '#A98019',
 					light: '#F5F7FA',
 					muted: '#94A3B8',
+					blueMotion: '#1E3A8A',
+					'blue-motion-light': '#E0F2FE',
 					'border-light': '#E2E8F0',
 					'border-dark': '#334155'
 				}
@@ -103,5 +105,4 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
