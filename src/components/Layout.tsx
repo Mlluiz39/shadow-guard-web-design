@@ -1,6 +1,6 @@
 
 import { Sidebar } from "./Sidebar";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 import { Menu } from "lucide-react";

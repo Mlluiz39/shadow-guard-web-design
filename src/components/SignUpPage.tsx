@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { User, Lock, Mail, UserPlus, ArrowLeft } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sonner';
 import { Link } from 'react-router-dom';
 
 const SignUpPage = () => {
