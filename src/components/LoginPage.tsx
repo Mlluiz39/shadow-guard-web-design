@@ -55,25 +55,31 @@ const LoginPage = () => {
 
           <form onSubmit={handleLogin}>
             <div className="mb-4">
-              <label className="block text-yellow-400">Email</label>
+              <label className="block text-yellow-400">Usuário</label>
+              <div className="relative">
+              <User className="absolute left-3 top-1/2 translate-y-1/2 text-maximus-muted h-5 w-5" />
+              </div>
               <Input
                 type="email"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                placeholder="Digite seu email"
+                className="w-full pl-10 px-10 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                placeholder="Nome de usuário"
               />
             </div>
 
             <div className="mb-4">
               <label className="block text-yellow-400">Senha</label>
-              <Input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                placeholder="Digite sua senha"
-              />
+              <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="w-full pl-10 px-10 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  placeholder="Senha"
+                />
+              </div>
             </div>
             <div className="mt-8">
               <Button
