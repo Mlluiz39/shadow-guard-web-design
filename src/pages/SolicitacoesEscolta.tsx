@@ -164,7 +164,7 @@ const SolicitacoesEscolta = () => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Adicionar nova solicitação</p>
+                  Adicionar nova solicitação
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -180,7 +180,7 @@ const SolicitacoesEscolta = () => {
                     </CollapsibleTrigger>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Filtrar resultados</p>
+                    Filtrar resultados
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -194,7 +194,7 @@ const SolicitacoesEscolta = () => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Legenda</p>
+                  Legenda
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -207,7 +207,7 @@ const SolicitacoesEscolta = () => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Imprimir relatório</p>
+                  Imprimir relatório
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -220,7 +220,7 @@ const SolicitacoesEscolta = () => {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Atualizar dados</p>
+                  Atualizar dados
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -341,3 +341,4 @@ const SolicitacoesEscolta = () => {
 };
 
 export default SolicitacoesEscolta;
+
