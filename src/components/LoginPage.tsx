@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { User, Lock, LogIn } from 'lucide-react'
-import { Card } from '@/components/ui/card'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
