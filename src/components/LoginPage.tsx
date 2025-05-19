@@ -22,7 +22,7 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    const userNameDefault = 'admin'
+    const userNameDefault = 'admin@maximus.com.br'
     const passwordDefault = 'admin123'
 
     // Simulating authentication
