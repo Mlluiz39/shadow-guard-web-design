@@ -3,6 +3,7 @@ import { FileText, Users, LayoutGrid, Shield, Truck, BookOpen, Bell, LayoutDashb
 import { Routes, Route, Navigate } from "react-router-dom";
 import OperationsNavigation from "@/components/OperationsNavigation";
 import PlaceholderPage from "./PlaceholderPage";
+import AgentesDisponiveis from "./AgentesDisponiveis";
 
 const Operations = () => {
   return (
@@ -18,12 +19,7 @@ const Operations = () => {
 
       <Routes>
         <Route index element={<OperationsHome />} />
-        <Route path="agentes" element={
-          <PlaceholderPage 
-            title="Agentes disponíveis" 
-            icon={<Users className="h-6 w-6" />} 
-          />
-        } />
+        <Route path="agentes" element={<AgentesDisponiveis />} />
         <Route path="grid" element={
           <PlaceholderPage 
             title="Grid Operacional" 
