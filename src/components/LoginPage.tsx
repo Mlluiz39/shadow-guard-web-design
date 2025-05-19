@@ -22,61 +22,64 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    // Simulating authentication
+    //values default
+    const userNameDefault = 'admin@maximus.com'
+    const passwordDefault = 'admin123'
+
+    // Simulate an API call
     setTimeout(() => {
+      if (username === userNameDefault && password === passwordDefault) {
+        toast.success('Login realizado com sucesso!')
+        localStorage.setItem('proteqrvLoggedIn', 'true')
+        navigate('/dashboard')
+      } else {
+        toast.error('Usuário ou senha inválidos.')
+      }
       setIsLoading(false)
-      toast.success('Login realizado com sucesso.')
-      navigate('/dashboard')
     }, 1000)
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans">
+    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-black">
       {/* Left side - Login Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 bg-slate-200">
-        <div className="w-full max-w-md space-y-8 mx-auto">
-          <div className="flex flex-col items-center gap-6">
+      <div className="flex-1 flex items-center justify-center text-white">
+        <div className="w-full max-w-md p-8 bg-[#111] rounded-2xl shadow-lg">
+          <div className="flex flex-col items-center mb-6">
             <img
               src="/logo-maximus.png"
-              alt="Maximus Tecnologia"
-              className="h-12"
+              alt="Logo Maximus"
+              className="h-16 mb-2"
             />
-            <h1 className="text-3xl font-bold text-maximus">
-              Sistema de Gestão
-            </h1>
-            <h2 className="text-lg text-maximus-muted">Acesso Seguro</h2>
           </div>
 
-          <Card className="p-6 shadow-md border border-maximus-border">
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-4">
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
-                  <Input
-                    type="text"
-                    placeholder="Nome de usuário"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                    className="pl-10 py-6 bg-maximus-light border-maximus-border focus:border-maximus-secondary"
-                  />
-                </div>
+          <form onSubmit={handleLogin}>
+            <div className="mb-4">
+              <label className="block text-yellow-400">Email</label>
+              <Input
+                type="email"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                placeholder="Digite seu email"
+              />
+            </div>
 
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
-                  <Input
-                    type="password"
-                    placeholder="Senha"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    className="pl-10 py-6 bg-maximus-light border-maximus-border focus:border-maximus-secondary"
-                  />
-                </div>
-              </div>
-
+            <div className="mb-4">
+              <label className="block text-yellow-400">Senha</label>
+              <Input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                placeholder="Digite sua senha"
+              />
+            </div>
+            <div className="mt-8">
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-6 hover:bg-[#c99c00] text-white font-medium rounded"
+                variant="default"
+                className="w-full px-4 py-2 hover:bg-[#c99c00] text-white font-medium rounded-xl bg-yellow-500 transition duration-200 ease-in-out flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -90,10 +93,9 @@ const LoginPage = () => {
                   </span>
                 )}
               </Button>
-            </form>
-          </Card>
-
-          <div className="text-center text-sm text-maximus-muted">
+            </div>
+          </form>
+          <div className="text-center text-sm text-maximus-muted mb-4 mt-6">
             <p>© {new Date().getFullYear()} Maximus Tecnologia</p>
             <p>Todos os direitos reservados</p>
           </div>
@@ -101,7 +103,7 @@ const LoginPage = () => {
       </div>
 
       {/* Right side - Informative Panel */}
-      <div className="hidden md:block md:w-1/2 bg-[#13132a] text-white relative overflow-hidden">
+      <div className="hidden md:block md:w-1/2 text-white relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[url('/bg-security-pattern.png')] opacity-10"></div>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
@@ -116,16 +118,28 @@ const LoginPage = () => {
 
             <div className="flex flex-wrap gap-4 pt-4">
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">+500</div>
-                <div className="text-sm opacity-75">Clientes</div>
+                <div className="text-2xl font-bold text-center mb-3">🤝</div>
+                <div className="text-sm opacity-75">
+                  Rede de Parcerias Certificadas
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">+1000</div>
-                <div className="text-sm opacity-75">Operações</div>
+                <div className="text-2xl font-bold text-center mb-3">🛡️</div>
+                <div className="text-sm opacity-75">
+                  Controle Operacional em Tempo real
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">+200</div>
-                <div className="text-sm opacity-75">Veículos</div>
+                <div className="text-2xl font-bold text-center mb-3">📡</div>
+                <div className="text-sm opacity-75">
+                  Gestão de Ativos de segurança
+                </div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
+                <div className="text-2xl font-bold text-center mb-3">🔗</div>
+                <div className="text-sm opacity-75">
+                  Integração com Centros de Comando
+                </div>
               </div>
             </div>
           </div>
