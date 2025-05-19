@@ -341,4 +341,3 @@ const SolicitacoesEscolta = () => {
 };
 
 export default SolicitacoesEscolta;
-
