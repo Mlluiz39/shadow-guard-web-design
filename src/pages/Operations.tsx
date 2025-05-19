@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import OperationsNavigation from "@/components/OperationsNavigation";
 import PlaceholderPage from "./PlaceholderPage";
 import AgentesDisponiveis from "./AgentesDisponiveis";
+import QuadroOperacional from "./QuadroOperacional";
 
 const Operations = () => {
   return (
@@ -38,12 +39,7 @@ const Operations = () => {
             icon={<Truck className="h-6 w-6" />} 
           />
         } />
-        <Route path="quadro" element={
-          <PlaceholderPage 
-            title="Quadro Operacional" 
-            icon={<LayoutGrid className="h-6 w-6" />} 
-          />
-        } />
+        <Route path="quadro" element={<QuadroOperacional />} />
         <Route path="ocorrencias" element={
           <PlaceholderPage 
             title="Livro de ocorrências" 
