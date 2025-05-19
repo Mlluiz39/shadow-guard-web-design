@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { set } from "date-fns";
 

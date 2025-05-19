@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { User, Lock, LogIn } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
+import { ToastContainer, toast } from 'react-toastify'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('')
@@ -21,17 +21,19 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    const userNameDefault = 'admin@maximus.com.br'
+    const userNameDefault = 'admin'
     const passwordDefault = 'admin123'
 
     // Simulating authentication
     setTimeout(() => {
       if (username === userNameDefault && password === passwordDefault) {
-        toast.success('Login realizado com sucesso!')
+        toast.success('Login realizado com sucesso.')
         localStorage.setItem('proteqrvLoggedIn', 'true')
         navigate('/dashboard')
       } else {
         toast.error('Usuário ou senha inválidos.')
+        setIsLoading(false)
+        return
       }
       setIsLoading(false)
       toast.success('Login realizado com sucesso.')
@@ -56,10 +58,10 @@ const LoginPage = () => {
             <div className="mb-4">
               <label className="block text-yellow-400">Usuário</label>
               <div className="relative">
-              <User className="absolute left-3 top-1/2 translate-y-1/2 text-maximus-muted h-5 w-5" />
+                <User className="absolute left-3 top-1/2 translate-y-1/2 text-maximus-muted h-5 w-5" />
               </div>
               <Input
-                type="email"
+                type="text"
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 className="w-full pl-10 px-10 py-2 bg-gray-800 border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -70,7 +72,7 @@ const LoginPage = () => {
             <div className="mb-4">
               <label className="block text-yellow-400">Senha</label>
               <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-maximus-muted h-5 w-5" />
                 <Input
                   type="password"
                   value={password}
@@ -110,8 +112,6 @@ const LoginPage = () => {
 
       {/* Right side - Informative Panel */}
       <div className="hidden md:block md:w-1/2 text-white relative overflow-hidden bg-slate-950">
-        <div className="absolute inset-0 bg-[url('/bg-security-pattern.png')] opacity-10"></div>
-
         <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
           <div className="w-full max-w-lg text-white space-y-6">
             <h2 className="text-3xl font-bold">
@@ -150,9 +150,24 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-0 right-0 w-full h-32 bg-gradient-to-t from-maximus/90 to-transparent"></div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        style={{ zIndex: 9999 }}
+        toastStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          color: 'white',
+        }}
+      />
     </div>
   )
 }
