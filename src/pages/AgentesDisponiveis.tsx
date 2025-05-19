@@ -29,6 +29,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger 
 } from "@/components/ui/collapsible";
+import { toast } from "@/components/ui/use-toast";
 
 // Sample data for agentes
 const agentesData = [
@@ -69,6 +70,7 @@ const AgentesDisponiveis = () => {
     setFilteredAgentes([...agentesData]);
     // Here you would typically fetch fresh data from an API
     console.log("Recarregando dados...");
+    toast("Dados atualizados com sucesso!");
   };
 
   return (
@@ -96,15 +98,31 @@ const AgentesDisponiveis = () => {
         <TabsContent value="lista" className="space-y-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <CollapsibleTrigger
-                asChild
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-              >
-                <Button variant="outline" className="gap-2">
-                  <Filter className="h-4 w-4" />
-                  Filtro
-                </Button>
-              </CollapsibleTrigger>
+              {/* Fixed: Wrapped CollapsibleTrigger within Collapsible component */}
+              <Collapsible open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                <CollapsibleTrigger asChild>
+                  <Button variant="outline" className="gap-2">
+                    <Filter className="h-4 w-4" />
+                    Filtro
+                  </Button>
+                </CollapsibleTrigger>
+                
+                {/* Move the CollapsibleContent here, inside the Collapsible */}
+                <CollapsibleContent className="p-4 bg-muted/50 rounded-md mb-4 mt-2">
+                  <div className="flex gap-4">
+                    <div className="flex-1">
+                      <Input
+                        placeholder="Buscar por nome, nome de guerra ou RE"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="mb-2"
+                      />
+                    </div>
+                    <Button onClick={filterAgentes}>Aplicar Filtro</Button>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+              
               {isFilterOpen && (
                 <Button 
                   variant="ghost" 
@@ -122,21 +140,7 @@ const AgentesDisponiveis = () => {
             </Button>
           </div>
           
-          <Collapsible open={isFilterOpen}>
-            <CollapsibleContent className="p-4 bg-muted/50 rounded-md mb-4">
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Input
-                    placeholder="Buscar por nome, nome de guerra ou RE"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="mb-2"
-                  />
-                </div>
-                <Button onClick={filterAgentes}>Aplicar Filtro</Button>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+          {/* Removed the duplicated Collapsible here */}
           
           <Card>
             <CardContent className="p-0">
