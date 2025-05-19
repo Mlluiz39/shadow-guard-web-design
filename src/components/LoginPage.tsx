@@ -22,11 +22,20 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    // Simulating authentication
+    // Dados fixos
+    const fixedUser = 'admin'
+    const fixedPassword = 'admin123'
+
     setTimeout(() => {
       setIsLoading(false)
-      toast.success('Login realizado com sucesso.')
-      navigate('/dashboard')
+
+      if (username === fixedUser && password === fixedPassword) {
+        localStorage.setItem('proteqrvLoggedIn', 'true')
+        toast.success('Login realizado com sucesso.')
+        navigate('/dashboard')
+      } else {
+        toast.error('Usuário ou senha incorretos.')
+      }
     }, 1000)
   }
 
