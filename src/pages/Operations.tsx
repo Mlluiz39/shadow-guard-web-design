@@ -5,6 +5,7 @@ import OperationsNavigation from "@/components/OperationsNavigation";
 import PlaceholderPage from "./PlaceholderPage";
 import AgentesDisponiveis from "./AgentesDisponiveis";
 import QuadroOperacional from "./QuadroOperacional";
+import SolicitacoesEscolta from "./SolicitacoesEscolta";
 
 const Operations = () => {
   return (
@@ -27,12 +28,7 @@ const Operations = () => {
             icon={<LayoutGrid className="h-6 w-6" />} 
           />
         } />
-        <Route path="escoltas" element={
-          <PlaceholderPage 
-            title="Solicitações de escolta" 
-            icon={<Shield className="h-6 w-6" />} 
-          />
-        } />
+        <Route path="escoltas" element={<SolicitacoesEscolta />} />
         <Route path="transportadoras" element={
           <PlaceholderPage 
             title="Transportadoras" 
