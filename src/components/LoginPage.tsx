@@ -22,11 +22,7 @@ const LoginPage = () => {
 
     setIsLoading(true)
 
-    //values default
-    const userNameDefault = 'admin@maximus.com'
-    const passwordDefault = 'admin123'
-
-    // Simulate an API call
+    // Simulating authentication
     setTimeout(() => {
       if (username === userNameDefault && password === passwordDefault) {
         toast.success('Login realizado com sucesso!')
@@ -36,6 +32,8 @@ const LoginPage = () => {
         toast.error('Usuário ou senha inválidos.')
       }
       setIsLoading(false)
+      toast.success('Login realizado com sucesso.')
+      navigate('/dashboard')
     }, 1000)
   }
 
