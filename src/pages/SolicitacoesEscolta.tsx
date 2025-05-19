@@ -1,60 +1,51 @@
-
-import { useState } from "react";
-import { Shield } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useState } from 'react'
+import { Shield } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
-} from "@/components/ui/collapsible";
-import { toast } from "@/components/ui/use-toast";
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { toast } from '@/components/ui/use-toast'
+import { EscoltaActionButtons } from '@/components/solicitacoes-escolta/EscoltaActionButtons'
+import { EscoltaFilter } from '@/components/solicitacoes-escolta/EscoltaFilter'
+import { EscoltaTable } from '@/components/solicitacoes-escolta/EscoltaTable'
+import { EspelhamentoContent } from '@/components/solicitacoes-escolta/EspelhamentoContent'
+import { escoltasData } from '@/components/solicitacoes-escolta/types'
 
-// Import our refactored components
-import { EscoltaActionButtons } from "@/components/solicitacoes-escolta/EscoltaActionButtons";
-import { EscoltaFilter } from "@/components/solicitacoes-escolta/EscoltaFilter";
-import { EscoltaTable } from "@/components/solicitacoes-escolta/EscoltaTable";
-import { EspelhamentoContent } from "@/components/solicitacoes-escolta/EspelhamentoContent";
-import { escoltasData } from "@/components/solicitacoes-escolta/types";
+export interface EscoltaFilterProps {
+  searchTerm: string
+  onSearchTermChange: (value: string) => void
+  onApplyFilter: () => void
+  onClearFilter: () => void
+  className?: string
+}
 
 const SolicitacoesEscolta = () => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEscoltas, setFilteredEscoltas] = useState(escoltasData);
-  const [activeTab, setActiveTab] = useState("solicitacoes");
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filteredEscoltas, setFilteredEscoltas] = useState(escoltasData)
+  const [activeTab, setActiveTab] = useState('solicitacoes')
 
-  // Function to filter escoltas based on search term
   const filterEscoltas = () => {
     const filtered = escoltasData.filter(
-      (item) =>
+      item =>
         item.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.solicitacao.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.operador.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredEscoltas(filtered);
-    toast({
-      title: "Filtro aplicado",
-      description: `Mostrando ${filtered.length} resultados para "${searchTerm}"`,
-    });
-  };
+    )
+    setFilteredEscoltas(filtered)
+  }
 
-  // Function to clear the filter
   const clearFilter = () => {
-    setSearchTerm("");
-    setFilteredEscoltas(escoltasData);
-    toast({
-      title: "Filtro removido",
-      description: "Mostrando todos os registros",
-    });
-  };
+    setSearchTerm('')
+    setFilteredEscoltas(escoltasData)
+  }
 
-  // Function to refresh the data
   const refreshData = () => {
-    setFilteredEscoltas([...escoltasData]);
-    toast({
-      title: "Dados atualizados",
-      description: "As informações foram atualizadas com sucesso",
-    });
-  };
+    setFilteredEscoltas([...escoltasData])
+    setSearchTerm('')
+  }
 
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -64,40 +55,43 @@ const SolicitacoesEscolta = () => {
         </h1>
       </div>
 
-      <Tabs defaultValue="solicitacoes" className="w-full" 
-        onValueChange={(value) => setActiveTab(value)}>
+      <Tabs
+        defaultValue="solicitacoes"
+        className="w-full"
+        onValueChange={value => setActiveTab(value)}
+      >
         <div className="flex justify-between items-center mb-4">
           <TabsList>
             <TabsTrigger value="solicitacoes">Solicitações</TabsTrigger>
             <TabsTrigger value="espelhamento">Espelhamento</TabsTrigger>
           </TabsList>
-          
+
           <Collapsible open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-            <CollapsibleTrigger className="hidden">
-              {/* Hidden trigger handled by EscoltaActionButtons */}
-            </CollapsibleTrigger>
-            
-            <EscoltaActionButtons 
-              isFilterOpen={isFilterOpen}
-              onFilterToggle={setIsFilterOpen}
-              onRefresh={refreshData}
-            />
+            <div className="flex gap-2">
+              <CollapsibleTrigger asChild>
+                <EscoltaActionButtons
+                  isFilterOpen={isFilterOpen}
+                  onFilterToggle={setIsFilterOpen}
+                  onRefresh={refreshData}
+                />
+              </CollapsibleTrigger>
+            </div>
+
+            <CollapsibleContent>
+              <EscoltaFilter
+                searchTerm={searchTerm}
+                onSearchTermChange={setSearchTerm}
+                onApplyFilter={filterEscoltas}
+                onClearFilter={clearFilter}
+              />
+            </CollapsibleContent>
           </Collapsible>
         </div>
-        
-        <CollapsibleContent className="mb-4">
-          <EscoltaFilter 
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-            onApplyFilter={filterEscoltas}
-            onClearFilter={clearFilter}
-          />
-        </CollapsibleContent>
 
         <TabsContent value="solicitacoes" className="space-y-4">
-          <EscoltaTable 
-            escoltas={filteredEscoltas} 
-            totalEscoltas={escoltasData.length} 
+          <EscoltaTable
+            escoltas={filteredEscoltas}
+            totalEscoltas={escoltasData.length}
           />
         </TabsContent>
 
@@ -106,7 +100,7 @@ const SolicitacoesEscolta = () => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
+  )
+}
 
-export default SolicitacoesEscolta;
+export default SolicitacoesEscolta
