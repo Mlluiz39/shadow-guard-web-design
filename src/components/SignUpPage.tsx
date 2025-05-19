@@ -153,7 +153,7 @@ const SignUpPage = () => {
           </div>
 
           <div className="text-center text-sm text-security-muted">
-            <p>© {new Date().getFullYear()} SecureGuard Security Systems</p>
+            <p>© {new Date().getFullYear()} Sistema Integrado de Segurança</p>
             <p>Todos os direitos reservados</p>
           </div>
         </div>
