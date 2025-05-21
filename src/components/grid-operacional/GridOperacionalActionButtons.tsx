@@ -29,7 +29,6 @@ export const GridOperacionalActionButtons = ({
   // Função para imprimir dados
   const printData = () => {
     toast({
-      title: "Imprimindo...",
       description: "Enviando os dados para impressão",
     });
     window.print();
