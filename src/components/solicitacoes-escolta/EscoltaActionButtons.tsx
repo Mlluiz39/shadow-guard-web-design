@@ -29,6 +29,7 @@ export const EscoltaActionButtons = ({
   // Function to print data
   const printData = () => {
     toast({
+      title: "Imprimindo...",
       description: "Enviando os dados para impressão",
     });
     window.print();

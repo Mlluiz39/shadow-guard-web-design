@@ -34,6 +34,7 @@ const GridOperacional = () => {
     setFilteredDados([...gridOperacionalData]);
     setSearchTerm('');
     toast({
+      title: "Dados atualizados",
       description: "Os dados foram atualizados com sucesso",
     });
   };
