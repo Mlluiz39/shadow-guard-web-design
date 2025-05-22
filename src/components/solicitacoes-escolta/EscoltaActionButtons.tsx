@@ -1,4 +1,3 @@
-
 import { 
   Plus, 
   Filter, 
@@ -28,10 +27,12 @@ export const EscoltaActionButtons = ({
 }: EscoltaActionButtonsProps) => {
   // Function to print data
   const printData = () => {
-    toast({
-      title: "Imprimindo...",
-      description: "Enviando os dados para impressão",
-    });
+    toast(
+      <>
+        <strong>Imprimindo...</strong>
+        <div>Enviando os dados para impressão</div>
+      </>
+    );
     window.print();
   };
 

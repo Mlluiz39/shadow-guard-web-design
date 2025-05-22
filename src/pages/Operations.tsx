@@ -6,6 +6,8 @@ import PlaceholderPage from "./PlaceholderPage";
 import AgentesDisponiveis from "./AgentesDisponiveis";
 import QuadroOperacional from "./QuadroOperacional";
 import SolicitacoesEscolta from "./SolicitacoesEscolta";
+import GridOperacional from "./GridOperacional";
+
 
 const Operations = () => {
   return (
@@ -22,16 +24,11 @@ const Operations = () => {
       <Routes>
         <Route index element={<OperationsHome />} />
         <Route path="agentes" element={<AgentesDisponiveis />} />
-        <Route path="grid" element={
-          <PlaceholderPage 
-            title="Grid Operacional" 
-            icon={<LayoutGrid className="h-6 w-6" />} 
-          />
-        } />
+        <Route path="grid" element={<GridOperacional />} />
         <Route path="escoltas" element={<SolicitacoesEscolta />} />
-        <Route path="transportadoras" element={
+        <Route path="clientes" element={
           <PlaceholderPage 
-            title="Transportadoras" 
+            title="Clientes" 
             icon={<Truck className="h-6 w-6" />} 
           />
         } />

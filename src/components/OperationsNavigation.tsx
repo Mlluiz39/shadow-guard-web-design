@@ -34,8 +34,8 @@ const operationItems = [
     icon: <Shield className="h-6 w-6" /> 
   },
   { 
-    name: "Transportadoras", 
-    path: "/operacoes/transportadoras", 
+    name: "Clientes", 
+    path: "/operacoes/clientes", 
     icon: <Truck className="h-6 w-6" /> 
   },
   { 
