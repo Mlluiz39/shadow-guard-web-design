@@ -22,26 +22,22 @@ const Operations = () => {
 
       <Routes>
         <Route index element={<OperationsHome />} />
-        <Route path="agentes" element={<AgentesDisponiveis />} />
         <Route path="grid" element={<GridOperacional />} />
-        <Route path="escoltas" element={<SolicitacoesEscolta />} />
-        <Route path="transportadoras" element={
-          <PlaceholderPage 
-            title="Transportadoras" 
-            icon={<Truck className="h-6 w-6" />} 
-          />
-        } />
-        <Route path="quadro" element={<QuadroOperacional />} />
+        <Route path="avisos" element={<SolicitacoesEscolta />} />
+        <Route path="quadro" element={<AgentesDisponiveis />} />
+
+        // modulos em desenvolvimento
+
         <Route path="ocorrencias" element={
           <PlaceholderPage 
             title="Livro de ocorrências" 
             icon={<BookOpen className="h-6 w-6" />} 
           />
         } />
-        <Route path="avisos" element={
+        <Route path="clientes" element={
           <PlaceholderPage 
-            title="Avisos" 
-            icon={<Bell className="h-6 w-6" />} 
+            title="Clientes" 
+            icon={<Truck className="h-6 w-6" />} 
           />
         } />
         <Route path="chamados" element={
