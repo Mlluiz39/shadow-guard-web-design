@@ -4,7 +4,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { toast } from '@/components/ui/use-toast';
 import { GridOperacionalTable } from '../components/grid-operacional/GridOperacionalTable';
 import { GridOperacionalFilter } from '../components/grid-operacional/GridOperacionalFilter';
-import { GridOperacionalActionButtons } from '@/components/grid-operacional/GridOperacionalActionButtons';
+import { GridOperacionalActionButtons } from '../components/grid-operacional/GridOperacionalActionButtons';
 import { gridOperacionalData } from '../components/grid-operacional/types';
 
 const GridOperacional = () => {

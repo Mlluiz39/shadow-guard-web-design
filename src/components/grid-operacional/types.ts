@@ -98,3 +98,4 @@ export interface GridOperacionalItem {
       kmTotal: 60
     }
   ];
+

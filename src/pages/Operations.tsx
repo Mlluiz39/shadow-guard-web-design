@@ -8,7 +8,6 @@ import QuadroOperacional from "./QuadroOperacional";
 import SolicitacoesEscolta from "./SolicitacoesEscolta";
 import GridOperacional from "./GridOperacional";
 
-
 const Operations = () => {
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -27,6 +26,7 @@ const Operations = () => {
         <Route path="grid" element={<GridOperacional />} />
         <Route path="avisos" element={<SolicitacoesEscolta />} />
         <Route path="clientes" element={
+
           <PlaceholderPage 
             title="Clientes" 
             icon={<Truck className="h-6 w-6" />} 
