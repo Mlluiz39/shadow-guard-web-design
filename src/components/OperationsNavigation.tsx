@@ -29,11 +29,6 @@ const operationItems = [
     icon: <LayoutGrid className="h-6 w-6" /> 
   },
   { 
-    name: "Solicitações de escolta", 
-    path: "/operacoes/escoltas", 
-    icon: <Shield className="h-6 w-6" /> 
-  },
-  { 
     name: "Clientes", 
     path: "/operacoes/clientes", 
     icon: <Truck className="h-6 w-6" /> 

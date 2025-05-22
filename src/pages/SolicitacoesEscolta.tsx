@@ -10,7 +10,6 @@ import { toast } from '@/components/ui/use-toast'
 import { EscoltaActionButtons } from '@/components/solicitacoes-escolta/EscoltaActionButtons'
 import { EscoltaFilter } from '@/components/solicitacoes-escolta/EscoltaFilter'
 import { EscoltaTable } from '@/components/solicitacoes-escolta/EscoltaTable'
-import { EspelhamentoContent } from '@/components/solicitacoes-escolta/EspelhamentoContent'
 import { escoltasData } from '@/components/solicitacoes-escolta/types'
 
 export interface EscoltaFilterProps {
@@ -63,7 +62,6 @@ const SolicitacoesEscolta = () => {
         <div className="flex justify-between items-center mb-4">
           <TabsList>
             <TabsTrigger value="solicitacoes">Solicitações</TabsTrigger>
-            <TabsTrigger value="espelhamento">Espelhamento</TabsTrigger>
           </TabsList>
 
           <Collapsible open={isFilterOpen} onOpenChange={setIsFilterOpen}>
@@ -96,7 +94,6 @@ const SolicitacoesEscolta = () => {
         </TabsContent>
 
         <TabsContent value="espelhamento">
-          <EspelhamentoContent />
         </TabsContent>
       </Tabs>
     </div>

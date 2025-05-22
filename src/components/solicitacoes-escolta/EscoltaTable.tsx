@@ -26,7 +26,6 @@ interface EscoltaItem {
   tratativas: string;
   operador: string;
   numeroEO: string;
-  espelhamento: string;
 }
 
 interface EscoltaTableProps {
@@ -79,9 +78,6 @@ export const EscoltaTable = ({ escoltas, totalEscoltas }: EscoltaTableProps) => 
                       <Phone className="h-4 w-4" /> Número E.O
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
-                    Espelhamento
-                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -95,7 +91,6 @@ export const EscoltaTable = ({ escoltas, totalEscoltas }: EscoltaTableProps) => 
                     <TableCell>{item.tratativas}</TableCell>
                     <TableCell>{item.operador}</TableCell>
                     <TableCell>{item.numeroEO}</TableCell>
-                    <TableCell>{item.espelhamento}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

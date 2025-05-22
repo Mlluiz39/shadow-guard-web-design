@@ -25,7 +25,7 @@ const Operations = () => {
         <Route index element={<OperationsHome />} />
         <Route path="agentes" element={<AgentesDisponiveis />} />
         <Route path="grid" element={<GridOperacional />} />
-        <Route path="escoltas" element={<SolicitacoesEscolta />} />
+        <Route path="avisos" element={<SolicitacoesEscolta />} />
         <Route path="clientes" element={
           <PlaceholderPage 
             title="Clientes" 
@@ -37,12 +37,6 @@ const Operations = () => {
           <PlaceholderPage 
             title="Livro de ocorrências" 
             icon={<BookOpen className="h-6 w-6" />} 
-          />
-        } />
-        <Route path="avisos" element={
-          <PlaceholderPage 
-            title="Avisos" 
-            icon={<Bell className="h-6 w-6" />} 
           />
         } />
         <Route path="chamados" element={

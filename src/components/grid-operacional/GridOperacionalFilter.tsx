@@ -25,7 +25,7 @@ export const GridOperacionalFilter = ({
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="search">Buscar por Cliente, Cód, Agente ou MTS-OS</Label>
+            <Label htmlFor="search">Buscar por Cliente, Cód, Data</Label>
             <div className="relative">
               <Search className="absolute left-2 top-3 h-4 w-4 text-muted-foreground" />
               <Input

@@ -19,7 +19,7 @@ export const GridOperacionalTable = ({ dados, totalRegistros }: GridOperacionalT
   const colunas = [
     "Cód", "Data Solicitação", "MTS-OS", "Cliente", "Placa Auto", 
     "Parceiro", "Agente 1", "Agente 2", "VTR", "Origem", "Destino", 
-    "Data Missão", "Hora Missão", "Hora Equipe", "Hora Início Real", 
+    "Data Inicio Missão", "Hora Missão", "Hora Equipe", "Hora Início Real", 
     "KM Início", "Data Fim Missão", "KM Final", "Hora Final", "Status", 
     "Total Hora Missão", "KM Total"
   ];

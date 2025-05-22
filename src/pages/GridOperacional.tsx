@@ -16,8 +16,9 @@ const GridOperacional = () => {
     const filtered = gridOperacionalData.filter(
       item =>
         item.cliente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.parceiro.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.cod.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.mtsOs.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.dataSolicitacao.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.agente1.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.agente2.toLowerCase().includes(searchTerm.toLowerCase())
     );
