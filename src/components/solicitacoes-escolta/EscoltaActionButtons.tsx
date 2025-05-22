@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 interface EscoltaActionButtonsProps {
   onFilterToggle: (isOpen: boolean) => void;
@@ -28,9 +28,7 @@ export const EscoltaActionButtons = ({
 }: EscoltaActionButtonsProps) => {
   // Function to print data
   const printData = () => {
-    toast({
-      description: "Enviando os dados para impressão",
-    });
+    toast("Enviando os dados para impressão");
     window.print();
   };
 
