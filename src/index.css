@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -157,5 +158,30 @@
   body {
     color: black !important;
     background: white !important;
+  }
+  
+  /* Specific code print styles */
+  #temp-print-container {
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  #temp-print-container h1 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  #temp-print-container .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  #temp-print-container strong {
+    font-weight: bold;
   }
 }
