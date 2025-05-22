@@ -24,28 +24,28 @@ export const GridOperacionalTable = ({ dados, totalRegistros }: GridOperacionalT
             <Table>
               <TableHeader className="bg-gray-200 whitespace-nowrap">
                 <TableRow>
-                  <TableHead className="font-semibold">Cód</TableHead>
-                  <TableHead className="font-semibold">Data Solicitação</TableHead>
-                  <TableHead className="font-semibold">MTS-OS</TableHead>
-                  <TableHead className="font-semibold">Cliente</TableHead>
-                  <TableHead className="font-semibold">Placa Auto</TableHead>
-                  <TableHead className="font-semibold">Parceiro</TableHead>
-                  <TableHead className="font-semibold">Agente 1</TableHead>
-                  <TableHead className="font-semibold">Agente 2</TableHead>
-                  <TableHead className="font-semibold">VTR</TableHead>
-                  <TableHead className="font-semibold">Origem</TableHead>
-                  <TableHead className="font-semibold">Destino</TableHead>
-                  <TableHead className="font-semibold">Data Missão</TableHead>
-                  <TableHead className="font-semibold">Hora Missão</TableHead>
-                  <TableHead className="font-semibold">Hora Equipe</TableHead>
-                  <TableHead className="font-semibold">Hora Início Real</TableHead>
-                  <TableHead className="font-semibold">KM Início</TableHead>
-                  <TableHead className="font-semibold">Data Fim Missão</TableHead>
-                  <TableHead className="font-semibold">KM Final</TableHead>
-                  <TableHead className="font-semibold">Hora Final</TableHead>
-                  <TableHead className="font-semibold">Status</TableHead>
-                  <TableHead className="font-semibold">Total Hora Missão</TableHead>
-                  <TableHead className="font-semibold">KM Total</TableHead>
+                  <TableHead className="font-semibold" data-field="cod">Cód</TableHead>
+                  <TableHead className="font-semibold" data-field="dataSolicitacao">Data Solicitação</TableHead>
+                  <TableHead className="font-semibold" data-field="mtsOs">MTS-OS</TableHead>
+                  <TableHead className="font-semibold" data-field="cliente">Cliente</TableHead>
+                  <TableHead className="font-semibold" data-field="placaAuto">Placa Auto</TableHead>
+                  <TableHead className="font-semibold" data-field="parceiro">Parceiro</TableHead>
+                  <TableHead className="font-semibold" data-field="agente1">Agente 1</TableHead>
+                  <TableHead className="font-semibold" data-field="agente2">Agente 2</TableHead>
+                  <TableHead className="font-semibold" data-field="vtr">VTR</TableHead>
+                  <TableHead className="font-semibold" data-field="origem">Origem</TableHead>
+                  <TableHead className="font-semibold" data-field="destino">Destino</TableHead>
+                  <TableHead className="font-semibold" data-field="dataMissao">Data Missão</TableHead>
+                  <TableHead className="font-semibold" data-field="horaMissao">Hora Missão</TableHead>
+                  <TableHead className="font-semibold" data-field="horaEquipe">Hora Equipe</TableHead>
+                  <TableHead className="font-semibold" data-field="horaInicioReal">Hora Início Real</TableHead>
+                  <TableHead className="font-semibold" data-field="kmInicio">KM Início</TableHead>
+                  <TableHead className="font-semibold" data-field="dataFimMissao">Data Fim Missão</TableHead>
+                  <TableHead className="font-semibold" data-field="kmFinal">KM Final</TableHead>
+                  <TableHead className="font-semibold" data-field="horaFinal">Hora Final</TableHead>
+                  <TableHead className="font-semibold" data-field="status">Status</TableHead>
+                  <TableHead className="font-semibold" data-field="totalHoraMissao">Total Hora Missão</TableHead>
+                  <TableHead className="font-semibold" data-field="kmTotal">KM Total</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
