@@ -43,43 +43,43 @@ export const EscoltaTable = ({ escoltas, totalEscoltas }: EscoltaTableProps) => 
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="cliente">
                     Cliente
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="solicitacao">
                     Solicitação
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="dataInicio">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" /> Data Início Previsto
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="origem">
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" /> Origem
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="destino">
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" /> Destino
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="tratativas">
                     <div className="flex items-center gap-1">
                       <FileText className="h-4 w-4" /> Tratativas
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="operador">
                     <div className="flex items-center gap-1">
                       <User className="h-4 w-4" /> Operador
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="numeroEO">
                     <div className="flex items-center gap-1">
                       <Phone className="h-4 w-4" /> Número E.O
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="espelhamento">
                     Espelhamento
                   </TableHead>
                 </TableRow>
@@ -87,15 +87,15 @@ export const EscoltaTable = ({ escoltas, totalEscoltas }: EscoltaTableProps) => 
               <TableBody>
                 {escoltas.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell>{item.cliente}</TableCell>
-                    <TableCell>{item.solicitacao}</TableCell>
-                    <TableCell>{item.dataInicioPrevisto}</TableCell>
-                    <TableCell>{item.origem}</TableCell>
-                    <TableCell>{item.destino}</TableCell>
-                    <TableCell>{item.tratativas}</TableCell>
-                    <TableCell>{item.operador}</TableCell>
-                    <TableCell>{item.numeroEO}</TableCell>
-                    <TableCell>{item.espelhamento}</TableCell>
+                    <TableCell data-field="cliente">{item.cliente}</TableCell>
+                    <TableCell data-field="solicitacao">{item.solicitacao}</TableCell>
+                    <TableCell data-field="dataInicio">{item.dataInicioPrevisto}</TableCell>
+                    <TableCell data-field="origem">{item.origem}</TableCell>
+                    <TableCell data-field="destino">{item.destino}</TableCell>
+                    <TableCell data-field="tratativas">{item.tratativas}</TableCell>
+                    <TableCell data-field="operador">{item.operador}</TableCell>
+                    <TableCell data-field="numeroEO">{item.numeroEO}</TableCell>
+                    <TableCell data-field="espelhamento">{item.espelhamento}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
