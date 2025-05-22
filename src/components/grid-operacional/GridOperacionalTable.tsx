@@ -22,7 +22,7 @@ export const GridOperacionalTable = ({ dados, totalRegistros }: GridOperacionalT
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-200 whitespace-nowrap">
                 <TableRow>
                   <TableHead className="font-semibold">Cód</TableHead>
                   <TableHead className="font-semibold">Data Solicitação</TableHead>
@@ -50,7 +50,10 @@ export const GridOperacionalTable = ({ dados, totalRegistros }: GridOperacionalT
               </TableHeader>
               <TableBody>
                 {dados.map((item) => (
-                  <TableRow key={item.cod}>
+                  
+                  <TableRow key={item.cod}
+                  className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
+                  >
                     <TableCell>{item.cod}</TableCell>
                     <TableCell>{item.dataSolicitacao}</TableCell>
                     <TableCell>{item.mtsOs}</TableCell>
