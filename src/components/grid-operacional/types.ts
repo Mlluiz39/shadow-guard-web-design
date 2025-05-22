@@ -1,4 +1,3 @@
-
 export interface GridOperacionalItem {
   cod: string;
   dataSolicitacao: string;
