@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import { Shield } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -6,6 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { toast } from '@/components/ui/use-toast'
 import { EscoltaActionButtons } from '@/components/solicitacoes-escolta/EscoltaActionButtons'
 import { EscoltaFilter } from '@/components/solicitacoes-escolta/EscoltaFilter'
 import { EscoltaTable } from '@/components/solicitacoes-escolta/EscoltaTable'
@@ -90,6 +92,9 @@ const SolicitacoesEscolta = () => {
             escoltas={filteredEscoltas}
             totalEscoltas={escoltasData.length}
           />
+        </TabsContent>
+
+        <TabsContent value="espelhamento">
         </TabsContent>
       </Tabs>
     </div>
