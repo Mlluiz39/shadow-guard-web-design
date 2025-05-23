@@ -1,3 +1,4 @@
+
 import {
   Table,
   TableHeader,
@@ -18,96 +19,57 @@ export const GridOperacionalTable = ({
   dados,
   totalRegistros,
 }: GridOperacionalTableProps) => {
+  // Títulos das colunas
+  const colunas = [
+    "Cód", "Data Solicitação", "MTS-OS", "Cliente", "Placa Auto", 
+    "Parceiro", "Agente 1", "Agente 2", "VTR", "Origem", "Destino", 
+    "Data Inicio Missão", "Hora Missão", "Hora Equipe", "Hora Início Real", 
+    "KM Início", "Data Fim Missão", "KM Final", "Hora Final", "Status", 
+    "Total Hora Missão", "KM Total"
+  ];
+
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="shadow-lg rounded-lg">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <Table>
+            <Table className="min-w-full bg-white rounded-lg shadow-md">
               <TableHeader className="bg-gray-200 whitespace-nowrap">
                 <TableRow>
-                  <TableHead className="font-semibold" data-field="cod">
-                    Cód
-                  </TableHead>
-                  <TableHead
-                    className="font-semibold"
-                    data-field="dataSolicitacao"
-                  >
-                    Data Solicitação
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="mtsOs">
-                    MTS-OS
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="cliente">
-                    Cliente
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="placaAuto">
-                    Placa Auto
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="parceiro">
-                    Parceiro
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="agente1">
-                    Agente 1
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="agente2">
-                    Agente 2
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="vtr">
-                    VTR
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="origem">
-                    Origem
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="destino">
-                    Destino
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="dataMissao">
-                    Data Missão
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="horaMissao">
-                    Hora Missão
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="horaEquipe">
-                    Hora Equipe
-                  </TableHead>
-                  <TableHead
-                    className="font-semibold"
-                    data-field="horaInicioReal"
-                  >
-                    Hora Início Real
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="kmInicio">
-                    KM Início
-                  </TableHead>
-                  <TableHead
-                    className="font-semibold"
-                    data-field="dataFimMissao"
-                  >
-                    Data Fim Missão
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="kmFinal">
-                    KM Final
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="horaFinal">
-                    Hora Final
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="status">
-                    Status
-                  </TableHead>
-                  <TableHead
-                    className="font-semibold"
-                    data-field="totalHoraMissao"
-                  >
-                    Total Hora Missão
-                  </TableHead>
-                  <TableHead className="font-semibold" data-field="kmTotal">
-                    KM Total
-                  </TableHead>
+                  {colunas.map((titulo, index) => (
+                    <TableHead 
+                      key={index} 
+                      className="font-semibold whitespace-nowrap p-2 text-center text-black"
+                      data-field={index === 0 ? "cod" : 
+                                 index === 1 ? "dataSolicitacao" :
+                                 index === 2 ? "mtsOs" :
+                                 index === 3 ? "cliente" :
+                                 index === 4 ? "placaAuto" :
+                                 index === 5 ? "parceiro" :
+                                 index === 6 ? "agente1" :
+                                 index === 7 ? "agente2" :
+                                 index === 8 ? "vtr" :
+                                 index === 9 ? "origem" :
+                                 index === 10 ? "destino" :
+                                 index === 11 ? "dataMissao" :
+                                 index === 12 ? "horaMissao" :
+                                 index === 13 ? "horaEquipe" :
+                                 index === 14 ? "horaInicioReal" :
+                                 index === 15 ? "kmInicio" :
+                                 index === 16 ? "dataFimMissao" :
+                                 index === 17 ? "kmFinal" :
+                                 index === 18 ? "horaFinal" :
+                                 index === 19 ? "status" :
+                                 index === 20 ? "totalHoraMissao" :
+                                 "kmTotal"}
+                    >
+                      {titulo}
+                    </TableHead>
+                  ))}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dados.map(item => (
+                {dados.map((item) => (
                   <TableRow
                     key={item.cod}
                     className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
@@ -151,4 +113,5 @@ export const GridOperacionalTable = ({
     </div>
   )
 }
+
 export default GridOperacionalTable
