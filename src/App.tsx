@@ -9,8 +9,8 @@ import Dashboard from './pages/Dashboard'
 import PlaceholderPage from './pages/PlaceholderPage'
 import NotFound from './pages/NotFound'
 import Operations from './pages/Operations'
+import Configuracoes from './pages/Configuracoes'
 import {
-  Settings,
   DollarSign,
   FileText,
   Archive,
@@ -65,10 +65,7 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage
-                    title="Configurações"
-                    icon={<Settings className="h-6 w-6" />}
-                  />
+                  <Configuracoes />
                 </Layout>
               </ProtectedRoute>
             }
