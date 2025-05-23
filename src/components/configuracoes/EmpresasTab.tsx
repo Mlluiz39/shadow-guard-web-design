@@ -1,28 +1,35 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableRow, 
-  TableHead, 
-  TableCell 
-} from "@/components/ui/table"
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogFooter 
-} from "@/components/ui/dialog"
-import { Plus, Search } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { toast } from "sonner"
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from '@/components/ui/table'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Plus, Search } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { toast } from 'sonner'
 
 interface Empresa {
   id: string
@@ -33,47 +40,47 @@ interface Empresa {
 }
 
 const empresasSchema = z.object({
-  nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-  cnpj: z.string().min(14, "CNPJ inválido"),
-  proprietario: z.string().min(1, "Proprietário é obrigatório"),
-  email: z.string().email("Email inválido"),
+  nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
+  cnpj: z.string().min(14, 'CNPJ inválido'),
+  proprietario: z.string().min(1, 'Proprietário é obrigatório'),
+  email: z.string().email('Email inválido'),
 })
 
 export const EmpresasTab = () => {
   const [empresas, setEmpresas] = useState<Empresa[]>([
-    { 
-      id: "1", 
-      nome: "Proteção Segurança Ltda", 
-      cnpj: "12.345.678/0001-90", 
-      proprietario: "João Silva", 
-      email: "joao@protecao.com" 
+    {
+      id: '1',
+      nome: 'Proteção Segurança Ltda',
+      cnpj: '12.345.678/0001-90',
+      proprietario: 'João Silva',
+      email: 'joao@protecao.com',
     },
-    { 
-      id: "2", 
-      nome: "Escolta Expressa S.A.", 
-      cnpj: "98.765.432/0001-10", 
-      proprietario: "Maria Souza", 
-      email: "maria@escolta.com" 
+    {
+      id: '2',
+      nome: 'Escolta Expressa S.A.',
+      cnpj: '98.765.432/0001-10',
+      proprietario: 'Maria Souza',
+      email: 'maria@escolta.com',
     },
-    { 
-      id: "3", 
-      nome: "Segurança Total", 
-      cnpj: "45.678.901/0001-23", 
-      proprietario: "Pedro Santos", 
-      email: "pedro@total.com" 
+    {
+      id: '3',
+      nome: 'Segurança Total',
+      cnpj: '45.678.901/0001-23',
+      proprietario: 'Pedro Santos',
+      email: 'pedro@total.com',
     },
   ])
-  
-  const [searchTerm, setSearchTerm] = useState("")
+
+  const [searchTerm, setSearchTerm] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const form = useForm<z.infer<typeof empresasSchema>>({
     resolver: zodResolver(empresasSchema),
     defaultValues: {
-      nome: "",
-      cnpj: "",
-      proprietario: "",
-      email: "",
+      nome: '',
+      cnpj: '',
+      proprietario: '',
+      email: '',
     },
   })
 
@@ -84,19 +91,20 @@ export const EmpresasTab = () => {
       nome: data.nome,
       cnpj: data.cnpj,
       proprietario: data.proprietario,
-      email: data.email
+      email: data.email,
     }
-    
+
     setEmpresas([...empresas, newEmpresa])
     setDialogOpen(false)
     form.reset()
-    toast.success("Empresa adicionada com sucesso!")
+    toast.success('Empresa adicionada com sucesso!')
   }
 
-  const filteredEmpresas = empresas.filter(empresa => 
-    empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    empresa.cnpj.includes(searchTerm) ||
-    empresa.proprietario.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEmpresas = empresas.filter(
+    empresa =>
+      empresa.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      empresa.cnpj.includes(searchTerm) ||
+      empresa.proprietario.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -104,11 +112,11 @@ export const EmpresasTab = () => {
       <div className="flex justify-between items-center">
         <div className="relative w-72">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Buscar empresas..." 
+          <Input
+            placeholder="Buscar empresas..."
             className="pl-8"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
         <Button onClick={() => setDialogOpen(true)}>
@@ -121,7 +129,7 @@ export const EmpresasTab = () => {
           <DialogHeader>
             <DialogTitle>Adicionar Nova Empresa</DialogTitle>
           </DialogHeader>
-          
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -137,7 +145,7 @@ export const EmpresasTab = () => {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="cnpj"
@@ -151,7 +159,7 @@ export const EmpresasTab = () => {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="proprietario"
@@ -165,7 +173,7 @@ export const EmpresasTab = () => {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="email"
@@ -173,15 +181,23 @@ export const EmpresasTab = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="email@exemplo.com" type="email" {...field} />
+                      <Input
+                        placeholder="email@exemplo.com"
+                        type="email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
+
               <DialogFooter>
-                <Button variant="outline" type="button" onClick={() => setDialogOpen(false)}>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => setDialogOpen(false)}
+                >
                   Cancelar
                 </Button>
                 <Button type="submit">Adicionar</Button>
@@ -203,8 +219,11 @@ export const EmpresasTab = () => {
           </TableHeader>
           <TableBody>
             {filteredEmpresas.length > 0 ? (
-              filteredEmpresas.map((empresa) => (
-                <TableRow key={empresa.id}>
+              filteredEmpresas.map(empresa => (
+                <TableRow
+                  key={empresa.id}
+                  className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
+                >
                   <TableCell className="font-medium">{empresa.nome}</TableCell>
                   <TableCell>{empresa.cnpj}</TableCell>
                   <TableCell>{empresa.proprietario}</TableCell>

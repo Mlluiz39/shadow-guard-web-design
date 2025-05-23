@@ -1,9 +1,14 @@
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { EmpresasTab } from "@/components/configuracoes/EmpresasTab"
-import { UsuariosTab } from "@/components/configuracoes/UsuariosTab"
-import { Settings } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { EmpresasTab } from '@/components/configuracoes/EmpresasTab'
+import { UsuariosTab } from '@/components/configuracoes/UsuariosTab'
+import { Settings } from 'lucide-react'
 
 const Configuracoes = () => {
   return (
@@ -16,7 +21,7 @@ const Configuracoes = () => {
           Última atualização: {new Date().toLocaleDateString()}
         </div>
       </div>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>Painel Administrativo</CardTitle>
@@ -27,8 +32,18 @@ const Configuracoes = () => {
         <CardContent>
           <Tabs defaultValue="empresas" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="empresas">Empresas</TabsTrigger>
-              <TabsTrigger value="usuarios">Usuários</TabsTrigger>
+              <TabsTrigger
+                className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                value="empresas"
+              >
+                Empresas
+              </TabsTrigger>
+              <TabsTrigger
+                className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                value="usuarios"
+              >
+                Usuários
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="empresas">
               <EmpresasTab />

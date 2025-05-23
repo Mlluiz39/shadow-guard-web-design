@@ -283,7 +283,9 @@ export const UsuariosTab = () => {
           <TableBody>
             {filteredUsuarios.length > 0 ? (
               filteredUsuarios.map((usuario) => (
-                <TableRow key={usuario.id}>
+                <TableRow key={usuario.id} 
+                className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
+                >
                   <TableCell className="font-medium">{usuario.nome}</TableCell>
                   <TableCell>{usuario.email}</TableCell>
                   <TableCell>{usuario.empresa}</TableCell>
