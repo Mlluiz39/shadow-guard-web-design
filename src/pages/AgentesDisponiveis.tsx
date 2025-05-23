@@ -1,172 +1,214 @@
-
-import { useState } from "react";
-import { 
-  Users, 
-  Filter, 
-  Bell, 
+import { useState, useEffect } from 'react'
+import {
+  Users,
+  Filter,
+  Bell,
   X,
-  RefreshCw
-} from "lucide-react";
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableRow, 
-  TableHead, 
-  TableCell 
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { 
-  Collapsible, 
+  RefreshCw,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsUpDown,
+} from 'lucide-react'
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import {
+  Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger 
-} from "@/components/ui/collapsible";
-import { toast } from "@/components/ui/use-toast";
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { toast } from '@/components/ui/use-toast'
+import { Card, CardContent } from '@/components/ui/card'
 
-// Sample data for agentes
 const agentesData = [
-  { id: 1, nome: "Carlos Silva", nomeGuerra: "Silva", situacao: "Disponível", re: "12345", telefone: "(11) 99999-1111" },
-  { id: 2, nome: "Ana Oliveira", nomeGuerra: "Ana", situacao: "Em serviço", re: "23456", telefone: "(11) 99999-2222" },
-  { id: 3, nome: "João Santos", nomeGuerra: "João", situacao: "Disponível", re: "34567", telefone: "(11) 99999-3333" },
-  { id: 4, nome: "Maria Costa", nomeGuerra: "Costa", situacao: "Folga", re: "45678", telefone: "(11) 99999-4444" },
-  { id: 5, nome: "Pedro Almeida", nomeGuerra: "Almeida", situacao: "Disponível", re: "56789", telefone: "(11) 99999-5555" },
-  { id: 6, nome: "Julia Pereira", nomeGuerra: "Julia", situacao: "Em serviço", re: "67890", telefone: "(11) 99999-6666" },
-  { id: 7, nome: "Roberto Ferreira", nomeGuerra: "Roberto", situacao: "Disponível", re: "78901", telefone: "(11) 99999-7777" },
-  { id: 8, nome: "Fernanda Lima", nomeGuerra: "Fernanda", situacao: "Folga", re: "89012", telefone: "(11) 99999-8888" },
-];
+  {
+    id: 1,
+    nome: 'Carlos Silva',
+    nomeGuerra: 'Silva',
+    situacao: 'Disponível',
+    re: '12345',
+    telefone: '(11) 99999-1111',
+  },
+  {
+    id: 2,
+    nome: 'Ana Oliveira',
+    nomeGuerra: 'Ana',
+    situacao: 'Em serviço',
+    re: '23456',
+    telefone: '(11) 99999-2222',
+  },
+  {
+    id: 3,
+    nome: 'João Santos',
+    nomeGuerra: 'João',
+    situacao: 'Disponível',
+    re: '34567',
+    telefone: '(11) 99999-3333',
+  },
+  {
+    id: 4,
+    nome: 'Maria Costa',
+    nomeGuerra: 'Costa',
+    situacao: 'Folga',
+    re: '45678',
+    telefone: '(11) 99999-4444',
+  },
+  {
+    id: 5,
+    nome: 'Pedro Almeida',
+    nomeGuerra: 'Almeida',
+    situacao: 'Disponível',
+    re: '56789',
+    telefone: '(11) 99999-5555',
+  },
+  {
+    id: 6,
+    nome: 'Julia Pereira',
+    nomeGuerra: 'Julia',
+    situacao: 'Em serviço',
+    re: '67890',
+    telefone: '(11) 99999-6666',
+  },
+  {
+    id: 7,
+    nome: 'Roberto Ferreira',
+    nomeGuerra: 'Roberto',
+    situacao: 'Disponível',
+    re: '78901',
+    telefone: '(11) 99999-7777',
+  },
+  {
+    id: 8,
+    nome: 'Fernanda Lima',
+    nomeGuerra: 'Fernanda',
+    situacao: 'Folga',
+    re: '89012',
+    telefone: '(11) 99999-8888',
+  },
+]
 
 const AgentesDisponiveis = () => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredAgentes, setFilteredAgentes] = useState(agentesData);
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filteredAgentes, setFilteredAgentes] = useState(agentesData)
 
-  // Function to filter agentes based on search term
-  const filterAgentes = () => {
-    const filtered = agentesData.filter(
-      (agente) =>
-        agente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        agente.nomeGuerra.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        agente.re.includes(searchTerm)
-    );
-    setFilteredAgentes(filtered);
-  };
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(5)
 
-  // Function to clear the filter
+  const [sortField, setSortField] = useState('')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const term = searchTerm.toLowerCase().trim()
+      const results = agentesData.filter(
+        a =>
+          a.nome.toLowerCase().includes(term) ||
+          a.nomeGuerra.toLowerCase().includes(term) ||
+          a.re.includes(term)
+      )
+      setFilteredAgentes(results)
+      setCurrentPage(1)
+    }, 300)
+    return () => clearTimeout(timeout)
+  }, [searchTerm])
+
   const clearFilter = () => {
-    setSearchTerm("");
-    setFilteredAgentes(agentesData);
-  };
+    setSearchTerm('')
+    setFilteredAgentes(agentesData)
+    setCurrentPage(1)
+  }
 
-  // Function to refresh the data
   const refreshData = () => {
-    setFilteredAgentes([...agentesData]);
-    // Here you would typically fetch fresh data from an API
-    console.log("Recarregando dados...");
-    toast("Dados atualizados com sucesso!");
-  };
+    setFilteredAgentes([...agentesData])
+    toast('Dados atualizados com sucesso!')
+  }
+
+  const handleSort = (field: string) => {
+    let direction: 'asc' | 'desc' = 'asc'
+    if (sortField === field && sortDirection === 'asc') direction = 'desc'
+    setSortField(field)
+    setSortDirection(direction)
+  }
+
+  const sortedAgentes = [...filteredAgentes].sort((a, b) => {
+    if (!sortField) return 0
+    const aValue = a[sortField]
+    const bValue = b[sortField]
+    if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
+    if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
+    return 0
+  })
+
+  const totalPages = Math.ceil(sortedAgentes.length / itemsPerPage)
+  const paginatedAgentes = sortedAgentes.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
 
   return (
     <div className="container mx-auto p-4 space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-security flex items-center gap-2">
-          <Users className="h-6 w-6" /> Agentes disponíveis
-        </h1>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => console.log("Notificações")}
-          >
-            <Bell className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-
-      <Tabs defaultValue="lista" className="w-full">
+      <Tabs defaultValue="lista">
         <TabsList className="mb-4">
           <TabsTrigger value="lista">Lista de Agentes</TabsTrigger>
-          <TabsTrigger value="mapa">Mapa</TabsTrigger>
         </TabsList>
         <TabsContent value="lista" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              {/* Fixed: Wrapped CollapsibleTrigger within Collapsible component */}
-              <Collapsible open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-                <CollapsibleTrigger asChild>
-                  <Button variant="outline" className="gap-2">
-                    <Filter className="h-4 w-4" />
-                    Filtro
-                  </Button>
-                </CollapsibleTrigger>
-                
-                {/* Move the CollapsibleContent here, inside the Collapsible */}
-                <CollapsibleContent className="p-4 bg-muted/50 rounded-md mb-4 mt-2">
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <Input
-                        placeholder="Buscar por nome, nome de guerra ou RE"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="mb-2"
-                      />
-                    </div>
-                    <Button onClick={filterAgentes}>Aplicar Filtro</Button>
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-              
-              {isFilterOpen && (
-                <Button 
-                  variant="ghost" 
-                  className="gap-2" 
-                  onClick={clearFilter}
-                >
-                  <X className="h-4 w-4" />
-                  Limpar Filtro
-                </Button>
-              )}
-            </div>
-            <Button variant="outline" onClick={refreshData} className="gap-2">
-              <RefreshCw className="h-4 w-4" />
-              Atualizar
+          <div className="flex gap-4">
+            <Input
+              placeholder="Buscar por nome, nome de guerra ou RE"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              className="mb-2"
+              onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
+            />
+            <Button onClick={clearFilter}>Limpar Filtro</Button>
+            <Button onClick={refreshData} variant="outline" className="gap-2">
+              <RefreshCw className="h-4 w-4" /> Atualizar
             </Button>
           </div>
-          
-          {/* Removed the duplicated Collapsible here */}
-          
+
           <Card>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Nome</TableHead>
-                    <TableHead>Nome de Guerra</TableHead>
-                    <TableHead>Situação</TableHead>
-                    <TableHead>RE</TableHead>
-                    <TableHead>Telefone</TableHead>
+                    {['nome', 'nomeGuerra', 'situacao', 're', 'telefone'].map(
+                      field => (
+                        <TableHead
+                          key={field}
+                          onClick={() => handleSort(field)}
+                          className="cursor-pointer select-none"
+                        >
+                          <div className="flex items-center gap-1 capitalize">
+                            {field}
+                            <ChevronsUpDown className="w-4 h-4" />
+                          </div>
+                        </TableHead>
+                      )
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredAgentes.map((agente) => (
+                  {paginatedAgentes.map(agente => (
                     <TableRow key={agente.id}>
                       <TableCell>{agente.nome}</TableCell>
                       <TableCell>{agente.nomeGuerra}</TableCell>
                       <TableCell>
-                        <span 
+                        <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            agente.situacao === "Disponível" 
-                              ? "bg-green-100 text-green-800" 
-                              : agente.situacao === "Em serviço" 
-                                ? "bg-blue-100 text-blue-800" 
-                                : "bg-orange-100 text-orange-800"
+                            agente.situacao === 'Disponível'
+                              ? 'bg-green-100 text-green-800'
+                              : agente.situacao === 'Em serviço'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-orange-100 text-orange-800'
                           }`}
                         >
                           {agente.situacao}
@@ -180,28 +222,60 @@ const AgentesDisponiveis = () => {
               </Table>
             </CardContent>
           </Card>
-          
+
           <div className="flex justify-between items-center text-sm text-muted-foreground mt-2">
             <div>
-              Mostrando {filteredAgentes.length} de {agentesData.length} agentes
+              Mostrando {paginatedAgentes.length} de {filteredAgentes.length}{' '}
+              agentes
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1">
+                <label htmlFor="perPage">Por página:</label>
+                <select
+                  id="perPage"
+                  value={itemsPerPage}
+                  onChange={e => {
+                    setItemsPerPage(Number(e.target.value))
+                    setCurrentPage(1)
+                  }}
+                  className="border border-gray-300 rounded px-2 py-1"
+                >
+                  {[5, 10, 15, 20].map(num => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                <span>
+                  Página {currentPage} de {totalPages}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() =>
+                    setCurrentPage(p => Math.min(p + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="mapa">
-          <Card>
-            <CardHeader>
-              <CardTitle>Mapa de Agentes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[400px] flex items-center justify-center bg-muted">
-                Visualização do mapa será implementada em breve.
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
     </div>
-  );
-};
+  )
+}
 
-export default AgentesDisponiveis;
+export default AgentesDisponiveis
