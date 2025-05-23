@@ -1,52 +1,13 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableRow, 
-  TableHead, 
-  TableCell 
-} from "@/components/ui/table"
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogFooter 
-} from "@/components/ui/dialog"
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Plus, Search } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { toast } from "sonner"
+import { Plus } from "lucide-react"
+import { Usuario } from "@/types/usuario"
+import { UsuariosSearch } from "./usuarios/UsuariosSearch"
+import { UsuariosTable } from "./usuarios/UsuariosTable"
+import { NovoUsuarioDialog } from "./usuarios/NovoUsuarioDialog"
 
-interface Usuario {
-  id: string
-  nome: string
-  email: string
-  empresa: string
-  cargo: string
-  departamento: string
-}
-
-const usuariosSchema = z.object({
-  nome: z.string().min(3, "Nome deve ter pelo menos 3 caracteres"),
-  email: z.string().email("Email inválido"),
-  empresa: z.string().min(1, "Empresa é obrigatória"),
-  cargo: z.string().min(1, "Cargo é obrigatório"),
-  departamento: z.string().min(1, "Departamento é obrigatório"),
-})
-
+// Mockup data
 const empresas = [
   { id: "1", nome: "Proteção Segurança Ltda" },
   { id: "2", nome: "Escolta Expressa S.A." },
@@ -87,32 +48,8 @@ export const UsuariosTab = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const form = useForm<z.infer<typeof usuariosSchema>>({
-    resolver: zodResolver(usuariosSchema),
-    defaultValues: {
-      nome: "",
-      email: "",
-      empresa: "",
-      cargo: "",
-      departamento: "",
-    },
-  })
-
-  const onSubmit = (data: z.infer<typeof usuariosSchema>) => {
-    // Fix by explicitly creating a new object that matches the Usuario interface
-    const newUsuario: Usuario = {
-      id: Date.now().toString(),
-      nome: data.nome,
-      email: data.email,
-      empresa: data.empresa,
-      cargo: data.cargo,
-      departamento: data.departamento
-    }
-    
+  const handleAddUsuario = (newUsuario: Usuario) => {
     setUsuarios([...usuarios, newUsuario])
-    setDialogOpen(false)
-    form.reset()
-    toast.success("Usuário adicionado com sucesso!")
   }
 
   const filteredUsuarios = usuarios.filter(usuario => 
@@ -124,15 +61,10 @@ export const UsuariosTab = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div className="relative w-72">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input 
-            placeholder="Buscar usuários..." 
-            className="pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <UsuariosSearch 
+          searchTerm={searchTerm} 
+          onSearchChange={setSearchTerm} 
+        />
         <Button onClick={() => setDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Novo Usuário
         </Button>
@@ -283,9 +215,7 @@ export const UsuariosTab = () => {
           <TableBody>
             {filteredUsuarios.length > 0 ? (
               filteredUsuarios.map((usuario) => (
-                <TableRow key={usuario.id} 
-                className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
-                >
+                <TableRow key={usuario.id}>
                   <TableCell className="font-medium">{usuario.nome}</TableCell>
                   <TableCell>{usuario.email}</TableCell>
                   <TableCell>{usuario.empresa}</TableCell>
