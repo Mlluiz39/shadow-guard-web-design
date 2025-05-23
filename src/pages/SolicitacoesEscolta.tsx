@@ -7,7 +7,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { toast } from '@/components/ui/use-toast'
 import { EscoltaActionButtons } from '@/components/solicitacoes-escolta/EscoltaActionButtons'
 import { EscoltaFilter } from '@/components/solicitacoes-escolta/EscoltaFilter'
 import { EscoltaTable } from '@/components/solicitacoes-escolta/EscoltaTable'
