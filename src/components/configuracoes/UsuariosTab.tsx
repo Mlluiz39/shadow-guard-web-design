@@ -6,6 +6,9 @@ import { Usuario } from "@/types/usuario"
 import { UsuariosSearch } from "./usuarios/UsuariosSearch"
 import { UsuariosTable } from "./usuarios/UsuariosTable"
 import { NovoUsuarioDialog } from "./usuarios/NovoUsuarioDialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 // Mockup data
 const empresas = [
@@ -17,7 +20,24 @@ const empresas = [
 const cargos = ["Administrador", "Supervisor", "Operador", "Agente", "Analista"]
 const departamentos = ["TI", "Operações", "Financeiro", "Comercial", "Logística", "RH"]
 
+import { useForm } from "react-hook-form";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+
 export const UsuariosTab = () => {
+  const form = useForm();
+  interface FormData {
+    nome: string;
+    email: string;
+    empresa: string;
+    cargo: string;
+    departamento: string;
+  }
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
   const [usuarios, setUsuarios] = useState<Usuario[]>([
     { 
       id: "1", 
