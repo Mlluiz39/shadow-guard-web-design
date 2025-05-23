@@ -22,13 +22,11 @@ const Operations = () => {
 
       <Routes>
         <Route index element={<OperationsHome />} />
-        <Route path="agentes" element={<AgentesDisponiveis />} />
         <Route path="grid" element={<GridOperacional />} />
-        <Route path="avisos" element={<SolicitacoesEscolta />} />
-        <Route path="clientes" element={
-
+        <Route path="escoltas" element={<SolicitacoesEscolta />} />
+        <Route path="transportadoras" element={
           <PlaceholderPage 
-            title="Clientes" 
+            title="Transportadoras" 
             icon={<Truck className="h-6 w-6" />} 
           />
         } />
@@ -37,6 +35,12 @@ const Operations = () => {
           <PlaceholderPage 
             title="Livro de ocorrências" 
             icon={<BookOpen className="h-6 w-6" />} 
+          />
+        } />
+        <Route path="avisos" element={
+          <PlaceholderPage 
+            title="Avisos" 
+            icon={<Bell className="h-6 w-6" />} 
           />
         } />
         <Route path="chamados" element={

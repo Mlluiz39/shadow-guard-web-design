@@ -42,41 +42,44 @@ export const EscoltaTable = ({ escoltas, totalEscoltas }: EscoltaTableProps) => 
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="cliente">
                     Cliente
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="solicitacao">
                     Solicitação
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="dataInicio">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" /> Data Início Previsto
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="origem">
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" /> Origem
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="destino">
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" /> Destino
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="tratativas">
                     <div className="flex items-center gap-1">
                       <FileText className="h-4 w-4" /> Tratativas
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="operador">
                     <div className="flex items-center gap-1">
                       <User className="h-4 w-4" /> Operador
                     </div>
                   </TableHead>
-                  <TableHead className="font-semibold">
+                  <TableHead className="font-semibold" data-field="numeroEO">
                     <div className="flex items-center gap-1">
                       <Phone className="h-4 w-4" /> Número E.O
                     </div>
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    Espelhamento
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -91,6 +94,7 @@ export const EscoltaTable = ({ escoltas, totalEscoltas }: EscoltaTableProps) => 
                     <TableCell>{item.tratativas}</TableCell>
                     <TableCell>{item.operador}</TableCell>
                     <TableCell>{item.numeroEO}</TableCell>
+                    <TableCell>{item.espelhamento}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

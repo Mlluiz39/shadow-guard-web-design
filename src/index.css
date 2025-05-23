@@ -104,3 +104,84 @@
     @apply border border-security-accent text-security-accent hover:bg-security-accent/10 font-medium px-4 py-2 rounded transition-colors;
   }
 }
+
+/* Print styles */
+@media print {
+  /* Hide UI elements that shouldn't be printed */
+  button, 
+  .sidebar,
+  header,
+  footer,
+  form,
+  .collapsible-trigger,
+  [role="tab"],
+  [role="tablist"],
+  .tooltip,
+  .print-hide {
+    display: none !important;
+  }
+  
+  /* Make sure the table is visible and fits the page */
+  .overflow-x-auto {
+    overflow-x: visible !important;
+  }
+  
+  /* Ensure good spacing */
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Adjust page breaks */
+  table {
+    page-break-inside: auto;
+  }
+  
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  /* Remove padding and borders from cards */
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  .card-content {
+    padding: 0 !important;
+  }
+  
+  /* Print with black text on white background */
+  body {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Specific code print styles */
+  #temp-print-container {
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  #temp-print-container h1 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  #temp-print-container .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  
+  #temp-print-container strong {
+    font-weight: bold;
+  }
+}

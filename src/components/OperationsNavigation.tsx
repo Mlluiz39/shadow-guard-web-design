@@ -19,18 +19,18 @@ interface OperationsNavProps {
 
 const operationItems = [
   { 
-    name: "Agentes disponíveis", 
-    path: "/operacoes/agentes", 
-    icon: <Users className="h-6 w-6" /> 
-  },
-  { 
     name: "Grid Operacional", 
     path: "/operacoes/grid", 
     icon: <LayoutGrid className="h-6 w-6" /> 
   },
   { 
-    name: "Clientes", 
-    path: "/operacoes/clientes", 
+    name: "Solicitações de escolta", 
+    path: "/operacoes/escoltas", 
+    icon: <Shield className="h-6 w-6" /> 
+  },
+  { 
+    name: "Transportadoras", 
+    path: "/operacoes/transportadoras", 
     icon: <Truck className="h-6 w-6" /> 
   },
   { 
@@ -39,14 +39,19 @@ const operationItems = [
     icon: <LayoutGrid className="h-6 w-6" /> 
   },
   { 
-    name: "Livro de ocorrências", 
-    path: "/operacoes/ocorrencias", 
-    icon: <BookOpen className="h-6 w-6" /> 
-  },
-  { 
     name: "Avisos", 
     path: "/operacoes/avisos", 
     icon: <Bell className="h-6 w-6" /> 
+  },
+  { 
+    name: "Clientes", 
+    path: "/operacoes/clientes", 
+    icon: <Truck className="h-6 w-6" /> 
+  },
+  { 
+    name: "Livro de ocorrências", 
+    path: "/operacoes/ocorrencias", 
+    icon: <BookOpen className="h-6 w-6" /> 
   },
   { 
     name: "Dashboard Chamados Equipes", 
