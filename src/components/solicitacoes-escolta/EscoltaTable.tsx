@@ -15,18 +15,7 @@ import {
   TableCell 
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-
-interface EscoltaItem {
-  id: number;
-  cliente: string;
-  solicitacao: string;
-  dataInicioPrevisto: string;
-  origem: string;
-  destino: string;
-  tratativas: string;
-  operador: string;
-  numeroEO: string;
-}
+import { EscoltaItem } from "./types";
 
 interface EscoltaTableProps {
   escoltas: EscoltaItem[];
