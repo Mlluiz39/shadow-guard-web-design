@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -100,10 +99,16 @@ export const UsuariosTab = () => {
   })
 
   const onSubmit = (data: z.infer<typeof usuariosSchema>) => {
-    const newUsuario = {
+    // Fix by explicitly creating a new object that matches the Usuario interface
+    const newUsuario: Usuario = {
       id: Date.now().toString(),
-      ...data
+      nome: data.nome,
+      email: data.email,
+      empresa: data.empresa,
+      cargo: data.cargo,
+      departamento: data.departamento
     }
+    
     setUsuarios([...usuarios, newUsuario])
     setDialogOpen(false)
     form.reset()

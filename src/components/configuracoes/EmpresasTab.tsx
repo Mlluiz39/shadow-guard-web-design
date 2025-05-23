@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -79,10 +78,15 @@ export const EmpresasTab = () => {
   })
 
   const onSubmit = (data: z.infer<typeof empresasSchema>) => {
-    const newEmpresa = {
+    // Fix by explicitly creating a new object that matches the Empresa interface
+    const newEmpresa: Empresa = {
       id: Date.now().toString(),
-      ...data
+      nome: data.nome,
+      cnpj: data.cnpj,
+      proprietario: data.proprietario,
+      email: data.email
     }
+    
     setEmpresas([...empresas, newEmpresa])
     setDialogOpen(false)
     form.reset()
