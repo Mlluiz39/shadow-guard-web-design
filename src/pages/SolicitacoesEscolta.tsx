@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { Shield } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -91,9 +90,6 @@ const SolicitacoesEscolta = () => {
             escoltas={filteredEscoltas}
             totalEscoltas={escoltasData.length}
           />
-        </TabsContent>
-
-        <TabsContent value="espelhamento">
         </TabsContent>
       </Tabs>
     </div>
