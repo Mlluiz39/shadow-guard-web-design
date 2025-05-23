@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,12 +14,14 @@ import {
 } from '@/components/ui/dialog'
 
 interface PrintFieldSelectorProps {
+  options?: { id: string; label: string }[]
   onPrint: (specificCode: string) => void
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
 export const PrintFieldSelector = ({
+  options,
   onPrint,
   open,
   onOpenChange,
