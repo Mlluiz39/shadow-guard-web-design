@@ -178,21 +178,30 @@ export const GridOperacionalActionButtons = ({
           </Tooltip>
         </TooltipProvider>
         
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Printer className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={printCompleteData}>
-              Imprimir relatório completo
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setShowPrintDialog(true)}>
-              Imprimir linha específica
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Printer className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={printCompleteData}>
+                    Imprimir relatório completo
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setShowPrintDialog(true)}>
+                    Imprimir linha específica
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TooltipTrigger>
+            <TooltipContent>
+              Imprimir
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         
         <TooltipProvider>
           <Tooltip>
