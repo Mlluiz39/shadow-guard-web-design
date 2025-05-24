@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { LayoutGrid } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -58,6 +59,7 @@ const GridOperacional = () => {
                 isFilterOpen={isFilterOpen}
                 onFilterToggle={setIsFilterOpen}
                 onRefresh={refreshData}
+                dados={filteredDados}
               />
             </div>
           </CollapsibleTrigger>
