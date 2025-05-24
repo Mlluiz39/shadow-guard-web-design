@@ -1,4 +1,3 @@
-
 import { 
   Plus, 
   Filter, 
@@ -22,6 +21,7 @@ import {
 import { toast } from "sonner";
 import { useState } from "react";
 import { PrintFieldSelector } from "../PrintFieldSelector";
+import { HelpModal } from "./HelpModal";
 import { GridOperacionalItem } from "./types";
 
 interface GridOperacionalActionButtonsProps {
@@ -38,6 +38,7 @@ export const GridOperacionalActionButtons = ({
   dados
 }: GridOperacionalActionButtonsProps) => {
   const [showPrintDialog, setShowPrintDialog] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   // Função para imprimir dados completos
   const printCompleteData = () => {
@@ -167,12 +168,12 @@ export const GridOperacionalActionButtons = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={() => console.log("Mostrar legendas")}>
+              <Button variant="outline" size="icon" onClick={() => setShowHelpModal(true)}>
                 <HelpCircle className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              Legenda
+              Ajuda
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -211,6 +212,11 @@ export const GridOperacionalActionButtons = ({
         open={showPrintDialog}
         onOpenChange={setShowPrintDialog}
         onPrint={printSpecificLine}
+      />
+
+      <HelpModal
+        open={showHelpModal}
+        onOpenChange={setShowHelpModal}
       />
     </>
   );
