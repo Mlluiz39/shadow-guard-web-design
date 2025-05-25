@@ -1,17 +1,20 @@
-
-import { useState } from 'react';
-import { LayoutGrid } from 'lucide-react';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { toast } from '@/components/ui/use-toast';
-import { GridOperacionalTable } from '../components/grid-operacional/GridOperacionalTable';
-import { GridOperacionalFilter } from '../components/grid-operacional/GridOperacionalFilter';
-import { GridOperacionalActionButtons } from '../components/grid-operacional/GridOperacionalActionButtons';
-import { gridOperacionalData } from '../components/grid-operacional/types';
+import { useState } from 'react'
+import { LayoutGrid } from 'lucide-react'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { toast } from '@/components/ui/use-toast'
+import { GridOperacionalTable } from '../components/grid-operacional/GridOperacionalTable'
+import { GridOperacionalFilter } from '../components/grid-operacional/GridOperacionalFilter'
+import { GridOperacionalActionButtons } from '../components/grid-operacional/GridOperacionalActionButtons'
+import { gridOperacionalData } from '../components/grid-operacional/types'
 
 const GridOperacional = () => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredDados, setFilteredDados] = useState(gridOperacionalData);
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filteredDados, setFilteredDados] = useState(gridOperacionalData)
 
   const filterDados = () => {
     const filtered = gridOperacionalData.filter(
@@ -22,25 +25,25 @@ const GridOperacional = () => {
         item.dataSolicitacao.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.agente1.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.agente2.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredDados(filtered);
-  };
+    )
+    setFilteredDados(filtered)
+  }
 
   const clearFilter = () => {
-    setSearchTerm('');
-    setFilteredDados(gridOperacionalData);
-  };
+    setSearchTerm('')
+    setFilteredDados(gridOperacionalData)
+  }
 
   const refreshData = () => {
-    setFilteredDados([...gridOperacionalData]);
-    setSearchTerm('');
+    setFilteredDados([...gridOperacionalData])
+    setSearchTerm('')
     toast(
-        <>
-      <strong> "Dados atualizados",</strong>
-      <div>"Os dados foram atualizados com sucesso",</div> 
+      <>
+        <strong> "Dados atualizados",</strong>
+        <div>"Os dados foram atualizados com sucesso",</div>
       </>
-    );
-  };
+    )
+  }
 
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -80,7 +83,7 @@ const GridOperacional = () => {
         totalRegistros={gridOperacionalData.length}
       />
     </div>
-  );
-};
+  )
+}
 
-export default GridOperacional;
+export default GridOperacional
