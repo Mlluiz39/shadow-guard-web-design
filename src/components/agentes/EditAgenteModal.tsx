@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useForm } from 'react-hook-form'
-import { toast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
 
 interface Agente {
   id: number
@@ -63,10 +63,7 @@ export const EditAgenteModal = ({ agente, isOpen, onClose, onSave }: EditAgenteM
     }
     
     onSave(updatedAgente)
-    toast({
-      title: "Agente atualizado",
-      description: "Os dados do agente foram salvos com sucesso.",
-    })
+    toast.success("Agente atualizado com sucesso!")
     onClose()
   }
 

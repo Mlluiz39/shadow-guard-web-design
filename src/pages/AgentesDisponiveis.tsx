@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import {
   Users,
@@ -27,7 +26,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { toast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
 import { Card, CardContent } from '@/components/ui/card'
 import { EditAgenteModal } from '../components/agentes/EditAgenteModal'
 
@@ -136,10 +135,7 @@ const AgentesDisponiveis = () => {
 
   const refreshData = () => {
     setFilteredAgentes([...agentesData])
-    toast({
-      title: "Dados atualizados",
-      description: "Os dados foram atualizados com sucesso!",
-    })
+    toast.success("Dados atualizados com sucesso!")
   }
 
   const handleSort = (field: string) => {
