@@ -38,17 +38,9 @@ interface EditGridOperacionalModalProps {
 export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: EditGridOperacionalModalProps) => {
   const form = useForm({
     defaultValues: {
-      cod: item?.cod || '',
-      dataSolicitacao: item?.dataSolicitacao || '',
-      mtsOs: item?.mtsOs || '',
-      cliente: item?.cliente || '',
-      placaAuto: item?.placaAuto || '',
-      parceiro: item?.parceiro || '',
       agente1: item?.agente1 || '',
       agente2: item?.agente2 || '',
       vtr: item?.vtr || '',
-      origem: item?.origem || '',
-      destino: item?.destino || '',
       dataMissao: item?.dataMissao || '',
       horaMissao: item?.horaMissao || '',
       horaEquipe: item?.horaEquipe || '',
@@ -80,98 +72,14 @@ export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: Edit
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[800px] max-h-[80vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Editar Registro - {item.cod}</DialogTitle>
+          <DialogTitle>Editar Operação - {item.cod}</DialogTitle>
         </DialogHeader>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSave)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="cod"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Código</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="dataSolicitacao"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data Solicitação</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="mtsOs"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>MTS-OS</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="cliente"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cliente</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="placaAuto"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Placa Auto</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="parceiro"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Parceiro</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
               <FormField
                 control={form.control}
                 name="agente1"
@@ -216,34 +124,6 @@ export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: Edit
               
               <FormField
                 control={form.control}
-                name="origem"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Origem</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="destino"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Destino</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
                 name="status"
                 render={({ field }) => (
                   <FormItem>
@@ -268,6 +148,62 @@ export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: Edit
               
               <FormField
                 control={form.control}
+                name="dataMissao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data Início Missão</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="horaMissao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hora Missão</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="horaEquipe"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hora Equipe</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="horaInicioReal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hora Início Real</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
                 name="kmInicio"
                 render={({ field }) => (
                   <FormItem>
@@ -282,12 +218,54 @@ export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: Edit
               
               <FormField
                 control={form.control}
+                name="dataFimMissao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data Fim Missão</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
                 name="kmFinal"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>KM Final</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="horaFinal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hora Final</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="totalHoraMissao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Total Hora Missão</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
