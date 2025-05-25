@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import { LayoutGrid } from 'lucide-react'
 import {
@@ -9,12 +10,15 @@ import { toast } from 'sonner'
 import { GridOperacionalTable } from '../components/grid-operacional/GridOperacionalTable'
 import { GridOperacionalFilter } from '../components/grid-operacional/GridOperacionalFilter'
 import { GridOperacionalActionButtons } from '../components/grid-operacional/GridOperacionalActionButtons'
-import { gridOperacionalData } from '../components/grid-operacional/types'
+import { EditGridOperacionalModal } from '../components/grid-operacional/EditGridOperacionalModal'
+import { gridOperacionalData, GridOperacionalItem } from '../components/grid-operacional/types'
 
 const GridOperacional = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredDados, setFilteredDados] = useState(gridOperacionalData)
+  const [editingItem, setEditingItem] = useState<GridOperacionalItem | null>(null)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   const filterDados = () => {
     const filtered = gridOperacionalData.filter(
@@ -38,6 +42,27 @@ const GridOperacional = () => {
     setFilteredDados([...gridOperacionalData])
     setSearchTerm('')
     toast.success("Dados atualizados com sucesso!")
+  }
+
+  const handleEdit = (item: GridOperacionalItem) => {
+    setEditingItem(item)
+    setIsEditModalOpen(true)
+  }
+
+  const handleSaveEdit = (updatedItem: GridOperacionalItem) => {
+    // Aqui você faria a atualização no banco de dados
+    // Por enquanto, apenas atualizamos o estado local
+    const updatedData = filteredDados.map(item => 
+      item.cod === updatedItem.cod ? updatedItem : item
+    )
+    setFilteredDados(updatedData)
+    setIsEditModalOpen(false)
+    setEditingItem(null)
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false)
+    setEditingItem(null)
   }
 
   return (
@@ -76,6 +101,14 @@ const GridOperacional = () => {
       <GridOperacionalTable
         dados={filteredDados}
         totalRegistros={gridOperacionalData.length}
+        onEdit={handleEdit}
+      />
+
+      <EditGridOperacionalModal
+        item={editingItem}
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        onSave={handleSaveEdit}
       />
     </div>
   )

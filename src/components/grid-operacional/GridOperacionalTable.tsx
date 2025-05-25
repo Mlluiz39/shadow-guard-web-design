@@ -8,20 +8,24 @@ import {
   TableCell,
 } from '@/components/ui/table'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Edit } from 'lucide-react'
 import { GridOperacionalItem } from './types'
 
 interface GridOperacionalTableProps {
   dados: GridOperacionalItem[]
   totalRegistros: number
+  onEdit?: (item: GridOperacionalItem) => void
 }
 
 export const GridOperacionalTable = ({
   dados,
   totalRegistros,
+  onEdit,
 }: GridOperacionalTableProps) => {
   // Títulos das colunas
   const colunas = [
-    "Cód", "Data Solicitação", "MTS-OS", "Cliente", "Placa Auto", 
+    "Ações", "Cód", "Data Solicitação", "MTS-OS", "Cliente", "Placa Auto", 
     "Parceiro", "Agente 1", "Agente 2", "VTR", "Origem", "Destino", 
     "Data Inicio Missão", "Hora Missão", "Hora Equipe", "Hora Início Real", 
     "KM Início", "Data Fim Missão", "KM Final", "Hora Final", "Status", 
@@ -40,28 +44,6 @@ export const GridOperacionalTable = ({
                     <TableHead 
                       key={index} 
                       className="font-semibold whitespace-nowrap p-2 text-center text-black"
-                      data-field={index === 0 ? "cod" : 
-                                 index === 1 ? "dataSolicitacao" :
-                                 index === 2 ? "mtsOs" :
-                                 index === 3 ? "cliente" :
-                                 index === 4 ? "placaAuto" :
-                                 index === 5 ? "parceiro" :
-                                 index === 6 ? "agente1" :
-                                 index === 7 ? "agente2" :
-                                 index === 8 ? "vtr" :
-                                 index === 9 ? "origem" :
-                                 index === 10 ? "destino" :
-                                 index === 11 ? "dataMissao" :
-                                 index === 12 ? "horaMissao" :
-                                 index === 13 ? "horaEquipe" :
-                                 index === 14 ? "horaInicioReal" :
-                                 index === 15 ? "kmInicio" :
-                                 index === 16 ? "dataFimMissao" :
-                                 index === 17 ? "kmFinal" :
-                                 index === 18 ? "horaFinal" :
-                                 index === 19 ? "status" :
-                                 index === 20 ? "totalHoraMissao" :
-                                 "kmTotal"}
                     >
                       {titulo}
                     </TableHead>
@@ -74,6 +56,18 @@ export const GridOperacionalTable = ({
                     key={item.cod}
                     className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
                   >
+                    <TableCell className="text-center">
+                      {onEdit && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onEdit(item)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </TableCell>
                     <TableCell>{item.cod}</TableCell>
                     <TableCell>{item.dataSolicitacao}</TableCell>
                     <TableCell>{item.mtsOs}</TableCell>
