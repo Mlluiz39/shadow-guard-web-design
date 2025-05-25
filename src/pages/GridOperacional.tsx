@@ -5,7 +5,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { toast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
 import { GridOperacionalTable } from '../components/grid-operacional/GridOperacionalTable'
 import { GridOperacionalFilter } from '../components/grid-operacional/GridOperacionalFilter'
 import { GridOperacionalActionButtons } from '../components/grid-operacional/GridOperacionalActionButtons'
@@ -37,12 +37,7 @@ const GridOperacional = () => {
   const refreshData = () => {
     setFilteredDados([...gridOperacionalData])
     setSearchTerm('')
-    toast(
-      <>
-        <strong> "Dados atualizados",</strong>
-        <div>"Os dados foram atualizados com sucesso",</div>
-      </>
-    )
+    toast.success("Dados atualizados com sucesso!")
   }
 
   return (
