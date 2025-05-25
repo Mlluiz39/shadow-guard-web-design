@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -38,22 +38,40 @@ interface EditGridOperacionalModalProps {
 export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: EditGridOperacionalModalProps) => {
   const form = useForm({
     defaultValues: {
-      agente1: item?.agente1 || '',
-      agente2: item?.agente2 || '',
-      vtr: item?.vtr || '',
-      dataMissao: item?.dataMissao || '',
-      horaMissao: item?.horaMissao || '',
-      horaEquipe: item?.horaEquipe || '',
-      horaInicioReal: item?.horaInicioReal || '',
-      kmInicio: item?.kmInicio || 0,
-      dataFimMissao: item?.dataFimMissao || '',
-      kmFinal: item?.kmFinal || 0,
-      horaFinal: item?.horaFinal || '',
-      status: item?.status || '',
-      totalHoraMissao: item?.totalHoraMissao || '',
-      kmTotal: item?.kmTotal || 0,
+      agente1: '',
+      agente2: '',
+      vtr: '',
+      horaEquipe: '',
+      horaInicioReal: '',
+      kmInicio: 0,
+      dataFimMissao: '',
+      kmFinal: 0,
+      horaFinal: '',
+      status: '',
+      totalHoraMissao: '',
+      kmTotal: 0,
     },
   })
+
+  // Atualiza os valores do formulário quando o item muda
+  useEffect(() => {
+    if (item) {
+      form.reset({
+        agente1: item.agente1 || '',
+        agente2: item.agente2 || '',
+        vtr: item.vtr || '',
+        horaEquipe: item.horaEquipe || '',
+        horaInicioReal: item.horaInicioReal || '',
+        kmInicio: item.kmInicio || 0,
+        dataFimMissao: item.dataFimMissao || '',
+        kmFinal: item.kmFinal || 0,
+        horaFinal: item.horaFinal || '',
+        status: item.status || '',
+        totalHoraMissao: item.totalHoraMissao || '',
+        kmTotal: item.kmTotal || 0,
+      })
+    }
+  }, [item, form])
 
   const handleSave = (data: any) => {
     if (!item) return
@@ -141,34 +159,6 @@ export const EditGridOperacionalModal = ({ item, isOpen, onClose, onSave }: Edit
                         <SelectItem value="Cancelado">Cancelado</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="dataMissao"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Data Início Missão</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="horaMissao"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hora Missão</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
