@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react'
 import {
   Users,
@@ -8,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  Edit,
 } from 'lucide-react'
 import {
   Table,
@@ -27,8 +29,9 @@ import {
 } from '@/components/ui/collapsible'
 import { toast } from '@/components/ui/use-toast'
 import { Card, CardContent } from '@/components/ui/card'
+import { EditAgenteModal } from '../components/agentes/EditAgenteModal'
 
-const agentesData = [
+const initialAgentesData = [
   {
     id: 1,
     nome: 'Carlos Silva',
@@ -98,6 +101,7 @@ const agentesData = [
 const AgentesDisponiveis = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const [agentesData, setAgentesData] = useState(initialAgentesData)
   const [filteredAgentes, setFilteredAgentes] = useState(agentesData)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -105,6 +109,9 @@ const AgentesDisponiveis = () => {
 
   const [sortField, setSortField] = useState('')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+
+  const [editingAgente, setEditingAgente] = useState(null)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -119,7 +126,7 @@ const AgentesDisponiveis = () => {
       setCurrentPage(1)
     }, 300)
     return () => clearTimeout(timeout)
-  }, [searchTerm])
+  }, [searchTerm, agentesData])
 
   const clearFilter = () => {
     setSearchTerm('')
@@ -129,7 +136,10 @@ const AgentesDisponiveis = () => {
 
   const refreshData = () => {
     setFilteredAgentes([...agentesData])
-    toast('Dados atualizados com sucesso!')
+    toast({
+      title: "Dados atualizados",
+      description: "Os dados foram atualizados com sucesso!",
+    })
   }
 
   const handleSort = (field: string) => {
@@ -137,6 +147,19 @@ const AgentesDisponiveis = () => {
     if (sortField === field && sortDirection === 'asc') direction = 'desc'
     setSortField(field)
     setSortDirection(direction)
+  }
+
+  const handleEditAgente = (agente: any) => {
+    setEditingAgente(agente)
+    setIsEditModalOpen(true)
+  }
+
+  const handleSaveAgente = (updatedAgente: any) => {
+    const updatedData = agentesData.map(agente => 
+      agente.id === updatedAgente.id ? updatedAgente : agente
+    )
+    setAgentesData(updatedData)
+    setFilteredAgentes(updatedData)
   }
 
   const sortedAgentes = [...filteredAgentes].sort((a, b) => {
@@ -194,6 +217,7 @@ const AgentesDisponiveis = () => {
                         </TableHead>
                       )
                     )}
+                    <TableHead>Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -218,6 +242,15 @@ const AgentesDisponiveis = () => {
                       </TableCell>
                       <TableCell>{agente.re}</TableCell>
                       <TableCell>{agente.telefone}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleEditAgente(agente)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -276,6 +309,16 @@ const AgentesDisponiveis = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      <EditAgenteModal
+        agente={editingAgente}
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false)
+          setEditingAgente(null)
+        }}
+        onSave={handleSaveAgente}
+      />
     </div>
   )
 }
