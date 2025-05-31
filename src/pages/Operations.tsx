@@ -1,3 +1,4 @@
+
 import {
   FileText,
   Users,
@@ -14,6 +15,7 @@ import AgentesDisponiveis from './AgentesDisponiveis'
 import PlaceholderPage from './PlaceholderPage'
 import SolicitacoesEscolta from './SolicitacoesEscolta'
 import GridOperacional from './GridOperacional'
+import Clientes from './Clientes'
 
 const Operations = () => {
   return (
@@ -41,15 +43,7 @@ const Operations = () => {
             />
           }
         />
-        <Route
-          path="clientes"
-          element={
-            <PlaceholderPage
-              title="Clientes"
-              icon={<Truck className="h-6 w-6" />}
-            />
-          }
-        />
+        <Route path="clientes" element={<Clientes />} />
         <Route
           path="chamados"
           element={
