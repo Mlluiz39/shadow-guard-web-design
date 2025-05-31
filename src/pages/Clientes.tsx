@@ -1,14 +1,14 @@
-
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Plus, Download, Upload } from 'lucide-react'
 import { ClientesTable } from '@/components/clientes/ClientesTable'
 import { ClientesFilter } from '@/components/clientes/ClientesFilter'
+import { ClienteModal } from '@/components/clientes/ClienteModal'
 import { Cliente } from '@/types/cliente'
 import { toast } from 'sonner'
 
-// Dados mockados para demonstração
+// Dados mockados
 const mockClientes: Cliente[] = [
   {
     id: '1',
@@ -19,7 +19,7 @@ const mockClientes: Cliente[] = [
     contrato: 'CT001',
     pastaN: 'P001',
     dataImportacao: '31/05/2024',
-    status: 'Ativo'
+    status: 'Ativo',
   },
   {
     id: '2',
@@ -30,7 +30,7 @@ const mockClientes: Cliente[] = [
     contrato: 'CT002',
     pastaN: 'P002',
     dataImportacao: '30/05/2024',
-    status: 'Ativo'
+    status: 'Ativo',
   },
   {
     id: '3',
@@ -41,24 +41,31 @@ const mockClientes: Cliente[] = [
     contrato: 'CT003',
     pastaN: 'P003',
     dataImportacao: '29/05/2024',
-    status: 'Suspenso'
-  }
+    status: 'Suspenso',
+  },
 ]
 
 const Clientes = () => {
-  const [clientes] = useState<Cliente[]>(mockClientes)
+  const [clientes, setClientes] = useState<Cliente[]>(mockClientes)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('todos')
 
-  // Filtrar clientes baseado na busca e filtros
-  const filteredClientes = clientes.filter((cliente) => {
-    const matchesSearch = searchTerm === '' || 
+  const [clienteSelecionado, setClienteSelecionado] = useState<Cliente | null>(
+    null
+  )
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // 🔍 Filtrar clientes
+  const filteredClientes = clientes.filter(cliente => {
+    const matchesSearch =
+      searchTerm === '' ||
       cliente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cliente.razaoSocial.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cliente.documento.includes(searchTerm)
-    
-    const matchesStatus = statusFilter === 'todos' || cliente.status === statusFilter
-    
+
+    const matchesStatus =
+      statusFilter === 'todos' || cliente.status === statusFilter
+
     return matchesSearch && matchesStatus
   })
 
@@ -67,12 +74,22 @@ const Clientes = () => {
   }
 
   const handleEdit = (cliente: Cliente) => {
-    toast.info(`Editando cliente: ${cliente.nome}`)
+    setClienteSelecionado(cliente)
+    setIsModalOpen(true)
   }
 
   const handleDelete = (id: string) => {
     const cliente = clientes.find(c => c.id === id)
-    toast.error(`Excluindo cliente: ${cliente?.nome}`)
+    if (!cliente) return
+
+    const confirm = window.confirm(
+      `Tem certeza que deseja excluir o cliente "${cliente.nome}"?`
+    )
+
+    if (confirm) {
+      setClientes(prev => prev.filter(c => c.id !== id))
+      toast.success(`Cliente "${cliente.nome}" foi excluído com sucesso.`)
+    }
   }
 
   const handleClearFilters = () => {
@@ -89,7 +106,20 @@ const Clientes = () => {
   }
 
   const handleAddNew = () => {
-    toast.info('Adicionando novo cliente...')
+    setClienteSelecionado(null)
+    setIsModalOpen(true)
+  }
+
+  const handleSave = (cliente: Cliente) => {
+    const existe = clientes.find(c => c.id === cliente.id)
+
+    if (existe) {
+      setClientes(prev => prev.map(c => (c.id === cliente.id ? cliente : c)))
+      toast.success('Cliente atualizado!')
+    } else {
+      setClientes(prev => [...prev, cliente])
+      toast.success('Cliente adicionado!')
+    }
   }
 
   return (
@@ -106,7 +136,10 @@ const Clientes = () => {
       {/* Barra de ações */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex gap-2">
-          <Button onClick={handleAddNew} className="bg-security text-white hover:bg-security/90">
+          <Button
+            onClick={handleAddNew}
+            className="bg-security text-white hover:bg-security/90"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Incluir
           </Button>
@@ -119,7 +152,7 @@ const Clientes = () => {
             Exportar
           </Button>
         </div>
-        
+
         <div className="text-sm text-security-muted">
           Mostrando {filteredClientes.length} de {clientes.length} registros
         </div>
@@ -144,15 +177,19 @@ const Clientes = () => {
         />
       </Card>
 
-      {/* Rodapé com informações */}
+      {/* Rodapé */}
       <div className="flex justify-between items-center text-sm text-security-muted bg-white p-4 rounded-lg border">
-        <div>
-          Total de registros: {clientes.length}
-        </div>
-        <div>
-          Localizar: Quantide Linhas: {filteredClientes.length}
-        </div>
+        <div>Total de registros: {clientes.length}</div>
+        <div>Quantidade de Linhas: {filteredClientes.length}</div>
       </div>
+
+      {/* Modal de inclusão e edição */}
+      <ClienteModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSave}
+        cliente={clienteSelecionado}
+      />
     </div>
   )
 }
