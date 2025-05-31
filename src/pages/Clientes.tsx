@@ -55,7 +55,6 @@ const Clientes = () => {
   )
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // 🔍 Filtrar clientes
   const filteredClientes = clientes.filter(cliente => {
     const matchesSearch =
       searchTerm === '' ||
@@ -110,6 +109,16 @@ const Clientes = () => {
     setIsModalOpen(true)
   }
 
+  function validarCampos(data: Cliente) {
+    // Verifica se algum campo está vazio (string vazia ou só espaços)
+    for (const key in data) {
+      if (data[key].trim() === '') {
+        return false
+      }
+    }
+    return true
+  }
+
   const handleSave = (cliente: Cliente) => {
     const existe = clientes.find(c => c.id === cliente.id)
 
@@ -128,9 +137,6 @@ const Clientes = () => {
         <h1 className="text-2xl font-bold text-security flex items-center gap-2">
           Clientes
         </h1>
-        <div className="text-sm text-security-muted">
-          Última atualização: {new Date().toLocaleDateString()}
-        </div>
       </div>
 
       {/* Barra de ações */}
