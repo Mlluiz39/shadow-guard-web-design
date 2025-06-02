@@ -1,5 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FinanceiroDropdown } from "@/components/navigation/FinanceiroDropdown";
+import { DollarSign } from "lucide-react";
 
 interface PlaceholderPageProps {
   title: string;
@@ -7,14 +9,19 @@ interface PlaceholderPageProps {
 }
 
 const PlaceholderPage = ({ title, icon }: PlaceholderPageProps) => {
+  const isFinanceiroModule = title === "Financeiro";
+
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-security flex items-center gap-2">
           {icon} {title}
         </h1>
-        <div className="text-sm text-security-muted">
-          Última atualização: {new Date().toLocaleDateString()}
+        <div className="flex items-center gap-4">
+          {isFinanceiroModule && <FinanceiroDropdown />}
+          <div className="text-sm text-security-muted">
+            Última atualização: {new Date().toLocaleDateString()}
+          </div>
         </div>
       </div>
 
