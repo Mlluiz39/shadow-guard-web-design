@@ -11,6 +11,13 @@ import NotFound from './pages/NotFound'
 import Operations from './pages/Operations'
 import Financeiro from './pages/Financeiro'
 import Configuracoes from './pages/Configuracoes'
+import CentrosCusto from './pages/financeiro/CentrosCusto'
+import CondicoesPagamento from './pages/financeiro/CondicoesPagamento'
+import Contas from './pages/financeiro/Contas'
+import DashboardFinanceiro from './pages/financeiro/DashboardFinanceiro'
+import Feriados from './pages/financeiro/Feriados'
+import FormasPagamento from './pages/financeiro/FormasPagamento'
+import LancamentosCaixa from './pages/financeiro/LancamentosCaixa'
 import {
   DollarSign,
   FileText,
@@ -72,11 +79,81 @@ const App = () => (
             }
           />
           <Route
-            path="/financeiro/*"
+            path="/financeiro"
             element={
               <ProtectedRoute>
                 <Layout>
                   <Financeiro />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/centros-custo"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <CentrosCusto />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/condicoes-pagamento"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <CondicoesPagamento />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/contas"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Contas />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/dashboard"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <DashboardFinanceiro />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/feriados"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Feriados />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/formas-pagamento"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <FormasPagamento />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/financeiro/lancamentos-caixa"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <LancamentosCaixa />
                 </Layout>
               </ProtectedRoute>
             }
