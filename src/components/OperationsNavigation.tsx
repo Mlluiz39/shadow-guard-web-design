@@ -36,7 +36,7 @@ const operationItems = [
   { 
     name: "Clientes", 
     path: "/operacoes/clientes", 
-    icon: <Truck className="h-6 wc6" /> 
+    icon: <Truck className="h-6 w-6" /> 
   },
   { 
     name: "Livro de ocorrências", 
@@ -65,16 +65,17 @@ export function OperationsNavigation({ className }: OperationsNavProps) {
         <Card
           key={item.path}
           className={cn(
-            "p-4 cursor-pointer transition-all hover:shadow-md",
+            "p-6 cursor-pointer transition-shadow hover:shadow-md group",
+            "bg-white rounded-lg border shadow-sm",
             location.pathname === item.path ? 
               "bg-sidebar-accent border-sidebar-accent-foreground" : 
               "hover:bg-sidebar-accent/10"
           )}
           onClick={() => navigate(item.path)}
         >
-          <div className="flex items-center gap-3">
-            <div className="text-sidebar-foreground">{item.icon}</div>
-            <div className="font-medium">{item.name}</div>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="text-blue-600 group-hover:text-blue-700">{item.icon}</div>
+            <div className="font-semibold text-lg group-hover:text-blue-700">{item.name}</div>
           </div>
         </Card>
       ))}
