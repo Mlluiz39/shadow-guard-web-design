@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard'
 import PlaceholderPage from './pages/PlaceholderPage'
 import NotFound from './pages/NotFound'
 import Operations from './pages/Operations'
+import Financeiro from './pages/Financeiro'
 import Configuracoes from './pages/Configuracoes'
 import {
   DollarSign,
@@ -71,14 +72,11 @@ const App = () => (
             }
           />
           <Route
-            path="/financeiro"
+            path="/financeiro/*"
             element={
               <ProtectedRoute>
                 <Layout>
-                  <PlaceholderPage
-                    title="Financeiro"
-                    icon={<DollarSign className="h-6 w-6" />}
-                  />
+                  <Financeiro />
                 </Layout>
               </ProtectedRoute>
             }

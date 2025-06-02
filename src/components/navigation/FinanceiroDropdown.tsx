@@ -8,22 +8,24 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { ChevronDown } from 'lucide-react'
-import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 export const FinanceiroDropdown = () => {
-  const handleItemClick = (moduleName: string) => {
-    toast.info(`Módulo ${moduleName} será implementado em breve`)
-  }
+  const navigate = useNavigate()
 
   const financeiroItems = [
-    { label: 'Centros de Custo' },
-    { label: 'Condições de Pagamento' },
-    { label: 'Contas' },
-    { label: 'Dashboard Financeiro' },
-    { label: 'Feriados' },
-    { label: 'Formas de Pagamento' },
-    { label: 'Lançamentos em Caixa' },
+    { label: 'Centros de Custo', path: '/financeiro/centros-custo' },
+    { label: 'Condições de Pagamento', path: '/financeiro/condicoes-pagamento' },
+    { label: 'Contas', path: '/financeiro/contas' },
+    { label: 'Dashboard Financeiro', path: '/financeiro/dashboard' },
+    { label: 'Feriados', path: '/financeiro/feriados' },
+    { label: 'Formas de Pagamento', path: '/financeiro/formas-pagamento' },
+    { label: 'Lançamentos em Caixa', path: '/financeiro/lancamentos-caixa' },
   ]
+
+  const handleItemClick = (path: string) => {
+    navigate(path)
+  }
 
   return (
     <DropdownMenu>
@@ -40,7 +42,7 @@ export const FinanceiroDropdown = () => {
         {financeiroItems.map((item, index) => (
           <DropdownMenuItem
             key={index}
-            onClick={() => handleItemClick(item.label)}
+            onClick={() => handleItemClick(item.path)}
             className="cursor-pointer hover:bg-gray-100 px-4 py-2 text-gray-700"
           >
             {item.label}
