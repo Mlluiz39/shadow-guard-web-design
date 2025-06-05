@@ -38,9 +38,9 @@ export const UsuariosTab = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([
     {
       id: '1',
-      nome: 'Carlos Mendes',
-      email: 'carlos@proteqrv.com',
-      empresa: 'Proteção Segurança Ltda',
+      nome: 'Marcelo Luiz',
+      email: 'marcelo@proteqrv.com',
+      empresa: 'MlluizDevTech Ltda',
       cargo: 'Administrador',
       departamento: 'TI',
       perfil: 'master',

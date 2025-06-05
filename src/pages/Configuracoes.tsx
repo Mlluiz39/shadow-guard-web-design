@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Card,
@@ -9,7 +8,14 @@ import {
 } from '@/components/ui/card'
 import { EmpresasTab } from '@/components/configuracoes/EmpresasTab'
 import { UsuariosTab } from '@/components/configuracoes/UsuariosTab'
-import { Settings, Building, Users, Truck, FileText, UserCheck } from 'lucide-react'
+import {
+  Settings,
+  Building,
+  Users,
+  Truck,
+  FileText,
+  UserCheck,
+} from 'lucide-react'
 
 const Configuracoes = () => {
   return (
@@ -42,6 +48,13 @@ const Configuracoes = () => {
               </TabsTrigger>
               <TabsTrigger
                 className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                value="usuarios"
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                Usuários
+              </TabsTrigger>
+              <TabsTrigger
+                className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
                 value="funcionarios"
               >
                 <Users className="h-4 w-4 mr-2" />
@@ -61,16 +74,12 @@ const Configuracoes = () => {
                 <Truck className="h-4 w-4 mr-2" />
                 Frota
               </TabsTrigger>
-              <TabsTrigger
-                className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                value="usuarios"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Usuários
-              </TabsTrigger>
             </TabsList>
             <TabsContent value="empresas">
               <EmpresasTab />
+            </TabsContent>
+            <TabsContent value="usuarios">
+              <UsuariosTab />
             </TabsContent>
             <TabsContent value="funcionarios">
               <DadosCadastraisTab />
@@ -80,9 +89,6 @@ const Configuracoes = () => {
             </TabsContent>
             <TabsContent value="frota">
               <CadastroFrotaTab />
-            </TabsContent>
-            <TabsContent value="usuarios">
-              <UsuariosTab />
             </TabsContent>
           </Tabs>
         </CardContent>
@@ -104,7 +110,8 @@ const DadosCadastraisTab = () => {
             Dados Cadastrais de Funcionários
           </CardTitle>
           <p className="text-gray-600 text-center max-w-md">
-            Gerencie as informações cadastrais dos funcionários, incluindo dados pessoais, documentos e histórico profissional.
+            Gerencie as informações cadastrais dos funcionários, incluindo dados
+            pessoais, documentos e histórico profissional.
           </p>
         </CardContent>
       </Card>
@@ -125,7 +132,8 @@ const CadastroOperacionalTab = () => {
             Cadastro Operacional
           </CardTitle>
           <p className="text-gray-600 text-center max-w-md">
-            Configure dados operacionais, permissões de acesso, escalas de trabalho e configurações específicas para operações de segurança.
+            Configure dados operacionais, permissões de acesso, escalas de
+            trabalho e configurações específicas para operações de segurança.
           </p>
         </CardContent>
       </Card>
@@ -146,7 +154,8 @@ const CadastroFrotaTab = () => {
             Cadastro de Frota
           </CardTitle>
           <p className="text-gray-600 text-center max-w-md">
-            Gerencie informações sobre veículos da frota, incluindo documentação, manutenção, rastreamento e atribuição de motoristas.
+            Gerencie informações sobre veículos da frota, incluindo
+            documentação, manutenção, rastreamento e atribuição de motoristas.
           </p>
         </CardContent>
       </Card>
