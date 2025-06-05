@@ -24,7 +24,7 @@ const operationItems = [
     icon: <LayoutGrid className="h-6 w-6" />,
   },
   {
-    name: 'Quadro Operacional',
+    name: 'Funcionarios',
     description: 'Gerencie suas equipes.',
     path: '/operacoes/quadro',
     icon: <LayoutGrid className="h-6 w-6" />,
