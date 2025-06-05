@@ -25,7 +25,7 @@ const operationItems = [
   },
   {
     name: 'Funcionarios',
-    description: 'Gerencie suas equipes.',
+    description: 'Gerencie seus colaboradores.',
     path: '/operacoes/quadro',
     icon: <LayoutGrid className="h-6 w-6" />,
   },
