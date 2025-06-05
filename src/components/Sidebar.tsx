@@ -71,14 +71,15 @@ export const Sidebar = ({ className }: SidebarProps) => {
     const storedUser = localStorage.getItem('proteqrvUser');
     if (storedUser) {
       const user = JSON.parse(storedUser);
-      setUsername(user.username || "Usuário");
+      setUsername(user.nome || user.username || "Usuário");
       setRole(user.role || "usuário");
     }
   }, []);
 
   const handleLogout = () => {
-    // Remover dados de autenticação - corrigindo o nome da chave para proteqrvLoggedIn
+    // Remover dados de autenticação
     localStorage.removeItem('proteqrvLoggedIn');
+    localStorage.removeItem('proteqrvUser');
     toast.success("Logout realizado com sucesso.");
     navigate("/", { replace: true });
   };
