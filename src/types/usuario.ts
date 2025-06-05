@@ -6,6 +6,8 @@ export interface Usuario {
   empresa: string
   cargo: string
   departamento: string
+  perfil: string
+  ativo: boolean
 }
 
 export const usuariosSchema = {
@@ -13,5 +15,6 @@ export const usuariosSchema = {
   email: { format: "email", message: "Email inválido" },
   empresa: { min: 1, message: "Empresa é obrigatória" },
   cargo: { min: 1, message: "Cargo é obrigatório" },
-  departamento: { min: 1, message: "Departamento é obrigatório" }
+  departamento: { min: 1, message: "Departamento é obrigatório" },
+  perfil: { min: 1, message: "Perfil é obrigatório" }
 }

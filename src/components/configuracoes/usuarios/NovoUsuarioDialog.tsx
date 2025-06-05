@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
 import { Usuario, usuariosSchema } from "@/types/usuario"
+import { PERFIS_SISTEMA } from "@/types/perfil"
 
 interface Empresa {
   id: string
@@ -42,6 +43,7 @@ const usuariosSchemaValidation = z.object({
   empresa: z.string().min(1, "Empresa é obrigatória"),
   cargo: z.string().min(1, "Cargo é obrigatório"),
   departamento: z.string().min(1, "Departamento é obrigatório"),
+  perfil: z.string().min(1, "Perfil é obrigatório"),
 })
 
 export const NovoUsuarioDialog = ({ 
@@ -60,6 +62,7 @@ export const NovoUsuarioDialog = ({
       empresa: "",
       cargo: "",
       departamento: "",
+      perfil: "",
     },
   })
 
@@ -70,7 +73,9 @@ export const NovoUsuarioDialog = ({
       email: data.email,
       empresa: data.empresa,
       cargo: data.cargo,
-      departamento: data.departamento
+      departamento: data.departamento,
+      perfil: data.perfil,
+      ativo: true
     }
     
     onUsuarioAdded(newUsuario)
@@ -191,6 +196,37 @@ export const NovoUsuarioDialog = ({
                       {departamentos.map((departamento) => (
                         <SelectItem key={departamento} value={departamento}>
                           {departamento}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="perfil"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Perfil de Acesso</FormLabel>
+                  <Select 
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione um perfil" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PERFIS_SISTEMA.map((perfil) => (
+                        <SelectItem key={perfil.id} value={perfil.id}>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{perfil.nome}</span>
+                            <span className="text-xs text-gray-500">{perfil.descricao}</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>

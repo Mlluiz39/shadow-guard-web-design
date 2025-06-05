@@ -19,18 +19,25 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import { set } from "date-fns";
+import { usePermissions } from "@/hooks/usePermissions";
 
 interface NavItemProps {
   icon: React.ElementType;
   label: string;
   to: string;
   collapsed: boolean;
+  permission?: string;
 }
 
-const NavItem = ({ icon: Icon, label, to, collapsed }: NavItemProps) => {
+const NavItem = ({ icon: Icon, label, to, collapsed, permission }: NavItemProps) => {
   const location = useLocation();
+  const { hasPermission } = usePermissions();
   const isActive = location.pathname === to;
+
+  // Se uma permissão foi especificada e o usuário não tem essa permissão, não renderiza o item
+  if (permission && !hasPermission(permission)) {
+    return null;
+  }
 
   return (
     <NavLink to={to} className="w-full">
@@ -66,7 +73,6 @@ export const Sidebar = ({ className }: SidebarProps) => {
       const user = JSON.parse(storedUser);
       setUsername(user.username || "Usuário");
       setRole(user.role || "usuário");
-      
     }
   }, []);
 
@@ -104,11 +110,11 @@ export const Sidebar = ({ className }: SidebarProps) => {
 
       {/* Nav Items */}
       <div className="flex-1 flex flex-col gap-1 p-2 overflow-y-auto">
-        <NavItem icon={BarChart4} label="Comercial" to="/dashboard" collapsed={collapsed} />
-        <NavItem icon={Settings} label="Configurações" to="/configuracoes" collapsed={collapsed} />
-        <NavItem icon={FileText} label="Operações" to="/operacoes" collapsed={collapsed} />
-        <NavItem icon={DollarSign} label="Financeiro" to="/financeiro" collapsed={collapsed} />
-        <NavItem icon={Car} label="Logística" to="/logistica" collapsed={collapsed} />
+        <NavItem icon={BarChart4} label="Comercial" to="/dashboard" collapsed={collapsed} permission="dashboard" />
+        <NavItem icon={Settings} label="Configurações" to="/configuracoes" collapsed={collapsed} permission="configuracoes" />
+        <NavItem icon={FileText} label="Operações" to="/operacoes" collapsed={collapsed} permission="operacoes" />
+        <NavItem icon={DollarSign} label="Financeiro" to="/financeiro" collapsed={collapsed} permission="financeiro" />
+        <NavItem icon={Car} label="Logística" to="/logistica" collapsed={collapsed} permission="logistica" />
       </div>
 
       {/* Footer */}

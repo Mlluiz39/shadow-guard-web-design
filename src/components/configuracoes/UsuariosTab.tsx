@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
@@ -5,22 +6,16 @@ import { Usuario } from '@/types/usuario'
 import { UsuariosSearch } from './usuarios/UsuariosSearch'
 import { UsuariosTable } from './usuarios/UsuariosTable'
 import { NovoUsuarioDialog } from './usuarios/NovoUsuarioDialog'
+import { Badge } from '@/components/ui/badge'
+import { getPerfilById } from '@/types/perfil'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog'
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
 
 // Mockup data
 const empresas = [
@@ -39,37 +34,7 @@ const departamentos = [
   'RH',
 ]
 
-import { useForm } from 'react-hook-form'
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from '@/components/ui/select'
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from '@/components/ui/table'
-
 export const UsuariosTab = () => {
-  const form = useForm()
-  interface FormData {
-    nome: string
-    email: string
-    empresa: string
-    cargo: string
-    departamento: string
-  }
-
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-  }
-
   const [usuarios, setUsuarios] = useState<Usuario[]>([
     {
       id: '1',
@@ -78,6 +43,8 @@ export const UsuariosTab = () => {
       empresa: 'Proteção Segurança Ltda',
       cargo: 'Administrador',
       departamento: 'TI',
+      perfil: 'master',
+      ativo: true,
     },
     {
       id: '2',
@@ -86,14 +53,18 @@ export const UsuariosTab = () => {
       empresa: 'Escolta Expressa S.A.',
       cargo: 'Supervisor',
       departamento: 'Operações',
+      perfil: 'operacional',
+      ativo: true,
     },
     {
       id: '3',
       nome: 'Roberto Alves',
       email: 'roberto@total.com',
       empresa: 'Segurança Total',
-      cargo: 'Operador',
-      departamento: 'Logística',
+      cargo: 'Analista',
+      departamento: 'Financeiro',
+      perfil: 'financeiro',
+      ativo: true,
     },
   ])
 
@@ -111,6 +82,23 @@ export const UsuariosTab = () => {
       usuario.empresa.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const getPerfilBadgeColor = (perfilId: string) => {
+    switch (perfilId) {
+      case 'master':
+        return 'bg-red-100 text-red-800'
+      case 'supervisor':
+        return 'bg-purple-100 text-purple-800'
+      case 'financeiro':
+        return 'bg-green-100 text-green-800'
+      case 'operacional':
+        return 'bg-blue-100 text-blue-800'
+      case 'logistica':
+        return 'bg-orange-100 text-orange-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
+    }
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -123,144 +111,14 @@ export const UsuariosTab = () => {
         </Button>
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Adicionar Novo Usuário</DialogTitle>
-          </DialogHeader>
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="nome"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nome completo" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="email@exemplo.com"
-                        type="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="empresa"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Empresa</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione uma empresa" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {empresas.map(empresa => (
-                          <SelectItem key={empresa.id} value={empresa.nome}>
-                            {empresa.nome}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="cargo"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cargo</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione um cargo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {cargos.map(cargo => (
-                          <SelectItem key={cargo} value={cargo}>
-                            {cargo}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="departamento"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Departamento</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione um departamento" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {departamentos.map(departamento => (
-                          <SelectItem key={departamento} value={departamento}>
-                            {departamento}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  type="button"
-                  onClick={() => setDialogOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button type="submit">Adicionar</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+      <NovoUsuarioDialog
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        onUsuarioAdded={handleAddUsuario}
+        empresas={empresas}
+        cargos={cargos}
+        departamentos={departamentos}
+      />
 
       <div className="rounded-md border">
         <Table>
@@ -271,6 +129,8 @@ export const UsuariosTab = () => {
               <TableHead>Empresa</TableHead>
               <TableHead>Cargo</TableHead>
               <TableHead>Departamento</TableHead>
+              <TableHead>Perfil</TableHead>
+              <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -285,11 +145,21 @@ export const UsuariosTab = () => {
                   <TableCell>{usuario.empresa}</TableCell>
                   <TableCell>{usuario.cargo}</TableCell>
                   <TableCell>{usuario.departamento}</TableCell>
+                  <TableCell>
+                    <Badge className={getPerfilBadgeColor(usuario.perfil)}>
+                      {getPerfilById(usuario.perfil)?.nome || 'Indefinido'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={usuario.ativo ? 'default' : 'secondary'}>
+                      {usuario.ativo ? 'Ativo' : 'Inativo'}
+                    </Badge>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-6">
+                <TableCell colSpan={7} className="text-center py-6">
                   Nenhum usuário encontrado
                 </TableCell>
               </TableRow>
