@@ -1,35 +1,35 @@
+import { Toaster } from '@/components/ui/toaster'
+import { Toaster as Sonner } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { AuthProvider } from '@/hooks/useAuth'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import AuthPage from '@/components/AuthPage'
+import Index from './pages/Index'
+import Layout from './components/Layout'
+import Dashboard from './pages/Dashboard'
+import Configuracoes from './pages/Configuracoes'
+import Operations from './pages/Operations'
+import Financeiro from './pages/Financeiro'
+import GridOperacional from './pages/GridOperacional'
+import SolicitacoesEscolta from './pages/SolicitacoesEscolta'
+import AgentesDisponiveis from './pages/AgentesDisponiveis'
+import Clientes from './pages/Clientes'
+import PlaceholderPage from './pages/PlaceholderPage'
+import NotFound from './pages/NotFound'
+import DashboardFinanceiro from './pages/financeiro/DashboardFinanceiro'
+import LancamentosCaixa from './pages/financeiro/LancamentosCaixa'
+import Contas from './pages/financeiro/Contas'
+import CentrosCusto from './pages/financeiro/CentrosCusto'
+import FormasPagamento from './pages/financeiro/FormasPagamento'
+import CondicoesPagamento from './pages/financeiro/CondicoesPagamento'
+import Feriados from './pages/financeiro/Feriados'
+import { Truck } from 'lucide-react'
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { AuthProvider } from "@/hooks/useAuth";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import AuthPage from "@/components/AuthPage";
-import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import Configuracoes from "./pages/Configuracoes";
-import Operations from "./pages/Operations";
-import Financeiro from "./pages/Financeiro";
-import GridOperacional from "./pages/GridOperacional";
-import SolicitacoesEscolta from "./pages/SolicitacoesEscolta";
-import AgentesDisponiveis from "./pages/AgentesDisponiveis";
-import Clientes from "./pages/Clientes";
-import PlaceholderPage from "./pages/PlaceholderPage";
-import NotFound from "./pages/NotFound";
-import DashboardFinanceiro from "./pages/financeiro/DashboardFinanceiro";
-import LancamentosCaixa from "./pages/financeiro/LancamentosCaixa";
-import Contas from "./pages/financeiro/Contas";
-import CentrosCusto from "./pages/financeiro/CentrosCusto";
-import FormasPagamento from "./pages/financeiro/FormasPagamento";
-import CondicoesPagamento from "./pages/financeiro/CondicoesPagamento";
-import Feriados from "./pages/financeiro/Feriados";
-import { Truck } from "lucide-react";
-
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -45,7 +45,9 @@ const App = () => (
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -53,7 +55,10 @@ const App = () => (
               path="/configuracoes"
               element={
                 <ProtectedRoute>
-                  <Configuracoes />
+                  <Layout>
+                    <Index />
+                    <Configuracoes />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -61,7 +66,9 @@ const App = () => (
               path="/operacoes/*"
               element={
                 <ProtectedRoute>
-                  <Operations />
+                  <Layout>
+                    <Operations />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -69,7 +76,9 @@ const App = () => (
               path="/financeiro"
               element={
                 <ProtectedRoute>
-                  <Financeiro />
+                  <Layout>
+                    <Financeiro />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -133,7 +142,9 @@ const App = () => (
               path="/grid-operacional"
               element={
                 <ProtectedRoute>
-                  <GridOperacional />
+                  <Layout>
+                    <GridOperacional />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -141,7 +152,9 @@ const App = () => (
               path="/solicitacoes-escolta"
               element={
                 <ProtectedRoute>
-                  <SolicitacoesEscolta />
+                  <Layout>
+                    <SolicitacoesEscolta />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -149,7 +162,9 @@ const App = () => (
               path="/agentes-disponiveis"
               element={
                 <ProtectedRoute>
-                  <AgentesDisponiveis />
+                  <Layout>
+                    <AgentesDisponiveis />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -157,7 +172,9 @@ const App = () => (
               path="/clientes"
               element={
                 <ProtectedRoute>
-                  <Clientes />
+                  <Layout>
+                    <Clientes />
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -165,8 +182,8 @@ const App = () => (
               path="/logistica"
               element={
                 <ProtectedRoute>
-                  <PlaceholderPage 
-                    title="Logística" 
+                  <PlaceholderPage
+                    title="Logística"
                     icon={<Truck className="h-6 w-6" />}
                   />
                 </ProtectedRoute>
@@ -191,6 +208,6 @@ const App = () => (
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
-);
+)
 
-export default App;
+export default App
