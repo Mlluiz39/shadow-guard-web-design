@@ -1,13 +1,11 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-import { Usuario } from '@/types/usuario'
-import { UsuariosSearch } from './usuarios/UsuariosSearch'
-import { UsuariosTable } from './usuarios/UsuariosTable'
-import { NovoUsuarioDialog } from './usuarios/NovoUsuarioDialog'
 import { Badge } from '@/components/ui/badge'
 import { getPerfilById } from '@/types/perfil'
+import { supabase } from '@/integrations/supabase/client'
+import { toast } from 'react-toastify'
 import {
   Table,
   TableHeader,
@@ -16,10 +14,22 @@ import {
   TableBody,
   TableCell,
 } from '@/components/ui/table'
+import { UsuariosSearch } from './usuarios/UsuariosSearch'
+import { NovoUsuarioDialog } from './usuarios/NovoUsuarioDialog'
 
-// Mockup data
+interface Profile {
+  id: string
+  nome: string
+  email: string
+  empresa?: string
+  cargo?: string
+  departamento?: string
+  perfil: string
+  ativo: boolean
+}
+
 const empresas = [
-  { id: '1', nome: 'Proteção Segurança Ltda' },
+  { id: '1', nome: 'MlluizDevTech Ltda' },
   { id: '2', nome: 'Escolta Expressa S.A.' },
   { id: '3', nome: 'Segurança Total' },
 ]
@@ -35,51 +45,47 @@ const departamentos = [
 ]
 
 export const UsuariosTab = () => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([
-    {
-      id: '1',
-      nome: 'Marcelo Luiz',
-      email: 'marcelo@proteqrv.com',
-      empresa: 'MlluizDevTech Ltda',
-      cargo: 'Administrador',
-      departamento: 'TI',
-      perfil: 'master',
-      ativo: true,
-    },
-    {
-      id: '2',
-      nome: 'Ana Oliveira',
-      email: 'ana@escolta.com',
-      empresa: 'Escolta Expressa S.A.',
-      cargo: 'Supervisor',
-      departamento: 'Operações',
-      perfil: 'operacional',
-      ativo: true,
-    },
-    {
-      id: '3',
-      nome: 'Roberto Alves',
-      email: 'roberto@total.com',
-      empresa: 'Segurança Total',
-      cargo: 'Analista',
-      departamento: 'Financeiro',
-      perfil: 'financeiro',
-      ativo: true,
-    },
-  ])
-
+  const [usuarios, setUsuarios] = useState<Profile[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const handleAddUsuario = (newUsuario: Usuario) => {
-    setUsuarios([...usuarios, newUsuario])
+  const fetchUsuarios = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('nome')
+
+      if (error) {
+        console.error('Erro ao buscar usuários:', error)
+        toast.error('Erro ao carregar usuários')
+        return
+      }
+
+      setUsuarios(data || [])
+    } catch (error) {
+      console.error('Erro:', error)
+      toast.error('Erro ao carregar usuários')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchUsuarios()
+  }, [])
+
+  const handleAddUsuario = async (newUsuario: any) => {
+    // Usuários são criados via auth, então apenas atualizamos a lista
+    await fetchUsuarios()
   }
 
   const filteredUsuarios = usuarios.filter(
     usuario =>
       usuario.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       usuario.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      usuario.empresa.toLowerCase().includes(searchTerm.toLowerCase())
+      (usuario.empresa && usuario.empresa.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
   const getPerfilBadgeColor = (perfilId: string) => {
@@ -97,6 +103,14 @@ export const UsuariosTab = () => {
       default:
         return 'bg-gray-100 text-gray-800'
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="h-8 w-8 border-2 border-security-accent border-opacity-50 border-t-security-accent rounded-full animate-spin"></div>
+      </div>
+    )
   }
 
   return (
@@ -142,9 +156,9 @@ export const UsuariosTab = () => {
                 >
                   <TableCell className="font-medium">{usuario.nome}</TableCell>
                   <TableCell>{usuario.email}</TableCell>
-                  <TableCell>{usuario.empresa}</TableCell>
-                  <TableCell>{usuario.cargo}</TableCell>
-                  <TableCell>{usuario.departamento}</TableCell>
+                  <TableCell>{usuario.empresa || '-'}</TableCell>
+                  <TableCell>{usuario.cargo || '-'}</TableCell>
+                  <TableCell>{usuario.departamento || '-'}</TableCell>
                   <TableCell>
                     <Badge className={getPerfilBadgeColor(usuario.perfil)}>
                       {getPerfilById(usuario.perfil)?.nome || 'Indefinido'}

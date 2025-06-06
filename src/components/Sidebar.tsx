@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Logo } from "./Logo";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { 
   Settings, 
   DollarSign, 
@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
 
 interface NavItemProps {
@@ -34,7 +34,6 @@ const NavItem = ({ icon: Icon, label, to, collapsed, permission }: NavItemProps)
   const { hasPermission } = usePermissions();
   const isActive = location.pathname === to;
 
-  // Se uma permissão foi especificada e o usuário não tem essa permissão, não renderiza o item
   if (permission && !hasPermission(permission)) {
     return null;
   }
@@ -62,26 +61,11 @@ interface SidebarProps {
 
 export const Sidebar = ({ className }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
-  const [username, setUsername] = useState("Usuário");
-  const [role, setRole] = useState("...");
-  const navigate = useNavigate();
+  const { signOut, profile } = useAuth();
 
-  useEffect(() => {
-    // Carregar informações do usuário do localStorage
-    const storedUser = localStorage.getItem('proteqrvUser');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setUsername(user.nome || user.username || "Usuário");
-      setRole(user.role || "usuário");
-    }
-  }, []);
-
-  const handleLogout = () => {
-    // Remover dados de autenticação
-    localStorage.removeItem('proteqrvLoggedIn');
-    localStorage.removeItem('proteqrvUser');
+  const handleLogout = async () => {
+    await signOut();
     toast.success("Logout realizado com sucesso.");
-    navigate("/", { replace: true });
   };
 
   return (
@@ -121,12 +105,12 @@ export const Sidebar = ({ className }: SidebarProps) => {
       {/* Footer */}
       <div className="p-2 border-t border-sidebar-border">
         <div className="flex flex-col gap-1">
-          {!collapsed && (
+          {!collapsed && profile && (
             <div className="flex items-center gap-3 px-3 py-2 mb-2">
               <UserCircle className="h-5 w-5 text-sidebar-foreground" />
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-sidebar-foreground">{username}</span>
-                <span className="text-xs text-sidebar-foreground/70">{role}</span>
+                <span className="text-sm font-medium text-sidebar-foreground">{profile.nome}</span>
+                <span className="text-xs text-sidebar-foreground/70">{profile.perfil}</span>
               </div>
             </div>
           )}

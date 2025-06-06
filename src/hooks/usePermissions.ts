@@ -1,22 +1,36 @@
 
 import { useState, useEffect } from 'react'
-import { getPerfilById } from '@/types/perfil'
+import { useAuth } from '@/hooks/useAuth'
 
 export const usePermissions = () => {
   const [userPermissions, setUserPermissions] = useState<string[]>([])
   const [userProfile, setUserProfile] = useState<string>('')
+  const { profile } = useAuth()
 
   useEffect(() => {
-    // Carregar perfil do usuário do localStorage
-    const storedUser = localStorage.getItem('proteqrvUser')
-    if (storedUser) {
-      const user = JSON.parse(storedUser)
-      const perfil = getPerfilById(user.perfil || 'operacional')
-      
-      setUserProfile(user.perfil || 'operacional')
-      setUserPermissions(perfil?.permissoes || ['dashboard'])
+    if (profile) {
+      const perfilPermissions = getPermissionsByProfile(profile.perfil)
+      setUserProfile(profile.perfil)
+      setUserPermissions(perfilPermissions)
     }
-  }, [])
+  }, [profile])
+
+  const getPermissionsByProfile = (perfil: string): string[] => {
+    switch (perfil) {
+      case 'master':
+        return ['configuracoes', 'financeiro', 'operacoes', 'logistica', 'dashboard']
+      case 'supervisor':
+        return ['operacoes', 'logistica', 'dashboard']
+      case 'financeiro':
+        return ['financeiro', 'dashboard']
+      case 'operacional':
+        return ['operacoes', 'dashboard']
+      case 'logistica':
+        return ['logistica', 'dashboard']
+      default:
+        return ['dashboard']
+    }
+  }
 
   const hasPermission = (permission: string): boolean => {
     return userPermissions.includes(permission)

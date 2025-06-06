@@ -9,13 +9,262 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      agentes: {
+        Row: {
+          categoria: string
+          cpf: string
+          created_at: string | null
+          email: string | null
+          empresa: string
+          id: string
+          nome: string
+          status: string
+          telefone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          categoria: string
+          cpf: string
+          created_at?: string | null
+          email?: string | null
+          empresa: string
+          id?: string
+          nome: string
+          status?: string
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          categoria?: string
+          cpf?: string
+          created_at?: string | null
+          email?: string | null
+          empresa?: string
+          id?: string
+          nome?: string
+          status?: string
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      clientes: {
+        Row: {
+          contrato: string | null
+          created_at: string | null
+          data_importacao: string | null
+          documento: string
+          id: string
+          nome: string
+          pasta_n: string | null
+          razao_social: string | null
+          status: string
+          telefone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          contrato?: string | null
+          created_at?: string | null
+          data_importacao?: string | null
+          documento: string
+          id?: string
+          nome: string
+          pasta_n?: string | null
+          razao_social?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          contrato?: string | null
+          created_at?: string | null
+          data_importacao?: string | null
+          documento?: string
+          id?: string
+          nome?: string
+          pasta_n?: string | null
+          razao_social?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      empresas: {
+        Row: {
+          cnpj: string
+          created_at: string | null
+          email: string
+          id: string
+          nome: string
+          proprietario: string
+          updated_at: string | null
+        }
+        Insert: {
+          cnpj: string
+          created_at?: string | null
+          email: string
+          id?: string
+          nome: string
+          proprietario: string
+          updated_at?: string | null
+        }
+        Update: {
+          cnpj?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          nome?: string
+          proprietario?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      operacoes: {
+        Row: {
+          agente: string
+          cliente: string
+          created_at: string | null
+          data_operacao: string
+          destino: string
+          hora_inicio: string
+          id: string
+          observacoes: string | null
+          origem: string
+          status: string
+          updated_at: string | null
+          veiculo: string | null
+        }
+        Insert: {
+          agente: string
+          cliente: string
+          created_at?: string | null
+          data_operacao: string
+          destino: string
+          hora_inicio: string
+          id?: string
+          observacoes?: string | null
+          origem: string
+          status?: string
+          updated_at?: string | null
+          veiculo?: string | null
+        }
+        Update: {
+          agente?: string
+          cliente?: string
+          created_at?: string | null
+          data_operacao?: string
+          destino?: string
+          hora_inicio?: string
+          id?: string
+          observacoes?: string | null
+          origem?: string
+          status?: string
+          updated_at?: string | null
+          veiculo?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          ativo: boolean
+          cargo: string | null
+          created_at: string | null
+          departamento: string | null
+          email: string
+          empresa: string | null
+          id: string
+          nome: string
+          perfil: string
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          cargo?: string | null
+          created_at?: string | null
+          departamento?: string | null
+          email: string
+          empresa?: string | null
+          id: string
+          nome: string
+          perfil?: string
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          cargo?: string | null
+          created_at?: string | null
+          departamento?: string | null
+          email?: string
+          empresa?: string | null
+          id?: string
+          nome?: string
+          perfil?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      solicitacoes_escolta: {
+        Row: {
+          agente_responsavel: string | null
+          cliente: string
+          created_at: string | null
+          data_solicitacao: string
+          destino: string
+          hora_solicitacao: string
+          id: string
+          observacoes: string | null
+          origem: string
+          prioridade: string
+          status: string
+          tipo_servico: string
+          updated_at: string | null
+        }
+        Insert: {
+          agente_responsavel?: string | null
+          cliente: string
+          created_at?: string | null
+          data_solicitacao: string
+          destino: string
+          hora_solicitacao: string
+          id?: string
+          observacoes?: string | null
+          origem: string
+          prioridade?: string
+          status?: string
+          tipo_servico: string
+          updated_at?: string | null
+        }
+        Update: {
+          agente_responsavel?: string | null
+          cliente?: string
+          created_at?: string | null
+          data_solicitacao?: string
+          destino?: string
+          hora_solicitacao?: string
+          id?: string
+          observacoes?: string | null
+          origem?: string
+          prioridade?: string
+          status?: string
+          tipo_servico?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      is_master: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

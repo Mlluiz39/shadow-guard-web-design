@@ -1,195 +1,192 @@
-import { Toaster } from '@/components/ui/toaster'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import Layout from './components/Layout'
-import LoginPage from './components/LoginPage'
-import SignUpPage from './components/SignUpPage'
-import Dashboard from './pages/Dashboard'
-import PlaceholderPage from './pages/PlaceholderPage'
-import NotFound from './pages/NotFound'
-import Operations from './pages/Operations'
-import Financeiro from './pages/Financeiro'
-import Configuracoes from './pages/Configuracoes'
-import CentrosCusto from './pages/financeiro/CentrosCusto'
-import CondicoesPagamento from './pages/financeiro/CondicoesPagamento'
-import Contas from './pages/financeiro/Contas'
-import DashboardFinanceiro from './pages/financeiro/DashboardFinanceiro'
-import Feriados from './pages/financeiro/Feriados'
-import FormasPagamento from './pages/financeiro/FormasPagamento'
-import LancamentosCaixa from './pages/financeiro/LancamentosCaixa'
-import {
-  DollarSign,
-  FileText,
-  Archive,
-  BarChart4,
-} from 'lucide-react'
-import { useEffect, useState } from 'react'
 
-// Componente para proteção de rotas - corrigido para evitar loops de renderização
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import AuthPage from "@/components/AuthPage";
+import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
+import Configuracoes from "./pages/Configuracoes";
+import Operations from "./pages/Operations";
+import Financeiro from "./pages/Financeiro";
+import GridOperacional from "./pages/GridOperacional";
+import SolicitacoesEscolta from "./pages/SolicitacoesEscolta";
+import AgentesDisponiveis from "./pages/AgentesDisponiveis";
+import Clientes from "./pages/Clientes";
+import PlaceholderPage from "./pages/PlaceholderPage";
+import NotFound from "./pages/NotFound";
+import DashboardFinanceiro from "./pages/financeiro/DashboardFinanceiro";
+import LancamentosCaixa from "./pages/financeiro/LancamentosCaixa";
+import Contas from "./pages/financeiro/Contas";
+import CentrosCusto from "./pages/financeiro/CentrosCusto";
+import FormasPagamento from "./pages/financeiro/FormasPagamento";
+import CondicoesPagamento from "./pages/financeiro/CondicoesPagamento";
+import Feriados from "./pages/financeiro/Feriados";
 
-  useEffect(() => {
-    // Verificando apenas uma vez na montagem do componente
-    const isLoggedIn = localStorage.getItem('proteqrvLoggedIn') === 'true'
-    setIsAuthenticated(isLoggedIn)
-  }, []) // Array de dependências vazio para executar apenas uma vez
-
-  if (isAuthenticated === null) {
-    // Estado de carregamento, poderia mostrar um spinner aqui
-    return (
-      <div className="flex h-screen items-center justify-center">
-        Carregando...
-      </div>
-    )
-  }
-
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />
-}
-
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/cadastro" element={<SignUpPage />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Layout>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
                   <Dashboard />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/configuracoes"
-            element={
-              <ProtectedRoute>
-                <Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/configuracoes"
+              element={
+                <ProtectedRoute>
                   <Configuracoes />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Financeiro />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/centros-custo"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <CentrosCusto />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/condicoes-pagamento"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <CondicoesPagamento />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/contas"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Contas />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/dashboard"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <DashboardFinanceiro />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/feriados"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Feriados />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/formas-pagamento"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <FormasPagamento />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/financeiro/lancamentos-caixa"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <LancamentosCaixa />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/operacoes/*"
-            element={
-              <ProtectedRoute>
-                <Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/operacoes"
+              element={
+                <ProtectedRoute>
                   <Operations />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/logistica"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <PlaceholderPage
-                    title="Logística"
-                    icon={<Archive className="h-6 w-6" />}
-                  />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/comercial"
-            element={<Navigate replace to="/dashboard" />}
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro"
+              element={
+                <ProtectedRoute>
+                  <Financeiro />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardFinanceiro />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/lancamentos"
+              element={
+                <ProtectedRoute>
+                  <LancamentosCaixa />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/contas"
+              element={
+                <ProtectedRoute>
+                  <Contas />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/centros-custo"
+              element={
+                <ProtectedRoute>
+                  <CentrosCusto />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/formas-pagamento"
+              element={
+                <ProtectedRoute>
+                  <FormasPagamento />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/condicoes-pagamento"
+              element={
+                <ProtectedRoute>
+                  <CondicoesPagamento />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/financeiro/feriados"
+              element={
+                <ProtectedRoute>
+                  <Feriados />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/grid-operacional"
+              element={
+                <ProtectedRoute>
+                  <GridOperacional />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/solicitacoes-escolta"
+              element={
+                <ProtectedRoute>
+                  <SolicitacoesEscolta />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/agentes-disponiveis"
+              element={
+                <ProtectedRoute>
+                  <AgentesDisponiveis />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/clientes"
+              element={
+                <ProtectedRoute>
+                  <Clientes />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/logistica"
+              element={
+                <ProtectedRoute>
+                  <PlaceholderPage title="Logística" />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          style={{ zIndex: 9999 }}
+        />
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
-)
+);
 
-export default App
+export default App;

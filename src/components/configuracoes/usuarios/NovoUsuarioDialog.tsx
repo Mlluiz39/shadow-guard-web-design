@@ -15,9 +15,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Usuario } from '@/types/usuario'
 import { PERFIS_SISTEMA } from '@/types/perfil'
 import { toast } from 'react-toastify'
+import { supabase } from '@/integrations/supabase/client'
 
 interface Empresa {
   id: string
@@ -27,7 +27,7 @@ interface Empresa {
 interface NovoUsuarioDialogProps {
   dialogOpen: boolean
   setDialogOpen: (open: boolean) => void
-  onUsuarioAdded: (usuario: Usuario) => void
+  onUsuarioAdded: (usuario: any) => void
   empresas: Empresa[]
   cargos: string[]
   departamentos: string[]
@@ -44,51 +44,84 @@ export const NovoUsuarioDialog = ({
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
+    password: '',
     empresa: '',
     cargo: '',
     departamento: '',
     perfil: 'operacional',
   })
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validações básicas
-    if (!formData.nome || !formData.email || !formData.empresa || !formData.cargo || !formData.departamento) {
-      toast.error('Por favor, preencha todos os campos.')
+    if (!formData.nome || !formData.email || !formData.password) {
+      toast.error('Por favor, preencha pelo menos nome, email e senha.')
       return
     }
 
-    const novoUsuario: Usuario = {
-      id: Date.now().toString(),
-      nome: formData.nome,
-      email: formData.email,
-      empresa: formData.empresa,
-      cargo: formData.cargo,
-      departamento: formData.departamento,
-      perfil: formData.perfil,
-      ativo: true,
+    if (formData.password.length < 6) {
+      toast.error('A senha deve ter pelo menos 6 caracteres.')
+      return
     }
 
-    // Salvar no localStorage para o sistema de login
-    const existingUsers = JSON.parse(localStorage.getItem('sistemaUsuarios') || '[]')
-    const updatedUsers = [...existingUsers, novoUsuario]
-    localStorage.setItem('sistemaUsuarios', JSON.stringify(updatedUsers))
+    setLoading(true)
 
-    onUsuarioAdded(novoUsuario)
-    toast.success('Usuário criado com sucesso! Senha padrão: 123456')
-    
-    // Reset form
-    setFormData({
-      nome: '',
-      email: '',
-      empresa: '',
-      cargo: '',
-      departamento: '',
-      perfil: 'operacional',
-    })
-    
-    setDialogOpen(false)
+    try {
+      // Criar usuário na auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            nome: formData.nome
+          }
+        }
+      })
+
+      if (authError) {
+        toast.error('Erro ao criar usuário: ' + authError.message)
+        return
+      }
+
+      if (authData.user) {
+        // Atualizar perfil com dados adicionais
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({
+            empresa: formData.empresa,
+            cargo: formData.cargo,
+            departamento: formData.departamento,
+            perfil: formData.perfil
+          })
+          .eq('id', authData.user.id)
+
+        if (profileError) {
+          console.error('Erro ao atualizar perfil:', profileError)
+        }
+      }
+
+      onUsuarioAdded(formData)
+      toast.success('Usuário criado com sucesso!')
+      
+      // Reset form
+      setFormData({
+        nome: '',
+        email: '',
+        password: '',
+        empresa: '',
+        cargo: '',
+        departamento: '',
+        perfil: 'operacional',
+      })
+      
+      setDialogOpen(false)
+    } catch (error) {
+      console.error('Erro:', error)
+      toast.error('Erro inesperado ao criar usuário')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -114,6 +147,16 @@ export const NovoUsuarioDialog = ({
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="email@exemplo.com"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Senha</label>
+            <Input
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="Mínimo 6 caracteres"
             />
           </div>
 
@@ -200,7 +243,9 @@ export const NovoUsuarioDialog = ({
             <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
               Cancelar
             </Button>
-            <Button type="submit">Criar Usuário</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Criando...' : 'Criar Usuário'}
+            </Button>
           </div>
         </form>
       </DialogContent>
