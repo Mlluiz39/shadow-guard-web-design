@@ -27,6 +27,7 @@ import CentrosCusto from "./pages/financeiro/CentrosCusto";
 import FormasPagamento from "./pages/financeiro/FormasPagamento";
 import CondicoesPagamento from "./pages/financeiro/CondicoesPagamento";
 import Feriados from "./pages/financeiro/Feriados";
+import { Truck } from "lucide-react";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +58,7 @@ const App = () => (
               }
             />
             <Route
-              path="/operacoes"
+              path="/operacoes/*"
               element={
                 <ProtectedRoute>
                   <Operations />
@@ -164,7 +165,10 @@ const App = () => (
               path="/logistica"
               element={
                 <ProtectedRoute>
-                  <PlaceholderPage title="Logística" />
+                  <PlaceholderPage 
+                    title="Logística" 
+                    icon={<Truck className="h-6 w-6" />}
+                  />
                 </ProtectedRoute>
               }
             />
