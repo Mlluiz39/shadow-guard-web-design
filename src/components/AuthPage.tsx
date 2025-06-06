@@ -105,7 +105,7 @@ const AuthPage = () => {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full py-6 bg-security-accent hover:bg-security-accent/90 text-white font-medium rounded"
+                    className="w-full py-6 font-medium rounded"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -162,7 +162,7 @@ const AuthPage = () => {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full py-6 bg-security-accent hover:bg-security-accent/90 text-white font-medium rounded"
+                    className="w-full py-6 font-medium rounded"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center gap-2">

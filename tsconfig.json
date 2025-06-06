@@ -5,6 +5,8 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "moduleResolution": "node",
+    "types": ["node", "jest", "jest-extended", "ts-jest"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
