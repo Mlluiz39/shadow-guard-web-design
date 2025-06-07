@@ -68,27 +68,56 @@ export const NovoUsuarioDialog = ({
     setLoading(true)
 
     try {
-      // Criar usuário na auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      // Criar usuário usando admin API (isso requer que você seja admin/master)
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email: formData.email,
         password: formData.password,
-        options: {
-          data: {
-            nome: formData.nome
-          }
+        email_confirm: true, // Confirma automaticamente o email
+        user_metadata: {
+          nome: formData.nome
         }
       })
 
       if (authError) {
-        toast.error('Erro ao criar usuário: ' + authError.message)
-        return
-      }
+        // Se admin.createUser não funcionar, tenta o método normal
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              nome: formData.nome
+            }
+          }
+        })
 
-      if (authData.user) {
-        // Atualizar perfil com dados adicionais
+        if (signUpError) {
+          toast.error('Erro ao criar usuário: ' + signUpError.message)
+          return
+        }
+
+        if (signUpData.user) {
+          // Atualizar perfil
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({
+              nome: formData.nome,
+              empresa: formData.empresa,
+              cargo: formData.cargo,
+              departamento: formData.departamento,
+              perfil: formData.perfil
+            })
+            .eq('id', signUpData.user.id)
+
+          if (profileError) {
+            console.error('Erro ao atualizar perfil:', profileError)
+          }
+        }
+      } else if (authData.user) {
+        // Atualizar perfil para usuário criado via admin
         const { error: profileError } = await supabase
           .from('profiles')
           .update({
+            nome: formData.nome,
             empresa: formData.empresa,
             cargo: formData.cargo,
             departamento: formData.departamento,
