@@ -140,16 +140,7 @@ const Configuracoes = () => {
   const availableTabs = getAvailableTabs()
   const defaultTab = availableTabs[0]?.id || 'funcionarios'
 
-  const tabComponents: Record<string, React.ReactNode> = {
-    empresas: <EmpresasTab />,
-    usuarios: <UsuariosTab />,
-    funcionarios: <DadosCadastraisTab />,
-    operacional: <CadastroOperacionalTab />,
-    financeiro: <CadastroFinanceiroTab />,
-    frota: <CadastroFrotaTab />,
-  }
-
-  return (
+    return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-security flex items-center gap-2">
