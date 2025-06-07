@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
-import { Plus, Search } from 'lucide-react'
+import { Plus, Search, AlertCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -30,6 +30,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { toast } from 'sonner'
+import { usePermissions } from '@/hooks/usePermissions'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
 interface Empresa {
   id: string
@@ -47,6 +49,27 @@ const empresasSchema = z.object({
 })
 
 export const EmpresasTab = () => {
+  const { isMaster, canAccessEmpresas } = usePermissions()
+  
+  // Verificar se o usuário tem permissão para acessar empresas
+  if (!canAccessEmpresas()) {
+    return (
+      <div className="space-y-4">
+        <Card className="p-12">
+          <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
+            <AlertCircle className="h-16 w-16 text-red-500" />
+            <CardTitle className="text-xl text-red-600">
+              Acesso Restrito
+            </CardTitle>
+            <p className="text-gray-600 text-center max-w-md">
+              Apenas usuários master podem gerenciar empresas do sistema.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   const [empresas, setEmpresas] = useState<Empresa[]>([
     {
       id: '1',
@@ -85,7 +108,12 @@ export const EmpresasTab = () => {
   })
 
   const onSubmit = (data: z.infer<typeof empresasSchema>) => {
-    // Fix by explicitly creating a new object that matches the Empresa interface
+    // Verificar novamente se é master antes de permitir criação
+    if (!isMaster()) {
+      toast.error('Apenas usuários master podem cadastrar empresas!')
+      return
+    }
+
     const newEmpresa: Empresa = {
       id: Date.now().toString(),
       nome: data.nome,
@@ -119,93 +147,97 @@ export const EmpresasTab = () => {
             onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Nova Empresa
-        </Button>
+        {isMaster() && (
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Nova Empresa
+          </Button>
+        )}
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Adicionar Nova Empresa</DialogTitle>
-          </DialogHeader>
+      {isMaster() && (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Adicionar Nova Empresa</DialogTitle>
+            </DialogHeader>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="nome"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome da Empresa</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nome da empresa" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="nome"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome da Empresa</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome da empresa" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="cnpj"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CNPJ</FormLabel>
-                    <FormControl>
-                      <Input placeholder="00.000.000/0000-00" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="cnpj"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>CNPJ</FormLabel>
+                      <FormControl>
+                        <Input placeholder="00.000.000/0000-00" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="proprietario"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Proprietário</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nome do proprietário" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="proprietario"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Proprietário</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome do proprietário" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="email@exemplo.com"
-                        type="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="email@exemplo.com"
+                          type="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <DialogFooter>
-                <Button
-                  variant="outline"
-                  type="button"
-                  onClick={() => setDialogOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button type="submit">Adicionar</Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => setDialogOpen(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit">Adicionar</Button>
+                </DialogFooter>
+              </form>
+            </Form>
+          </DialogContent>
+        </Dialog>
+      )}
 
       <div className="rounded-md border">
         <Table>

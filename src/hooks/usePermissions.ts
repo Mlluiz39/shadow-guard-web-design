@@ -18,15 +18,15 @@ export const usePermissions = () => {
   const getPermissionsByProfile = (perfil: string): string[] => {
     switch (perfil) {
       case 'master':
-        return ['configuracoes', 'financeiro', 'operacoes', 'logistica', 'dashboard']
+        return ['configuracoes', 'financeiro', 'operacoes', 'logistica', 'dashboard', 'empresas', 'usuarios', 'funcionarios', 'frota']
       case 'supervisor':
-        return ['operacoes', 'logistica', 'dashboard']
+        return ['operacoes', 'logistica', 'dashboard', 'funcionarios', 'frota']
       case 'financeiro':
         return ['financeiro', 'dashboard']
       case 'operacional':
-        return ['operacoes', 'dashboard']
+        return ['operacoes', 'dashboard', 'funcionarios']
       case 'logistica':
-        return ['logistica', 'dashboard']
+        return ['logistica', 'dashboard', 'frota']
       default:
         return ['dashboard']
     }
@@ -40,10 +40,40 @@ export const usePermissions = () => {
     return userProfile === 'master'
   }
 
+  const canAccessEmpresas = (): boolean => {
+    return isMaster()
+  }
+
+  const canAccessUsuarios = (): boolean => {
+    return isMaster()
+  }
+
+  const canAccessFuncionarios = (): boolean => {
+    return userProfile === 'operacional' || isMaster()
+  }
+
+  const canAccessOperacional = (): boolean => {
+    return userProfile === 'operacional' || isMaster()
+  }
+
+  const canAccessFinanceiro = (): boolean => {
+    return userProfile === 'financeiro' || isMaster()
+  }
+
+  const canAccessFrota = (): boolean => {
+    return userProfile === 'logistica' || userProfile === 'supervisor' || isMaster()
+  }
+
   return {
     hasPermission,
     isMaster,
     userPermissions,
-    userProfile
+    userProfile,
+    canAccessEmpresas,
+    canAccessUsuarios,
+    canAccessFuncionarios,
+    canAccessOperacional,
+    canAccessFinanceiro,
+    canAccessFrota
   }
 }

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { Plus, AlertCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { getPerfilById } from '@/types/perfil'
 import { supabase } from '@/integrations/supabase/client'
@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/table'
 import { UsuariosSearch } from './usuarios/UsuariosSearch'
 import { NovoUsuarioDialog } from './usuarios/NovoUsuarioDialog'
+import { usePermissions } from '@/hooks/usePermissions'
+import { Card, CardContent, CardTitle } from '@/components/ui/card'
 
 interface Profile {
   id: string
@@ -45,6 +47,27 @@ const departamentos = [
 ]
 
 export const UsuariosTab = () => {
+  const { isMaster, canAccessUsuarios } = usePermissions()
+  
+  // Verificar se o usuário tem permissão para acessar usuários
+  if (!canAccessUsuarios()) {
+    return (
+      <div className="space-y-4">
+        <Card className="p-12">
+          <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
+            <AlertCircle className="h-16 w-16 text-red-500" />
+            <CardTitle className="text-xl text-red-600">
+              Acesso Restrito
+            </CardTitle>
+            <p className="text-gray-600 text-center max-w-md">
+              Apenas usuários master podem gerenciar usuários do sistema.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   const [usuarios, setUsuarios] = useState<Profile[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -77,6 +100,12 @@ export const UsuariosTab = () => {
   }, [])
 
   const handleAddUsuario = async (newUsuario: any) => {
+    // Verificar se é master antes de permitir criação
+    if (!isMaster()) {
+      toast.error('Apenas usuários master podem criar usuários!')
+      return
+    }
+    
     // Usuários são criados via auth, então apenas atualizamos a lista
     await fetchUsuarios()
   }
@@ -120,19 +149,23 @@ export const UsuariosTab = () => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-        <Button onClick={() => setDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Novo Usuário
-        </Button>
+        {isMaster() && (
+          <Button onClick={() => setDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Novo Usuário
+          </Button>
+        )}
       </div>
 
-      <NovoUsuarioDialog
-        dialogOpen={dialogOpen}
-        setDialogOpen={setDialogOpen}
-        onUsuarioAdded={handleAddUsuario}
-        empresas={empresas}
-        cargos={cargos}
-        departamentos={departamentos}
-      />
+      {isMaster() && (
+        <NovoUsuarioDialog
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+          onUsuarioAdded={handleAddUsuario}
+          empresas={empresas}
+          cargos={cargos}
+          departamentos={departamentos}
+        />
+      )}
 
       <div className="rounded-md border">
         <Table>
