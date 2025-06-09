@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -43,18 +44,15 @@ const Clientes = () => {
     const clienteFormatted: Cliente = {
       id: cliente.id,
       nome: cliente.nome,
-      razaoSocial: cliente.razao_social || '',
+      razao_social: cliente.razao_social || '',
       documento: cliente.documento,
       telefone: cliente.telefone || '',
       contrato: cliente.contrato || '',
-      pastaN: cliente.pasta_n || '',
-      dataImportacao: cliente.data_importacao ? new Date(cliente.data_importacao).toLocaleDateString() : '',
+      pasta_n: cliente.pasta_n || '',
+      data_importacao: cliente.data_importacao,
       status: cliente.status as 'Ativo' | 'Inativo' | 'Suspenso',
       created_at: cliente.created_at,
       updated_at: cliente.updated_at,
-      razao_social: cliente.razao_social,
-      pasta_n: cliente.pasta_n,
-      data_importacao: cliente.data_importacao,
     }
     setClienteSelecionado(clienteFormatted)
     setIsModalOpen(true)
