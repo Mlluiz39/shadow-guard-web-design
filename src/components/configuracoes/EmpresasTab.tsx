@@ -81,7 +81,15 @@ export const EmpresasTab = () => {
       return
     }
 
-    const result = await createEmpresa(data)
+    // Ensure all required fields are present
+    const empresaData = {
+      nome: data.nome,
+      cnpj: data.cnpj,
+      proprietario: data.proprietario,
+      email: data.email,
+    }
+
+    const result = await createEmpresa(empresaData)
     if (result) {
       setDialogOpen(false)
       form.reset()
