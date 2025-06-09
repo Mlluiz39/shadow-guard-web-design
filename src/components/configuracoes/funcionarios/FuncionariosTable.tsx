@@ -1,6 +1,14 @@
+
 import { useState } from 'react'
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   Dialog,
   DialogContent,
@@ -9,13 +17,24 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { Input } from '@/components/ui/input'
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, Search, Loader2 } from 'lucide-react'
+import { Edit, Trash2, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -27,9 +46,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { toast } from 'sonner'
+import { Funcionario } from '@/types/funcionario'
 import { useFuncionarios } from '@/hooks/useFuncionarios'
-import { FuncionariosTable } from '@/components/configuracoes/funcionarios/FuncionariosTable'
+
+interface FuncionariosTableProps {
+  funcionarios: Funcionario[]
+}
 
 const funcionarioSchema = z.object({
   nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -46,10 +68,11 @@ const funcionarioSchema = z.object({
   empresa: z.string().optional(),
 })
 
-export const FuncionariosTab = () => {
-  const { funcionarios, loading, createFuncionario } = useFuncionarios()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [dialogOpen, setDialogOpen] = useState(false)
+export const FuncionariosTable = ({ funcionarios }: FuncionariosTableProps) => {
+  const { updateFuncionario, deleteFuncionario } = useFuncionarios()
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [selectedFuncionario, setSelectedFuncionario] = useState<Funcionario | null>(null)
 
   const form = useForm<z.infer<typeof funcionarioSchema>>({
     resolver: zodResolver(funcionarioSchema),
@@ -69,7 +92,33 @@ export const FuncionariosTab = () => {
     },
   })
 
-  const onSubmit = async (data: z.infer<typeof funcionarioSchema>) => {
+  const handleEdit = (funcionario: Funcionario) => {
+    setSelectedFuncionario(funcionario)
+    form.reset({
+      nome: funcionario.nome,
+      cpf: funcionario.cpf,
+      rg: funcionario.rg || '',
+      telefone: funcionario.telefone || '',
+      email: funcionario.email || '',
+      endereco: funcionario.endereco || '',
+      cargo: funcionario.cargo || '',
+      departamento: funcionario.departamento || '',
+      salario: funcionario.salario || undefined,
+      data_admissao: funcionario.data_admissao || '',
+      status: funcionario.status,
+      empresa: funcionario.empresa || '',
+    })
+    setEditDialogOpen(true)
+  }
+
+  const handleDelete = (funcionario: Funcionario) => {
+    setSelectedFuncionario(funcionario)
+    setDeleteDialogOpen(true)
+  }
+
+  const onSubmitEdit = async (data: z.infer<typeof funcionarioSchema>) => {
+    if (!selectedFuncionario) return
+
     const funcionarioData = {
       nome: data.nome,
       cpf: data.cpf,
@@ -85,53 +134,101 @@ export const FuncionariosTab = () => {
       empresa: data.empresa || undefined,
     }
 
-    const result = await createFuncionario(funcionarioData)
+    const result = await updateFuncionario(selectedFuncionario.id, funcionarioData)
     if (result) {
-      setDialogOpen(false)
+      setEditDialogOpen(false)
+      setSelectedFuncionario(null)
       form.reset()
     }
   }
 
-  const filteredFuncionarios = funcionarios.filter(
-    funcionario =>
-      funcionario.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      funcionario.cpf.includes(searchTerm) ||
-      (funcionario.cargo && funcionario.cargo.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
+  const onConfirmDelete = async () => {
+    if (!selectedFuncionario) return
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    )
+    const result = await deleteFuncionario(selectedFuncionario.id)
+    if (result) {
+      setDeleteDialogOpen(false)
+      setSelectedFuncionario(null)
+    }
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="relative w-72">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar funcionários..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <Button onClick={() => setDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Novo Funcionário
-        </Button>
+    <>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome</TableHead>
+              <TableHead>CPF</TableHead>
+              <TableHead>Cargo</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead className="w-24">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {funcionarios.length > 0 ? (
+              funcionarios.map(funcionario => (
+                <TableRow key={funcionario.id}>
+                  <TableCell className="font-medium">
+                    {funcionario.nome}
+                  </TableCell>
+                  <TableCell>{funcionario.cpf}</TableCell>
+                  <TableCell>{funcionario.cargo || '-'}</TableCell>
+                  <TableCell>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        funcionario.status === 'Ativo'
+                          ? 'bg-green-100 text-green-800'
+                          : funcionario.status === 'Inativo'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}
+                    >
+                      {funcionario.status}
+                    </span>
+                  </TableCell>
+                  <TableCell>{funcionario.email || '-'}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEdit(funcionario)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(funcionario)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-6">
+                  Nenhum funcionário encontrado
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      {/* Edit Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Adicionar Novo Funcionário</DialogTitle>
+            <DialogTitle>Editar Funcionário</DialogTitle>
           </DialogHeader>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmitEdit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -237,7 +334,7 @@ export const FuncionariosTab = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o status" />
@@ -273,7 +370,7 @@ export const FuncionariosTab = () => {
                 <Button
                   variant="outline"
                   type="button"
-                  onClick={() => setDialogOpen(false)}
+                  onClick={() => setEditDialogOpen(false)}
                 >
                   Cancelar
                 </Button>
@@ -281,10 +378,10 @@ export const FuncionariosTab = () => {
                   {form.formState.isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Adicionando...
+                      Salvando...
                     </>
                   ) : (
-                    'Adicionar'
+                    'Salvar'
                   )}
                 </Button>
               </DialogFooter>
@@ -293,7 +390,24 @@ export const FuncionariosTab = () => {
         </DialogContent>
       </Dialog>
 
-      <FuncionariosTable funcionarios={filteredFuncionarios} />
-    </div>
+      {/* Delete Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir o funcionário "{selectedFuncionario?.nome}"? 
+              Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirmDelete}>
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }

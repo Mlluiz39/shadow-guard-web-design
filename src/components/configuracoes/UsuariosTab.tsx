@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -41,6 +40,7 @@ import { usePermissions } from '@/hooks/usePermissions'
 import { useUsuarios } from '@/hooks/useUsuarios'
 import { useEmpresas } from '@/hooks/useEmpresas'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { UsuariosTable } from '@/components/configuracoes/usuarios/UsuariosTable'
 
 const usuariosSchema = z.object({
   nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -309,50 +309,7 @@ export const UsuariosTab = () => {
           </DialogContent>
         </Dialog>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Empresa</TableHead>
-                <TableHead>Cargo</TableHead>
-                <TableHead>Perfil</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredUsuarios.length > 0 ? (
-                filteredUsuarios.map(usuario => (
-                  <TableRow key={usuario.id}>
-                    <TableCell className="font-medium">
-                      {usuario.nome}
-                    </TableCell>
-                    <TableCell>{usuario.email}</TableCell>
-                    <TableCell>{usuario.empresa || '-'}</TableCell>
-                    <TableCell>{usuario.cargo || '-'}</TableCell>
-                    <TableCell className="capitalize">{usuario.perfil}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        usuario.ativo 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {usuario.ativo ? 'Ativo' : 'Inativo'}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-6">
-                    Nenhum usuário encontrado
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        <UsuariosTable usuarios={filteredUsuarios} />
       </div>
     </div>
   )

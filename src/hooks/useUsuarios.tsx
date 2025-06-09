@@ -60,6 +60,54 @@ export const useUsuarios = () => {
     }
   }
 
+  const updateUsuario = async (id: string, usuario: Partial<Profile>) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(usuario)
+        .eq('id', id)
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Erro ao atualizar usuário:', error)
+        toast.error('Erro ao atualizar usuário')
+        return null
+      }
+
+      setUsuarios(prev => prev.map(u => u.id === id ? data : u))
+      toast.success('Usuário atualizado com sucesso!')
+      return data
+    } catch (error) {
+      console.error('Erro ao atualizar usuário:', error)
+      toast.error('Erro ao atualizar usuário')
+      return null
+    }
+  }
+
+  const deleteUsuario = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', id)
+
+      if (error) {
+        console.error('Erro ao deletar usuário:', error)
+        toast.error('Erro ao deletar usuário')
+        return false
+      }
+
+      setUsuarios(prev => prev.filter(u => u.id !== id))
+      toast.success('Usuário deletado com sucesso!')
+      return true
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error)
+      toast.error('Erro ao deletar usuário')
+      return false
+    }
+  }
+
   useEffect(() => {
     fetchUsuarios()
   }, [])
@@ -68,6 +116,8 @@ export const useUsuarios = () => {
     usuarios,
     loading,
     createUsuario,
+    updateUsuario,
+    deleteUsuario,
     refetch: fetchUsuarios
   }
 }
