@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,7 +24,7 @@ const AuthPage = () => {
 
     setIsLoading(true)
     const { error } = await signIn(email, password)
-    
+
     if (error) {
       toast.error('Erro ao fazer login: ' + error.message)
     } else {
@@ -37,15 +36,17 @@ const AuthPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 bg-white">
-        <div className="w-full max-w-md space-y-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 bg-black">
+        <div className="w-full max-w-md space-y-8 bg-white/10 backdrop-blur-md p-8 rounded-lg shadow-lg">
           <div className="flex flex-col items-center gap-6">
             <Logo size="lg" />
-            <h1 className="text-2xl md:text-3xl font-bold text-security">Sistema de Gestão</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-security-light">
+              Sistema de Gestão
+            </h1>
             <h2 className="text-lg text-security-secondary">Acesso Restrito</h2>
           </div>
 
-          <Card className="p-6 shadow-md border border-security-border-light">
+          <div className="p-6 bg-slate-500/10 backdrop-blur-md rounded-lg">
             <form onSubmit={handleSignIn} className="space-y-6">
               <div className="space-y-4">
                 <div className="relative">
@@ -54,7 +55,7 @@ const AuthPage = () => {
                     type="email"
                     placeholder="Email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)}
                     className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
                   />
                 </div>
@@ -65,7 +66,7 @@ const AuthPage = () => {
                     type="password"
                     placeholder="Senha"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                     className="pl-10 py-6 bg-security-light border-security-border-light focus:border-security-accent"
                   />
                 </div>
@@ -90,42 +91,55 @@ const AuthPage = () => {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-security-muted">
-              <p>Apenas usuários autorizados podem acessar o sistema.</p>
+            <div className="mt-6 text-center text-sm text-security-border">
+              <p className='text-red-400'>Apenas usuários autorizados.</p>
               <p>Entre em contato com o administrador para criar sua conta.</p>
             </div>
-          </Card>
+          </div>
 
-          <div className="text-center text-sm text-security-muted">
+          <div className="text-center text-sm text-security-border mt-6">
             <p>© {new Date().getFullYear()} Sistema Integrado de Segurança</p>
             <p>Todos os direitos reservados</p>
           </div>
         </div>
       </div>
 
-      <div className="hidden md:block md:w-1/2 bg-security bg-gradient-to-br from-security-secondary to-security relative overflow-hidden">
-        <div className="absolute inset-0 bg-security-pattern opacity-10"></div>
-        
+      {/* Right side - Informative Panel */}
+      <div className="hidden md:block md:w-1/2 text-white relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 flex flex-col items-center justify-center p-12">
           <div className="w-full max-w-lg text-white space-y-6">
-            <h2 className="text-3xl font-bold">Sistema Integrado de Segurança</h2>
+            <h2 className="text-3xl font-bold">
+              Sistema Integrado de Informações
+            </h2>
             <p className="text-lg opacity-90">
-              Sistema de gestão completo para operações de segurança privada.
-              Gerencie empresas, usuários, clientes e operações com total controle e segurança.
+              Plataforma completa para gestão de operações de segurança privada.
+              Acesse todos os módulos do sistema com total segurança e controle.
             </p>
-            
-            <div className="flex flex-wrap gap-4 pt-4">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">Gestão</div>
-                <div className="text-sm opacity-75">Empresarial</div>
+                <div className="text-2xl font-bold text-center mb-3">🤝</div>
+                <div className="text-sm opacity-75">
+                  Rede de Parcerias Certificadas
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">Segurança</div>
-                <div className="text-sm opacity-75">Avançada</div>
+                <div className="text-2xl font-bold text-center mb-3">🛡️</div>
+                <div className="text-sm opacity-75">
+                  Controle Operacional em Tempo real
+                </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
-                <div className="text-2xl font-bold">Controle</div>
-                <div className="text-sm opacity-75">Total</div>
+                <div className="text-2xl font-bold text-center mb-3">📡</div>
+                <div className="text-sm opacity-75">
+                  Gestão de Ativos de segurança
+                </div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg">
+                <div className="text-2xl font-bold text-center mb-3">🔗</div>
+                <div className="text-sm opacity-75">
+                  Integração com Centros de Comando
+                </div>
               </div>
             </div>
           </div>

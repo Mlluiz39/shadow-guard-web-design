@@ -15,11 +15,11 @@ export const Logo = ({ size = "md", variant = "full" }: LogoProps) => {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="text-security-accent">
+      <div className="text-security-secondary flex items-center justify-center">
         <ShieldCheck className={`${size === "sm" ? "h-5 w-5" : size === "md" ? "h-6 w-6" : "h-7 w-7"}`} />
       </div>
       {variant === "full" && (
-        <div className={`font-bold ${sizeClasses[size]} text-security-accent`}>
+        <div className={`font-bold ${sizeClasses[size]} text-security-secondary`}>
           <span>Maximus </span>
           <span className="text-security-accent">Tecnologia</span>
         </div>
