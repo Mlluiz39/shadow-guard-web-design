@@ -22,7 +22,7 @@ export const useFrota = () => {
         return
       }
 
-      setFrota(data || [])
+      setFrota((data || []) as Frota[])
     } catch (error) {
       console.error('Erro ao buscar frota:', error)
       toast.error('Erro ao carregar frota')
@@ -45,7 +45,7 @@ export const useFrota = () => {
         return null
       }
 
-      setFrota(prev => [data, ...prev])
+      setFrota(prev => [data as Frota, ...prev])
       toast.success('Veículo criado com sucesso!')
       return data
     } catch (error) {
@@ -70,7 +70,7 @@ export const useFrota = () => {
         return null
       }
 
-      setFrota(prev => prev.map(v => v.id === id ? data : v))
+      setFrota(prev => prev.map(v => v.id === id ? data as Frota : v))
       toast.success('Veículo atualizado com sucesso!')
       return data
     } catch (error) {

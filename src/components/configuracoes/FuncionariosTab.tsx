@@ -17,7 +17,14 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
-import { Plus, Search, Loader2, Edit, Trash } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Plus, Search, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,9 +36,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { toast } from 'sonner'
 import { useFuncionarios } from '@/hooks/useFuncionarios'
-import { usePermissions } from '@/hooks/usePermissions'
-import type { Funcionario } from '@/types/funcionario'
 
 const funcionarioSchema = z.object({
   nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -42,18 +48,16 @@ const funcionarioSchema = z.object({
   endereco: z.string().optional(),
   cargo: z.string().optional(),
   departamento: z.string().optional(),
-  salario: z.string().optional(),
+  salario: z.number().optional(),
   data_admissao: z.string().optional(),
-  status: z.enum(['Ativo', 'Inativo', 'Afastado']),
+  status: z.enum(['Ativo', 'Inativo', 'Afastado']).default('Ativo'),
   empresa: z.string().optional(),
 })
 
 export const FuncionariosTab = () => {
-  const { isMaster, userProfile } = usePermissions()
-  const { funcionarios, loading, createFuncionario, updateFuncionario, deleteFuncionario } = useFuncionarios()
+  const { funcionarios, loading, createFuncionario } = useFuncionarios()
   const [searchTerm, setSearchTerm] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingFuncionario, setEditingFuncionario] = useState<Funcionario | null>(null)
 
   const form = useForm<z.infer<typeof funcionarioSchema>>({
     resolver: zodResolver(funcionarioSchema),
@@ -66,55 +70,33 @@ export const FuncionariosTab = () => {
       endereco: '',
       cargo: '',
       departamento: '',
-      salario: '',
+      salario: undefined,
       data_admissao: '',
       status: 'Ativo',
       empresa: '',
     },
   })
 
-  const canManageFuncionarios = isMaster() || userProfile === 'operacional'
-
   const onSubmit = async (data: z.infer<typeof funcionarioSchema>) => {
     const funcionarioData = {
-      ...data,
-      salario: data.salario ? parseFloat(data.salario) : undefined,
+      nome: data.nome,
+      cpf: data.cpf,
+      rg: data.rg || undefined,
+      telefone: data.telefone || undefined,
       email: data.email || undefined,
+      endereco: data.endereco || undefined,
+      cargo: data.cargo || undefined,
+      departamento: data.departamento || undefined,
+      salario: data.salario || undefined,
+      data_admissao: data.data_admissao || undefined,
+      status: data.status,
+      empresa: data.empresa || undefined,
     }
 
-    if (editingFuncionario) {
-      await updateFuncionario(editingFuncionario.id, funcionarioData)
-    } else {
-      await createFuncionario(funcionarioData)
-    }
-    
-    setDialogOpen(false)
-    setEditingFuncionario(null)
-    form.reset()
-  }
-
-  const handleEdit = (funcionario: Funcionario) => {
-    setEditingFuncionario(funcionario)
-    form.reset({
-      nome: funcionario.nome,
-      cpf: funcionario.cpf,
-      rg: funcionario.rg || '',
-      telefone: funcionario.telefone || '',
-      email: funcionario.email || '',
-      endereco: funcionario.endereco || '',
-      cargo: funcionario.cargo || '',
-      departamento: funcionario.departamento || '',
-      salario: funcionario.salario?.toString() || '',
-      data_admissao: funcionario.data_admissao || '',
-      status: funcionario.status,
-      empresa: funcionario.empresa || '',
-    })
-    setDialogOpen(true)
-  }
-
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Tem certeza que deseja excluir este funcionário?')) {
-      await deleteFuncionario(id)
+    const result = await createFuncionario(funcionarioData)
+    if (result) {
+      setDialogOpen(false)
+      form.reset()
     }
   }
 
@@ -122,7 +104,7 @@ export const FuncionariosTab = () => {
     funcionario =>
       funcionario.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       funcionario.cpf.includes(searchTerm) ||
-      funcionario.cargo?.toLowerCase().includes(searchTerm.toLowerCase())
+      (funcionario.cargo && funcionario.cargo.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
   if (loading) {
@@ -145,19 +127,15 @@ export const FuncionariosTab = () => {
             onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-        {canManageFuncionarios && (
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Novo Funcionário
-          </Button>
-        )}
+        <Button onClick={() => setDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Novo Funcionário
+        </Button>
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>
-              {editingFuncionario ? 'Editar Funcionário' : 'Adicionar Novo Funcionário'}
-            </DialogTitle>
+            <DialogTitle>Adicionar Novo Funcionário</DialogTitle>
           </DialogHeader>
 
           <Form {...form}>
@@ -263,28 +241,47 @@ export const FuncionariosTab = () => {
 
                 <FormField
                   control={form.control}
-                  name="empresa"
+                  name="status"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Empresa</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Empresa" {...field} />
-                      </FormControl>
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione o status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Ativo">Ativo</SelectItem>
+                          <SelectItem value="Inativo">Inativo</SelectItem>
+                          <SelectItem value="Afastado">Afastado</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
 
+              <FormField
+                control={form.control}
+                name="endereco"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Endereço</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Endereço completo" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <DialogFooter>
                 <Button
                   variant="outline"
                   type="button"
-                  onClick={() => {
-                    setDialogOpen(false)
-                    setEditingFuncionario(null)
-                    form.reset()
-                  }}
+                  onClick={() => setDialogOpen(false)}
                 >
                   Cancelar
                 </Button>
@@ -292,10 +289,10 @@ export const FuncionariosTab = () => {
                   {form.formState.isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {editingFuncionario ? 'Atualizando...' : 'Adicionando...'}
+                      Adicionando...
                     </>
                   ) : (
-                    editingFuncionario ? 'Atualizar' : 'Adicionar'
+                    'Adicionar'
                   )}
                 </Button>
               </DialogFooter>
@@ -311,45 +308,38 @@ export const FuncionariosTab = () => {
               <TableHead>Nome</TableHead>
               <TableHead>CPF</TableHead>
               <TableHead>Cargo</TableHead>
-              <TableHead>Departamento</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Ações</TableHead>
+              <TableHead>Email</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredFuncionarios.length > 0 ? (
               filteredFuncionarios.map(funcionario => (
                 <TableRow key={funcionario.id}>
-                  <TableCell className="font-medium">{funcionario.nome}</TableCell>
+                  <TableCell className="font-medium">
+                    {funcionario.nome}
+                  </TableCell>
                   <TableCell>{funcionario.cpf}</TableCell>
                   <TableCell>{funcionario.cargo || '-'}</TableCell>
-                  <TableCell>{funcionario.departamento || '-'}</TableCell>
-                  <TableCell>{funcionario.status}</TableCell>
                   <TableCell>
-                    {canManageFuncionarios && (
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleEdit(funcionario)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleDelete(funcionario.id)}
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        funcionario.status === 'Ativo'
+                          ? 'bg-green-100 text-green-800'
+                          : funcionario.status === 'Inativo'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}
+                    >
+                      {funcionario.status}
+                    </span>
                   </TableCell>
+                  <TableCell>{funcionario.email || '-'}</TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-6">
+                <TableCell colSpan={5} className="text-center py-6">
                   Nenhum funcionário encontrado
                 </TableCell>
               </TableRow>

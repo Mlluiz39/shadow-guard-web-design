@@ -22,7 +22,7 @@ export const useFuncionarios = () => {
         return
       }
 
-      setFuncionarios(data || [])
+      setFuncionarios((data || []) as Funcionario[])
     } catch (error) {
       console.error('Erro ao buscar funcionários:', error)
       toast.error('Erro ao carregar funcionários')
@@ -45,7 +45,7 @@ export const useFuncionarios = () => {
         return null
       }
 
-      setFuncionarios(prev => [data, ...prev])
+      setFuncionarios(prev => [data as Funcionario, ...prev])
       toast.success('Funcionário criado com sucesso!')
       return data
     } catch (error) {
@@ -70,7 +70,7 @@ export const useFuncionarios = () => {
         return null
       }
 
-      setFuncionarios(prev => prev.map(f => f.id === id ? data : f))
+      setFuncionarios(prev => prev.map(f => f.id === id ? data as Funcionario : f))
       toast.success('Funcionário atualizado com sucesso!')
       return data
     } catch (error) {
