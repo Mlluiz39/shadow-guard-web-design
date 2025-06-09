@@ -1,11 +1,16 @@
-
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { User, Lock, LogIn } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Usuario } from '@/types/usuario'
 
 const LoginPage = () => {
@@ -42,29 +47,36 @@ const LoginPage = () => {
       if (username === userNameDefault && password === passwordDefault) {
         // Login como Master (admin padrão)
         localStorage.setItem('proteqrvLoggedIn', 'true')
-        localStorage.setItem('proteqrvUser', JSON.stringify({
-          id: 'admin',
-          username: 'admin',
-          role: 'Master',
-          perfil: 'master',
-          nome: 'Administrador',
-          email: 'admin@sistema.com'
-        }))
+        localStorage.setItem(
+          'proteqrvUser',
+          JSON.stringify({
+            id: 'admin',
+            username: 'admin',
+            role: 'Master',
+            perfil: 'master',
+            nome: 'Administrador',
+            email: 'admin@sistema.com',
+          })
+        )
         toast.success('Login realizado com sucesso.')
         navigate('/dashboard')
       } else if (selectedUser) {
         // Login com usuário selecionado
         const usuario = usuarios.find(u => u.id === selectedUser)
-        if (usuario && password === '123456') { // Senha padrão para usuários criados
+        if (usuario && password === '123456') {
+          // Senha padrão para usuários criados
           localStorage.setItem('proteqrvLoggedIn', 'true')
-          localStorage.setItem('proteqrvUser', JSON.stringify({
-            id: usuario.id,
-            username: usuario.nome,
-            role: usuario.perfil,
-            perfil: usuario.perfil,
-            nome: usuario.nome,
-            email: usuario.email
-          }))
+          localStorage.setItem(
+            'proteqrvUser',
+            JSON.stringify({
+              id: usuario.id,
+              username: usuario.nome,
+              role: usuario.perfil,
+              perfil: usuario.perfil,
+              nome: usuario.nome,
+              email: usuario.email,
+            })
+          )
           toast.success('Login realizado com sucesso.')
           navigate('/dashboard')
         } else {
@@ -102,23 +114,27 @@ const LoginPage = () => {
             {/* Seletor de usuários criados */}
             {usuarios.length > 0 && (
               <div className="mb-4">
-                <label className="block text-yellow-400 mb-2">Ou selecione um usuário criado</label>
+                <label className="block text-yellow-400 mb-2">
+                  Ou selecione um usuário criado
+                </label>
                 <Select onValueChange={handleUserSelect}>
                   <SelectTrigger className="w-full bg-gray-800 border-gray-600 text-white">
                     <SelectValue placeholder="Selecione um usuário..." />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-600">
-                    {usuarios.map((usuario) => (
-                      <SelectItem key={usuario.id} value={usuario.id} className="text-white hover:bg-gray-700">
+                    {usuarios.map(usuario => (
+                      <SelectItem
+                        key={usuario.id}
+                        value={usuario.id}
+                        className="text-white hover:bg-gray-700"
+                      >
                         {usuario.nome} - {usuario.perfil}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
                 {selectedUser && (
-                  <p className="text-sm text-gray-400 mt-1">
-                    Senha: 123456
-                  </p>
+                  <p className="text-sm text-gray-400 mt-1">Senha: 123456</p>
                 )}
               </div>
             )}
@@ -152,8 +168,12 @@ const LoginPage = () => {
             </div>
 
             <div className="text-center text-sm text-gray-400 mb-4">
-              <p><strong>Login Master:</strong> admin / admin123</p>
-              <p><strong>Usuários criados:</strong> senha padrão é 123456</p>
+              <p>
+                <strong>Login Master:</strong> admin / admin123
+              </p>
+              <p>
+                <strong>Usuários criados:</strong> senha padrão é 123456
+              </p>
             </div>
 
             <div className="mt-8">
