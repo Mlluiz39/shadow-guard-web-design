@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Card,
@@ -6,6 +7,7 @@ import {
 } from '@/components/ui/card'
 import { EmpresasTab } from '@/components/configuracoes/EmpresasTab'
 import { UsuariosTab } from '@/components/configuracoes/UsuariosTab'
+import { FuncionariosTab } from '@/components/configuracoes/FuncionariosTab'
 import { usePermissions } from '@/hooks/usePermissions'
 import { useAuth } from '@/hooks/useAuth'
 import {
@@ -18,50 +20,33 @@ import {
   AlertCircle,
 } from 'lucide-react'
 
-const DadosCadastraisTab = () => (
-  <div className="space-y-4">
-    <Card className="p-12">
-      <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
-        <Users className="h-16 w-16 text-blue-600" />
-        <CardTitle className="text-xl text-blue-700">
-          Dados Cadastrais de Funcionários
-        </CardTitle>
-        <p className="text-gray-600 text-center max-w-md">
-          Gerencie as informações cadastrais dos funcionários, incluindo dados
-          pessoais, documentos e histórico profissional.
-        </p>
-      </CardContent>
-    </Card>
-  </div>
-)
-
-const CadastroOperacionalTab = () => (
+const OperacionalTab = () => (
   <div className="space-y-4">
     <Card className="p-12">
       <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
         <UserCheck className="h-16 w-16 text-blue-600" />
         <CardTitle className="text-xl text-blue-700">
-          Cadastro Operacional
+          Configurações Operacionais
         </CardTitle>
         <p className="text-gray-600 text-center max-w-md">
-          Configure dados operacionais, permissões de acesso, escalas de
-          trabalho e configurações específicas para operações de segurança.
+          Configure dados operacionais, turnos, postos, procedimentos e
+          configurações específicas para operações de segurança.
         </p>
       </CardContent>
     </Card>
   </div>
 )
 
-const CadastroFinanceiroTab = () => (
+const FinanceiroTab = () => (
   <div className="space-y-4">
     <Card className="p-12">
       <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
         <DollarSign className="h-16 w-16 text-blue-600" />
         <CardTitle className="text-xl text-blue-700">
-          Cadastro Financeiro
+          Configurações Financeiras
         </CardTitle>
         <p className="text-gray-600 text-center max-w-md">
-          Configure dados financeiros, centros de custo, formas de pagamento e
+          Configure dados financeiros, contas, centros de custo, categorias e
           outras configurações relacionadas ao módulo financeiro.
         </p>
       </CardContent>
@@ -69,17 +54,17 @@ const CadastroFinanceiroTab = () => (
   </div>
 )
 
-const CadastroFrotaTab = () => (
+const FrotaTab = () => (
   <div className="space-y-4">
     <Card className="p-12">
       <CardContent className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
         <Truck className="h-16 w-16 text-blue-600" />
         <CardTitle className="text-xl text-blue-700">
-          Cadastro de Frota
+          Gerenciamento de Frota
         </CardTitle>
         <p className="text-gray-600 text-center max-w-md">
           Gerencie informações sobre veículos da frota, incluindo documentação,
-          manutenção, rastreamento e atribuição de motoristas.
+          manutenção, quilometragem e atribuição de motoristas.
         </p>
       </CardContent>
     </Card>
@@ -140,7 +125,7 @@ const Configuracoes = () => {
   const availableTabs = getAvailableTabs()
   const defaultTab = availableTabs[0]?.id || 'funcionarios'
 
-    return (
+  return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-security flex items-center gap-2">
@@ -155,8 +140,40 @@ const Configuracoes = () => {
       <Card>
         <CardContent>
           <Tabs defaultValue={defaultTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-6">
+              {availableTabs.map((tab) => {
+                const Icon = tab.icon
+                return (
+                  <TabsTrigger key={tab.id} value={tab.id} className="flex items-center gap-2">
+                    <Icon className="h-4 w-4" />
+                    {tab.label}
+                  </TabsTrigger>
+                )
+              })}
+            </TabsList>
+
             <TabsContent value="empresas">
               <EmpresasTab />
+            </TabsContent>
+
+            <TabsContent value="usuarios">
+              <UsuariosTab />
+            </TabsContent>
+
+            <TabsContent value="funcionarios">
+              <FuncionariosTab />
+            </TabsContent>
+
+            <TabsContent value="operacional">
+              <OperacionalTab />
+            </TabsContent>
+
+            <TabsContent value="financeiro">
+              <FinanceiroTab />
+            </TabsContent>
+
+            <TabsContent value="frota">
+              <FrotaTab />
             </TabsContent>
           </Tabs>
         </CardContent>

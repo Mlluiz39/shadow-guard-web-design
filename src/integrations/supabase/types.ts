@@ -90,6 +90,75 @@ export type Database = {
         }
         Relationships: []
       }
+      config_financeiro: {
+        Row: {
+          ativo: boolean | null
+          codigo: string | null
+          created_at: string
+          descricao: string | null
+          id: string
+          nome: string
+          tipo: string
+          updated_at: string
+          valor: number | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          codigo?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          tipo: string
+          updated_at?: string
+          valor?: number | null
+        }
+        Update: {
+          ativo?: boolean | null
+          codigo?: string | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          tipo?: string
+          updated_at?: string
+          valor?: number | null
+        }
+        Relationships: []
+      }
+      config_operacional: {
+        Row: {
+          ativo: boolean | null
+          created_at: string
+          descricao: string | null
+          id: string
+          nome: string
+          tipo: string
+          updated_at: string
+          valor: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          tipo: string
+          updated_at?: string
+          valor?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          tipo?: string
+          updated_at?: string
+          valor?: string | null
+        }
+        Relationships: []
+      }
       empresas: {
         Row: {
           cnpj: string
@@ -117,6 +186,108 @@ export type Database = {
           nome?: string
           proprietario?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      frota: {
+        Row: {
+          ano: number | null
+          combustivel: string | null
+          cor: string | null
+          created_at: string
+          id: string
+          marca: string
+          modelo: string
+          motorista_responsavel: string | null
+          observacoes: string | null
+          placa: string
+          quilometragem: number | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          ano?: number | null
+          combustivel?: string | null
+          cor?: string | null
+          created_at?: string
+          id?: string
+          marca: string
+          modelo: string
+          motorista_responsavel?: string | null
+          observacoes?: string | null
+          placa: string
+          quilometragem?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          ano?: number | null
+          combustivel?: string | null
+          cor?: string | null
+          created_at?: string
+          id?: string
+          marca?: string
+          modelo?: string
+          motorista_responsavel?: string | null
+          observacoes?: string | null
+          placa?: string
+          quilometragem?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      funcionarios: {
+        Row: {
+          cargo: string | null
+          cpf: string
+          created_at: string
+          data_admissao: string | null
+          departamento: string | null
+          email: string | null
+          empresa: string | null
+          endereco: string | null
+          id: string
+          nome: string
+          rg: string | null
+          salario: number | null
+          status: string
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          cargo?: string | null
+          cpf: string
+          created_at?: string
+          data_admissao?: string | null
+          departamento?: string | null
+          email?: string | null
+          empresa?: string | null
+          endereco?: string | null
+          id?: string
+          nome: string
+          rg?: string | null
+          salario?: number | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cargo?: string | null
+          cpf?: string
+          created_at?: string
+          data_admissao?: string | null
+          departamento?: string | null
+          email?: string | null
+          empresa?: string | null
+          endereco?: string | null
+          id?: string
+          nome?: string
+          rg?: string | null
+          salario?: number | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
