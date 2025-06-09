@@ -1,52 +1,19 @@
+
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, Download, Upload } from 'lucide-react'
+import { Plus, Download, Upload, Loader2 } from 'lucide-react'
 import { ClientesTable } from '@/components/clientes/ClientesTable'
 import { ClientesFilter } from '@/components/clientes/ClientesFilter'
 import { ClienteModal } from '@/components/clientes/ClienteModal'
-import { Cliente } from '@/types/cliente'
+import { useClientes } from '@/hooks/useClientes'
 import { toast } from 'sonner'
+import type { Database } from '@/integrations/supabase/types'
 
-// Dados mockados
-const mockClientes: Cliente[] = [
-  {
-    id: '1',
-    nome: 'João Silva',
-    razaoSocial: 'Silva & Associados Ltda',
-    documento: '12.345.678/0001-90',
-    telefone: '(11) 99999-9999',
-    contrato: 'CT001',
-    pastaN: 'P001',
-    dataImportacao: '31/05/2024',
-    status: 'Ativo',
-  },
-  {
-    id: '2',
-    nome: 'Maria Santos',
-    razaoSocial: 'Santos Comércio S.A.',
-    documento: '98.765.432/0001-10',
-    telefone: '(11) 88888-8888',
-    contrato: 'CT002',
-    pastaN: 'P002',
-    dataImportacao: '30/05/2024',
-    status: 'Ativo',
-  },
-  {
-    id: '3',
-    nome: 'Pedro Costa',
-    razaoSocial: 'Costa Transportes Ltda',
-    documento: '11.222.333/0001-44',
-    telefone: '(11) 77777-7777',
-    contrato: 'CT003',
-    pastaN: 'P003',
-    dataImportacao: '29/05/2024',
-    status: 'Suspenso',
-  },
-]
+type Cliente = Database['public']['Tables']['clientes']['Row']
 
 const Clientes = () => {
-  const [clientes, setClientes] = useState<Cliente[]>(mockClientes)
+  const { clientes, loading, createCliente, updateCliente, deleteCliente } = useClientes()
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('todos')
 
@@ -59,7 +26,7 @@ const Clientes = () => {
     const matchesSearch =
       searchTerm === '' ||
       cliente.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      cliente.razaoSocial.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (cliente.razao_social && cliente.razao_social.toLowerCase().includes(searchTerm.toLowerCase())) ||
       cliente.documento.includes(searchTerm)
 
     const matchesStatus =
@@ -77,7 +44,7 @@ const Clientes = () => {
     setIsModalOpen(true)
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     const cliente = clientes.find(c => c.id === id)
     if (!cliente) return
 
@@ -86,8 +53,7 @@ const Clientes = () => {
     )
 
     if (confirm) {
-      setClientes(prev => prev.filter(c => c.id !== id))
-      toast.success(`Cliente "${cliente.nome}" foi excluído com sucesso.`)
+      await deleteCliente(id)
     }
   }
 
@@ -109,26 +75,43 @@ const Clientes = () => {
     setIsModalOpen(true)
   }
 
-  function validarCampos(data: Cliente) {
-    // Verifica se algum campo está vazio (string vazia ou só espaços)
-    for (const key in data) {
-      if (data[key].trim() === '') {
-        return false
-      }
-    }
-    return true
-  }
-
-  const handleSave = (cliente: Cliente) => {
-    const existe = clientes.find(c => c.id === cliente.id)
+  const handleSave = async (clienteData: any) => {
+    const existe = clienteSelecionado
 
     if (existe) {
-      setClientes(prev => prev.map(c => (c.id === cliente.id ? cliente : c)))
-      toast.success('Cliente atualizado!')
+      await updateCliente(existe.id, {
+        nome: clienteData.nome,
+        razao_social: clienteData.razaoSocial,
+        documento: clienteData.documento,
+        telefone: clienteData.telefone,
+        contrato: clienteData.contrato,
+        pasta_n: clienteData.pastaN,
+        status: clienteData.status,
+      })
     } else {
-      setClientes(prev => [...prev, cliente])
-      toast.success('Cliente adicionado!')
+      await createCliente({
+        nome: clienteData.nome,
+        razao_social: clienteData.razaoSocial,
+        documento: clienteData.documento,
+        telefone: clienteData.telefone,
+        contrato: clienteData.contrato,
+        pasta_n: clienteData.pastaN,
+        status: clienteData.status,
+      })
     }
+    
+    setIsModalOpen(false)
+    setClienteSelecionado(null)
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -139,7 +122,6 @@ const Clientes = () => {
         </h1>
       </div>
 
-      {/* Barra de ações */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex gap-2">
           <Button
@@ -164,7 +146,6 @@ const Clientes = () => {
         </div>
       </div>
 
-      {/* Filtros */}
       <ClientesFilter
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
@@ -173,28 +154,45 @@ const Clientes = () => {
         onClearFilters={handleClearFilters}
       />
 
-      {/* Tabela de clientes */}
       <Card className="p-0">
         <ClientesTable
-          clientes={filteredClientes}
+          clientes={filteredClientes.map(cliente => ({
+            id: cliente.id,
+            nome: cliente.nome,
+            razaoSocial: cliente.razao_social || '',
+            documento: cliente.documento,
+            telefone: cliente.telefone || '',
+            contrato: cliente.contrato || '',
+            pastaN: cliente.pasta_n || '',
+            dataImportacao: cliente.data_importacao ? new Date(cliente.data_importacao).toLocaleDateString() : '',
+            status: cliente.status as 'Ativo' | 'Inativo' | 'Suspenso',
+          }))}
           onView={handleView}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
       </Card>
 
-      {/* Rodapé */}
       <div className="flex justify-between items-center text-sm text-security-muted bg-white p-4 rounded-lg border">
         <div>Total de registros: {clientes.length}</div>
         <div>Quantidade de Linhas: {filteredClientes.length}</div>
       </div>
 
-      {/* Modal de inclusão e edição */}
       <ClienteModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSave}
-        cliente={clienteSelecionado}
+        cliente={clienteSelecionado ? {
+          id: clienteSelecionado.id,
+          nome: clienteSelecionado.nome,
+          razaoSocial: clienteSelecionado.razao_social || '',
+          documento: clienteSelecionado.documento,
+          telefone: clienteSelecionado.telefone || '',
+          contrato: clienteSelecionado.contrato || '',
+          pastaN: clienteSelecionado.pasta_n || '',
+          dataImportacao: clienteSelecionado.data_importacao ? new Date(clienteSelecionado.data_importacao).toLocaleDateString() : '',
+          status: clienteSelecionado.status as 'Ativo' | 'Inativo' | 'Suspenso',
+        } : null}
       />
     </div>
   )

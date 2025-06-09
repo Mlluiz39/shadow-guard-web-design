@@ -1,7 +1,7 @@
+
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Table,
   TableHeader,
@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog'
-import { Plus, Search, AlertCircle } from 'lucide-react'
+import { Plus, Search, AlertCircle, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,15 +31,8 @@ import {
 } from '@/components/ui/form'
 import { toast } from 'sonner'
 import { usePermissions } from '@/hooks/usePermissions'
+import { useEmpresas } from '@/hooks/useEmpresas'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-
-interface Empresa {
-  id: string
-  nome: string
-  cnpj: string
-  proprietario: string
-  email: string
-}
 
 const empresasSchema = z.object({
   nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -50,7 +43,7 @@ const empresasSchema = z.object({
 
 export const EmpresasTab = () => {
   const { isMaster, canAccessEmpresas } = usePermissions()
-  const [empresas, setEmpresas] = useState<Empresa[]>([])
+  const { empresas, loading, createEmpresa } = useEmpresas()
   const [searchTerm, setSearchTerm] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -82,24 +75,17 @@ export const EmpresasTab = () => {
     )
   }
 
-  const onSubmit = (data: z.infer<typeof empresasSchema>) => {
+  const onSubmit = async (data: z.infer<typeof empresasSchema>) => {
     if (!isMaster()) {
       toast.error('Apenas usuários master podem cadastrar empresas!')
       return
     }
 
-    const newEmpresa: Empresa = {
-      id: Date.now().toString(),
-      nome: data.nome,
-      cnpj: data.cnpj,
-      proprietario: data.proprietario,
-      email: data.email,
+    const result = await createEmpresa(data)
+    if (result) {
+      setDialogOpen(false)
+      form.reset()
     }
-
-    setEmpresas([...empresas, newEmpresa])
-    setDialogOpen(false)
-    form.reset()
-    toast.success('Empresa adicionada com sucesso!')
   }
 
   const filteredEmpresas = empresas.filter(
@@ -109,6 +95,14 @@ export const EmpresasTab = () => {
       empresa.proprietario.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -117,7 +111,6 @@ export const EmpresasTab = () => {
           Gerencie configurações do sistema baseado em suas permissões
         </p>
 
-        {/* Abas horizontais */}
         <div className="flex flex-wrap items-center gap-2 border-b pb-2">
           <Button
             variant="outline"
@@ -133,7 +126,6 @@ export const EmpresasTab = () => {
         </div>
       </div>
 
-      {/* Conteúdo da aba Empresas */}
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <div className="relative w-72">
@@ -235,7 +227,16 @@ export const EmpresasTab = () => {
                     >
                       Cancelar
                     </Button>
-                    <Button type="submit">Adicionar</Button>
+                    <Button type="submit" disabled={form.formState.isSubmitting}>
+                      {form.formState.isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Adicionando...
+                        </>
+                      ) : (
+                        'Adicionar'
+                      )}
+                    </Button>
                   </DialogFooter>
                 </form>
               </Form>
