@@ -22,8 +22,18 @@ export const ChatSetores = () => {
   const [setorDestino, setSetorDestino] = useState('')
   const [enviando, setEnviando] = useState(false)
 
-  // Encontrar o setor do usuário atual
-  const setorUsuario = setores.find(setor => setor.nome === profile?.departamento)
+  console.log('Profile departamento:', profile?.departamento)
+  console.log('Setores disponíveis:', setores)
+
+  // Encontrar o setor do usuário atual baseado no departamento do perfil
+  const setorUsuario = setores.find(setor => {
+    const setorNomeNormalizado = setor.nome.toLowerCase().trim()
+    const departamentoNormalizado = profile?.departamento?.toLowerCase().trim()
+    console.log('Comparando:', setorNomeNormalizado, 'com', departamentoNormalizado)
+    return setorNomeNormalizado === departamentoNormalizado
+  })
+
+  console.log('Setor do usuário encontrado:', setorUsuario)
 
   const handleEnviarMensagem = async () => {
     if (!novaMensagem.trim()) {
@@ -37,7 +47,7 @@ export const ChatSetores = () => {
     }
 
     if (!setorUsuario) {
-      toast.error('Setor do usuário não identificado')
+      toast.error(`Setor não identificado para o departamento: ${profile?.departamento || 'N/A'}`)
       return
     }
 
@@ -91,7 +101,7 @@ export const ChatSetores = () => {
             <div>
               <label className="text-sm font-medium">Setor de origem:</label>
               <p className="text-sm text-muted-foreground">
-                {setorUsuario?.nome || 'Não identificado'}
+                {setorUsuario?.nome || `Não identificado (Departamento: ${profile?.departamento || 'N/A'})`}
               </p>
             </div>
 
@@ -134,7 +144,7 @@ export const ChatSetores = () => {
 
             <Button 
               onClick={handleEnviarMensagem}
-              disabled={enviando || !novaMensagem.trim() || !setorDestino}
+              disabled={enviando || !novaMensagem.trim() || !setorDestino || !setorUsuario}
               className="w-full"
             >
               {enviando ? 'Enviando...' : 'Enviar Mensagem'}

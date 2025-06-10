@@ -17,8 +17,8 @@ export interface MensagemSetor {
   lida: boolean
   created_at: string
   updated_at: string
-  // Dados relacionados via join
-  setor_origem?: Setor
-  setor_destino?: Setor
+  // Dados relacionados via join - apenas o nome do setor
+  setor_origem?: { nome: string }
+  setor_destino?: { nome: string }
   remetente_nome?: string
 }
