@@ -1,4 +1,3 @@
-
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -29,6 +28,7 @@ import FormasPagamento from './pages/financeiro/FormasPagamento'
 import CondicoesPagamento from './pages/financeiro/CondicoesPagamento'
 import Feriados from './pages/financeiro/Feriados'
 import { Truck } from 'lucide-react'
+import ChatSetores from './pages/ChatSetores'
 
 const queryClient = new QueryClient()
 
@@ -186,6 +186,16 @@ const App = () => (
                     title="Logística"
                     icon={<Truck className="h-6 w-6" />}
                   />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat-setores"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ChatSetores />
+                  </Layout>
                 </ProtectedRoute>
               }
             />

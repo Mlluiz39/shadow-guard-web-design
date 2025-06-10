@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react'
 import {
   Users,
@@ -8,7 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
-  Edit,
+  Loader2,
 } from 'lucide-react'
 import {
   Table,
@@ -28,80 +29,13 @@ import {
 } from '@/components/ui/collapsible'
 import { toast } from 'sonner'
 import { Card, CardContent } from '@/components/ui/card'
-import { EditAgenteModal } from '../components/agentes/EditAgenteModal'
-
-const initialAgentesData = [
-  {
-    id: 1,
-    nome: 'Carlos Silva',
-    nomeGuerra: 'Silva',
-    situacao: 'Disponível',
-    re: '12345',
-    telefone: '(11) 99999-1111',
-  },
-  {
-    id: 2,
-    nome: 'Ana Oliveira',
-    nomeGuerra: 'Ana',
-    situacao: 'Em serviço',
-    re: '23456',
-    telefone: '(11) 99999-2222',
-  },
-  {
-    id: 3,
-    nome: 'João Santos',
-    nomeGuerra: 'João',
-    situacao: 'Disponível',
-    re: '34567',
-    telefone: '(11) 99999-3333',
-  },
-  {
-    id: 4,
-    nome: 'Maria Costa',
-    nomeGuerra: 'Costa',
-    situacao: 'Folga',
-    re: '45678',
-    telefone: '(11) 99999-4444',
-  },
-  {
-    id: 5,
-    nome: 'Pedro Almeida',
-    nomeGuerra: 'Almeida',
-    situacao: 'Disponível',
-    re: '56789',
-    telefone: '(11) 99999-5555',
-  },
-  {
-    id: 6,
-    nome: 'Julia Pereira',
-    nomeGuerra: 'Julia',
-    situacao: 'Em serviço',
-    re: '67890',
-    telefone: '(11) 99999-6666',
-  },
-  {
-    id: 7,
-    nome: 'Roberto Ferreira',
-    nomeGuerra: 'Roberto',
-    situacao: 'Disponível',
-    re: '78901',
-    telefone: '(11) 99999-7777',
-  },
-  {
-    id: 8,
-    nome: 'Fernanda Lima',
-    nomeGuerra: 'Fernanda',
-    situacao: 'Folga',
-    re: '89012',
-    telefone: '(11) 99999-8888',
-  },
-]
+import { useFuncionarios } from '@/hooks/useFuncionarios'
+import type { Funcionario } from '@/types/funcionario'
 
 const AgentesDisponiveis = () => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const { funcionarios, loading, refetch } = useFuncionarios()
   const [searchTerm, setSearchTerm] = useState('')
-  const [agentesData, setAgentesData] = useState(initialAgentesData)
-  const [filteredAgentes, setFilteredAgentes] = useState(agentesData)
+  const [filteredAgentes, setFilteredAgentes] = useState<Funcionario[]>([])
 
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(5)
@@ -109,32 +43,42 @@ const AgentesDisponiveis = () => {
   const [sortField, setSortField] = useState('')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
-  const [editingAgente, setEditingAgente] = useState(null)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  // Filtrar apenas funcionários que podem ser considerados agentes
+  const agenteFuncionarios = funcionarios.filter(funcionario => 
+    funcionario.status === 'Ativo' && 
+    (funcionario.cargo?.toLowerCase().includes('agente') || 
+     funcionario.cargo?.toLowerCase().includes('segurança') ||
+     funcionario.departamento?.toLowerCase().includes('operacional'))
+  )
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       const term = searchTerm.toLowerCase().trim()
-      const results = agentesData.filter(
-        a =>
-          a.nome.toLowerCase().includes(term) ||
-          a.nomeGuerra.toLowerCase().includes(term) ||
-          a.re.includes(term)
+      const results = agenteFuncionarios.filter(
+        funcionario =>
+          funcionario.nome.toLowerCase().includes(term) ||
+          funcionario.cpf.includes(term) ||
+          (funcionario.cargo && funcionario.cargo.toLowerCase().includes(term)) ||
+          (funcionario.telefone && funcionario.telefone.includes(term))
       )
       setFilteredAgentes(results)
       setCurrentPage(1)
     }, 300)
     return () => clearTimeout(timeout)
-  }, [searchTerm, agentesData])
+  }, [searchTerm, agenteFuncionarios])
+
+  useEffect(() => {
+    setFilteredAgentes(agenteFuncionarios)
+  }, [funcionarios])
 
   const clearFilter = () => {
     setSearchTerm('')
-    setFilteredAgentes(agentesData)
+    setFilteredAgentes(agenteFuncionarios)
     setCurrentPage(1)
   }
 
   const refreshData = () => {
-    setFilteredAgentes([...agentesData])
+    refetch()
     toast.success("Dados atualizados com sucesso!")
   }
 
@@ -145,23 +89,10 @@ const AgentesDisponiveis = () => {
     setSortDirection(direction)
   }
 
-  const handleEditAgente = (agente: any) => {
-    setEditingAgente(agente)
-    setIsEditModalOpen(true)
-  }
-
-  const handleSaveAgente = (updatedAgente: any) => {
-    const updatedData = agentesData.map(agente => 
-      agente.id === updatedAgente.id ? updatedAgente : agente
-    )
-    setAgentesData(updatedData)
-    setFilteredAgentes(updatedData)
-  }
-
   const sortedAgentes = [...filteredAgentes].sort((a, b) => {
     if (!sortField) return 0
-    const aValue = a[sortField]
-    const bValue = b[sortField]
+    const aValue = a[sortField as keyof Funcionario]
+    const bValue = b[sortField as keyof Funcionario]
     if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1
     if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1
     return 0
@@ -173,6 +104,14 @@ const AgentesDisponiveis = () => {
     currentPage * itemsPerPage
   )
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto p-4 space-y-6">
       <Tabs defaultValue="lista">
@@ -182,7 +121,7 @@ const AgentesDisponiveis = () => {
         <TabsContent value="lista" className="space-y-4">
           <div className="flex gap-4">
             <Input
-              placeholder="Buscar por nome, nome de guerra ou RE"
+              placeholder="Buscar por nome, CPF, cargo ou telefone"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               className="mb-2"
@@ -199,7 +138,7 @@ const AgentesDisponiveis = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    {['nome', 'nomeGuerra', 'situacao', 're', 'telefone'].map(
+                    {['nome', 'cargo', 'status', 'cpf', 'telefone'].map(
                       field => (
                         <TableHead
                           key={field}
@@ -207,46 +146,40 @@ const AgentesDisponiveis = () => {
                           className="cursor-pointer select-none"
                         >
                           <div className="flex items-center gap-1 capitalize">
-                            {field}
+                            {field === 'nome' ? 'Nome' :
+                             field === 'cargo' ? 'Cargo' :
+                             field === 'status' ? 'Situação' :
+                             field === 'cpf' ? 'CPF' :
+                             field === 'telefone' ? 'Telefone' : field}
                             <ChevronsUpDown className="w-4 h-4" />
                           </div>
                         </TableHead>
                       )
                     )}
-                    <TableHead>Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedAgentes.map(agente => (
-                    <TableRow key={agente.id}
+                  {paginatedAgentes.map(funcionario => (
+                    <TableRow key={funcionario.id}
                     className="odd:bg-gray-50 even:bg-white hover:bg-blue-100 transition-colors duration-300"
                     >
-                      <TableCell>{agente.nome}</TableCell>
-                      <TableCell>{agente.nomeGuerra}</TableCell>
+                      <TableCell>{funcionario.nome}</TableCell>
+                      <TableCell>{funcionario.cargo || 'Não informado'}</TableCell>
                       <TableCell>
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            agente.situacao === 'Disponível'
+                            funcionario.status === 'Ativo'
                               ? 'bg-green-100 text-green-800'
-                              : agente.situacao === 'Em serviço'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-orange-100 text-orange-800'
+                              : funcionario.status === 'Afastado'
+                              ? 'bg-orange-100 text-orange-800'
+                              : 'bg-red-100 text-red-800'
                           }`}
                         >
-                          {agente.situacao}
+                          {funcionario.status}
                         </span>
                       </TableCell>
-                      <TableCell>{agente.re}</TableCell>
-                      <TableCell>{agente.telefone}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleEditAgente(agente)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
+                      <TableCell>{funcionario.cpf}</TableCell>
+                      <TableCell>{funcionario.telefone || 'Não informado'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -305,16 +238,6 @@ const AgentesDisponiveis = () => {
           </div>
         </TabsContent>
       </Tabs>
-
-      <EditAgenteModal
-        agente={editingAgente}
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false)
-          setEditingAgente(null)
-        }}
-        onSave={handleSaveAgente}
-      />
     </div>
   )
 }
