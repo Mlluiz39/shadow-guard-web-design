@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -15,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, Search, Loader2 } from 'lucide-react'
+import { Plus, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -27,9 +28,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { toast } from 'sonner'
 import { useFuncionarios } from '@/hooks/useFuncionarios'
 import { FuncionariosTable } from '@/components/configuracoes/funcionarios/FuncionariosTable'
+import { FuncionariosSearch } from '@/components/configuracoes/funcionarios/FuncionariosSearch'
 
 const funcionarioSchema = z.object({
   nome: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres'),
@@ -110,15 +111,7 @@ export const FuncionariosTab = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div className="relative w-72">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar funcionários..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <FuncionariosSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         <Button onClick={() => setDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Novo Funcionário
         </Button>
