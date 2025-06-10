@@ -9,7 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
-  Edit,
   Loader2,
 } from 'lucide-react'
 import {
@@ -30,12 +29,11 @@ import {
 } from '@/components/ui/collapsible'
 import { toast } from 'sonner'
 import { Card, CardContent } from '@/components/ui/card'
-import { EditAgenteModal } from '../components/agentes/EditAgenteModal'
 import { useFuncionarios } from '@/hooks/useFuncionarios'
 import type { Funcionario } from '@/types/funcionario'
 
 const AgentesDisponiveis = () => {
-  const { funcionarios, loading, updateFuncionario, refetch } = useFuncionarios()
+  const { funcionarios, loading, refetch } = useFuncionarios()
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredAgentes, setFilteredAgentes] = useState<Funcionario[]>([])
 
@@ -44,9 +42,6 @@ const AgentesDisponiveis = () => {
 
   const [sortField, setSortField] = useState('')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
-
-  const [editingAgente, setEditingAgente] = useState<Funcionario | null>(null)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
   // Filtrar apenas funcionários que podem ser considerados agentes
   const agenteFuncionarios = funcionarios.filter(funcionario => 
@@ -94,19 +89,6 @@ const AgentesDisponiveis = () => {
     setSortDirection(direction)
   }
 
-  const handleEditAgente = (funcionario: Funcionario) => {
-    setEditingAgente(funcionario)
-    setIsEditModalOpen(true)
-  }
-
-  const handleSaveAgente = async (updatedAgente: Funcionario) => {
-    const result = await updateFuncionario(updatedAgente.id, updatedAgente)
-    if (result) {
-      setIsEditModalOpen(false)
-      setEditingAgente(null)
-    }
-  }
-
   const sortedAgentes = [...filteredAgentes].sort((a, b) => {
     if (!sortField) return 0
     const aValue = a[sortField as keyof Funcionario]
@@ -121,13 +103,6 @@ const AgentesDisponiveis = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )
-
-  // Função para mapear status do funcionário para status de disponibilidade
-  const getStatusDisponibilidade = (funcionario: Funcionario) => {
-    if (funcionario.status === 'Ativo') return 'Disponível'
-    if (funcionario.status === 'Afastado') return 'Afastado'
-    return 'Inativo'
-  }
 
   if (loading) {
     return (
@@ -173,7 +148,7 @@ const AgentesDisponiveis = () => {
                           <div className="flex items-center gap-1 capitalize">
                             {field === 'nome' ? 'Nome' :
                              field === 'cargo' ? 'Cargo' :
-                             field === 'status' ? 'Status' :
+                             field === 'status' ? 'Situação' :
                              field === 'cpf' ? 'CPF' :
                              field === 'telefone' ? 'Telefone' : field}
                             <ChevronsUpDown className="w-4 h-4" />
@@ -181,7 +156,6 @@ const AgentesDisponiveis = () => {
                         </TableHead>
                       )
                     )}
-                    <TableHead>Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -194,27 +168,18 @@ const AgentesDisponiveis = () => {
                       <TableCell>
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            getStatusDisponibilidade(funcionario) === 'Disponível'
+                            funcionario.status === 'Ativo'
                               ? 'bg-green-100 text-green-800'
-                              : getStatusDisponibilidade(funcionario) === 'Afastado'
+                              : funcionario.status === 'Afastado'
                               ? 'bg-orange-100 text-orange-800'
                               : 'bg-red-100 text-red-800'
                           }`}
                         >
-                          {getStatusDisponibilidade(funcionario)}
+                          {funcionario.status}
                         </span>
                       </TableCell>
                       <TableCell>{funcionario.cpf}</TableCell>
                       <TableCell>{funcionario.telefone || 'Não informado'}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => handleEditAgente(funcionario)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -273,16 +238,6 @@ const AgentesDisponiveis = () => {
           </div>
         </TabsContent>
       </Tabs>
-
-      <EditAgenteModal
-        agente={editingAgente}
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false)
-          setEditingAgente(null)
-        }}
-        onSave={handleSaveAgente}
-      />
     </div>
   )
 }
