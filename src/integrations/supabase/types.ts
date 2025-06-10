@@ -291,6 +291,57 @@ export type Database = {
         }
         Relationships: []
       }
+      mensagens_setores: {
+        Row: {
+          assunto: string | null
+          created_at: string
+          id: string
+          lida: boolean | null
+          mensagem: string
+          remetente_id: string
+          setor_destino_id: string
+          setor_origem_id: string
+          updated_at: string
+        }
+        Insert: {
+          assunto?: string | null
+          created_at?: string
+          id?: string
+          lida?: boolean | null
+          mensagem: string
+          remetente_id: string
+          setor_destino_id: string
+          setor_origem_id: string
+          updated_at?: string
+        }
+        Update: {
+          assunto?: string | null
+          created_at?: string
+          id?: string
+          lida?: boolean | null
+          mensagem?: string
+          remetente_id?: string
+          setor_destino_id?: string
+          setor_origem_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mensagens_setores_setor_destino_id_fkey"
+            columns: ["setor_destino_id"]
+            isOneToOne: false
+            referencedRelation: "setores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mensagens_setores_setor_origem_id_fkey"
+            columns: ["setor_origem_id"]
+            isOneToOne: false
+            referencedRelation: "setores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       operacoes: {
         Row: {
           agente: string
@@ -372,6 +423,30 @@ export type Database = {
           nome?: string
           perfil?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      setores: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -15,6 +15,7 @@ import PlaceholderPage from './PlaceholderPage'
 import SolicitacoesEscolta from './SolicitacoesEscolta'
 import GridOperacional from './GridOperacional'
 import Clientes from './Clientes'
+import ChatSetores from './ChatSetores'
 
 const Operations = () => {
   return (
@@ -52,15 +53,7 @@ const Operations = () => {
             />
           }
         />
-        <Route
-          path="chat"
-          element={
-            <PlaceholderPage
-              title="Chat"
-              icon={<MessageSquare className="h-6 w-6" />}
-            />
-          }
-        />
+        <Route path="chat" element={<ChatSetores />} />
         <Route path="*" element={<Navigate to="/operacoes" replace />} />
       </Routes>
     </div>
