@@ -1,95 +1,94 @@
 
 import {
   DollarSign,
-  CreditCard,
-  Building,
-  Calendar,
   Calculator,
+  Building,
   Wallet,
+  CreditCard,
   Receipt,
+  Calendar,
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import DashboardFinanceiro from './financeiro/DashboardFinanceiro'
+import CentrosCusto from './financeiro/CentrosCusto'
+import Contas from './financeiro/Contas'
+import FormasPagamento from './financeiro/FormasPagamento'
+import CondicoesPagamento from './financeiro/CondicoesPagamento'
+import LancamentosCaixa from './financeiro/LancamentosCaixa'
+import Feriados from './financeiro/Feriados'
 
 const Financeiro = () => {
-  const financeiroModules = [
-    {
-      title: 'Dashboard Financeiro',
-      description: 'Visão geral e relatórios financeiros',
-      icon: Calculator,
-      path: '/financeiro/dashboard'
-    },
-    {
-      title: 'Centros de Custo',
-      description: 'Gerenciamento de centros de custo',
-      icon: Building,
-      path: '/financeiro/centros-custo'
-    },
-    {
-      title: 'Contas',
-      description: 'Gestão de contas bancárias e financeiras',
-      icon: Wallet,
-      path: '/financeiro/contas'
-    },
-    {
-      title: 'Formas de Pagamento',
-      description: 'Configuração de formas de pagamento',
-      icon: CreditCard,
-      path: '/financeiro/formas-pagamento'
-    },
-    {
-      title: 'Condições de Pagamento',
-      description: 'Definição de condições de pagamento',
-      icon: CreditCard,
-      path: '/financeiro/condicoes-pagamento'
-    },
-    {
-      title: 'Lançamentos em Caixa',
-      description: 'Registro de movimentações financeiras',
-      icon: Receipt,
-      path: '/financeiro/lancamentos-caixa'
-    },
-    {
-      title: 'Feriados',
-      description: 'Calendário de feriados',
-      icon: Calendar,
-      path: '/financeiro/feriados'
-    }
-  ]
-
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-security flex items-center gap-2">
+        <h1 className="text-2xl font-bold flex items-center gap-2">
           <DollarSign className="h-6 w-6" /> Financeiro
         </h1>
-        <div className="text-sm text-security-muted">
+        <div className="text-sm text-muted-foreground">
           Última atualização: {new Date().toLocaleDateString()}
         </div>
       </div>
 
-      <div className="space-y-6">
-        <h2 className="text-xl font-medium">Módulos Financeiros</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {financeiroModules.map((module, index) => {
-            const IconComponent = module.icon
-            return (
-              <Link 
-                key={index}
-                to={module.path}
-                className="p-6 bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <IconComponent className="h-6 w-6 text-blue-600 group-hover:text-blue-700" />
-                  <h3 className="font-semibold text-lg group-hover:text-blue-700">{module.title}</h3>
-                </div>
-                <p className="text-gray-600 text-sm">
-                  {module.description}
-                </p>
-              </Link>
-            )
-          })}
-        </div>
-      </div>
+      <Tabs defaultValue="dashboard" className="w-full">
+        <TabsList className="grid w-full grid-cols-7">
+          <TabsTrigger value="dashboard" className="flex items-center gap-2">
+            <Calculator className="h-4 w-4" />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="centros-custo" className="flex items-center gap-2">
+            <Building className="h-4 w-4" />
+            Centros
+          </TabsTrigger>
+          <TabsTrigger value="contas" className="flex items-center gap-2">
+            <Wallet className="h-4 w-4" />
+            Contas
+          </TabsTrigger>
+          <TabsTrigger value="formas-pagamento" className="flex items-center gap-2">
+            <CreditCard className="h-4 w-4" />
+            Formas
+          </TabsTrigger>
+          <TabsTrigger value="condicoes-pagamento" className="flex items-center gap-2">
+            <CreditCard className="h-4 w-4" />
+            Condições
+          </TabsTrigger>
+          <TabsTrigger value="lancamentos" className="flex items-center gap-2">
+            <Receipt className="h-4 w-4" />
+            Lançamentos
+          </TabsTrigger>
+          <TabsTrigger value="feriados" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Feriados
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard">
+          <DashboardFinanceiro />
+        </TabsContent>
+        
+        <TabsContent value="centros-custo">
+          <CentrosCusto />
+        </TabsContent>
+        
+        <TabsContent value="contas">
+          <Contas />
+        </TabsContent>
+        
+        <TabsContent value="formas-pagamento">
+          <FormasPagamento />
+        </TabsContent>
+        
+        <TabsContent value="condicoes-pagamento">
+          <CondicoesPagamento />
+        </TabsContent>
+        
+        <TabsContent value="lancamentos">
+          <LancamentosCaixa />
+        </TabsContent>
+        
+        <TabsContent value="feriados">
+          <Feriados />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
