@@ -28,6 +28,8 @@ import FormasPagamento from './pages/financeiro/FormasPagamento'
 import CondicoesPagamento from './pages/financeiro/CondicoesPagamento'
 import Feriados from './pages/financeiro/Feriados'
 import { Truck } from 'lucide-react'
+import DashboardChamados from './pages/DashboardChamados'
+import Logistica from './pages/Logistica'
 import ChatSetores from './pages/ChatSetores'
 
 const queryClient = new QueryClient()
@@ -182,10 +184,19 @@ const App = () => (
               path="/logistica"
               element={
                 <ProtectedRoute>
-                  <PlaceholderPage
-                    title="Logística"
-                    icon={<Truck className="h-6 w-6" />}
-                  />
+                  <Layout>
+                    <Logistica />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard-chamados"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <DashboardChamados />
+                  </Layout>
                 </ProtectedRoute>
               }
             />

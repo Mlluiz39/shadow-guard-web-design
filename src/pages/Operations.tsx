@@ -1,3 +1,4 @@
+
 import {
   FileText,
   Users,
@@ -7,65 +8,89 @@ import {
   BookOpen,
   LayoutDashboard,
   MessageSquare,
+  Bell,
 } from 'lucide-react'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import OperationsNavigation from '../components/OperationsNavigation'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import AgentesDisponiveis from './AgentesDisponiveis'
-import PlaceholderPage from './PlaceholderPage'
 import SolicitacoesEscolta from './SolicitacoesEscolta'
 import GridOperacional from './GridOperacional'
 import Clientes from './Clientes'
 import ChatOperacional from './ChatOperacional'
+import LivroOcorrencias from './LivroOcorrencias'
+import DashboardChamados from './DashboardChamados'
 
 const Operations = () => {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-security flex items-center gap-2">
+        <h1 className="text-2xl font-bold flex items-center gap-2">
           <FileText className="h-6 w-6" /> Operações
         </h1>
-        <div className="text-sm text-security-muted">
+        <div className="text-sm text-muted-foreground">
           Última atualização: {new Date().toLocaleDateString()}
         </div>
       </div>
 
-      <Routes>
-        <Route index element={<OperationsHome />} />
-        <Route path="grid" element={<GridOperacional />} />
-        <Route path="avisos" element={<SolicitacoesEscolta />} />
-        <Route path="quadro" element={<AgentesDisponiveis />} />
-        <Route
-          path="ocorrencias"
-          element={
-            <PlaceholderPage
-              title="Livro de ocorrências"
-              icon={<BookOpen className="h-6 w-6" />}
-            />
-          }
-        />
-        <Route path="clientes" element={<Clientes />} />
-        <Route
-          path="chamados"
-          element={
-            <PlaceholderPage
-              title="Dashboard Chamados Equipes"
-              icon={<LayoutDashboard className="h-6 w-6" />}
-            />
-          }
-        />
-        <Route path="chat" element={<ChatOperacional />} />
-        <Route path="*" element={<Navigate to="/operacoes" replace />} />
-      </Routes>
-    </div>
-  )
-}
+      <Tabs defaultValue="grid" className="w-full">
+        <TabsList className="grid w-full grid-cols-7">
+          <TabsTrigger value="grid" className="flex items-center gap-2">
+            <LayoutGrid className="h-4 w-4" />
+            Grid
+          </TabsTrigger>
+          <TabsTrigger value="quadro" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Funcionários
+          </TabsTrigger>
+          <TabsTrigger value="avisos" className="flex items-center gap-2">
+            <Bell className="h-4 w-4" />
+            Avisos
+          </TabsTrigger>
+          <TabsTrigger value="clientes" className="flex items-center gap-2">
+            <Truck className="h-4 w-4" />
+            Clientes
+          </TabsTrigger>
+          <TabsTrigger value="ocorrencias" className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4" />
+            Ocorrências
+          </TabsTrigger>
+          <TabsTrigger value="chamados" className="flex items-center gap-2">
+            <LayoutDashboard className="h-4 w-4" />
+            Chamados
+          </TabsTrigger>
+          <TabsTrigger value="chat" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Chat
+          </TabsTrigger>
+        </TabsList>
 
-// Home page with the navigation menu
-const OperationsHome = () => {
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-medium">Módulos de operações</h2>
-      <OperationsNavigation />
+        <TabsContent value="grid">
+          <GridOperacional />
+        </TabsContent>
+        
+        <TabsContent value="quadro">
+          <AgentesDisponiveis />
+        </TabsContent>
+        
+        <TabsContent value="avisos">
+          <SolicitacoesEscolta />
+        </TabsContent>
+        
+        <TabsContent value="clientes">
+          <Clientes />
+        </TabsContent>
+        
+        <TabsContent value="ocorrencias">
+          <LivroOcorrencias />
+        </TabsContent>
+        
+        <TabsContent value="chamados">
+          <DashboardChamados />
+        </TabsContent>
+        
+        <TabsContent value="chat">
+          <ChatOperacional />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
